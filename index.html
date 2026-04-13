@@ -3,357 +3,323 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>فلونس — مخططك المالي الذكي</title>
+    <title>تدبير — المنظومة المالية المتكاملة</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Tajawal:wght@400;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* تعريف الخطوط */
+        /* دمج الهوية البصرية والخطوط */
         @font-face {
             font-family: 'Gumela';
             src: local('Gumela'), url('Gumela.ttf') format('truetype');
-            font-weight: normal;
         }
 
         :root {
-            --bg-body: #080a12;
-            --bg-card: #121622;
+            --bg-deep: #0a0c14;
+            --bg-card: #161b29;
             --primary: #3b82f6;
-            --secondary: #1e293b;
-            --accent: #f59e0b;
             --success: #10b981;
             --danger: #ef4444;
+            --warning: #f59e0b;
             --text-main: #f8fafc;
-            --text-dim: #94a3b8;
-            --border: rgba(255, 255, 255, 0.05);
-            --font-main: 'Gumela', 'Tajawal', sans-serif;
+            --text-muted: #94a3b8;
+            --border: rgba(255, 255, 255, 0.08);
+            --font-display: 'Gumela', 'Tajawal', sans-serif;
         }
 
-        * { box-sizing: border-box; transition: 0.3s; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
         body {
-            font-family: var(--font-main);
-            background: var(--bg-body);
+            font-family: var(--font-display);
+            background: var(--bg-deep);
             color: var(--text-main);
-            margin: 0;
-            padding-bottom: 100px;
+            margin: 0; padding-bottom: 100px;
+            overflow-x: hidden;
         }
 
-        /* الهيدر */
-        .header {
+        /* 1. الهيدر وستريك الحضور */
+        .app-header {
             padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background: var(--bg-card);
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(22, 27, 41, 0.9);
+            backdrop-filter: blur(15px);
+            position: sticky; top: 0; z-index: 1000;
             border-bottom: 1px solid var(--border);
         }
 
-        .logo-section { display: flex; align-items: center; gap: 10px; }
-        .logo-img { height: 40px; width: auto; }
-        .logo-name { font-size: 20px; font-weight: 900; letter-spacing: -0.5px; }
-
-        .container { max-width: 500px; margin: 0 auto; padding: 15px; }
-
-        /* لوحة التحكم المالية */
-        .dashboard-card {
-            background: linear-gradient(145deg, #1e3a5f, #121622);
-            border-radius: 24px;
-            padding: 25px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(59, 130, 246, 0.2);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-
-        .balance-title { font-size: 13px; color: var(--text-dim); margin-bottom: 5px; }
-        .balance-value { font-size: 32px; font-weight: 900; margin-bottom: 20px; }
-
-        .stats-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
-        .stat-box { background: rgba(255,255,255,0.03); padding: 10px; border-radius: 15px; text-align: center; }
-        .stat-label { font-size: 10px; color: var(--text-dim); display: block; }
-        .stat-num { font-size: 14px; font-weight: 700; margin-top: 4px; }
-
-        /* وحدة الذكاء الاصطناعي (AI Insight) */
-        .ai-unit {
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px dashed var(--primary);
-            border-radius: 16px;
-            padding: 15px;
-            margin-bottom: 20px;
-            display: flex;
-            gap: 12px;
-            align-items: flex-start;
-        }
-        .ai-icon { font-size: 20px; animation: pulse 2s infinite; }
-        .ai-content { font-size: 12px; line-height: 1.6; }
-
-        /* الخدمات السريعة */
-        .services-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            margin-bottom: 25px;
-        }
-        .service-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
+        .streak-container {
+            background: linear-gradient(45deg, #f59e0b, #ef4444);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 14px;
+            display: flex; align-items: center; gap: 6px;
+            box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
             cursor: pointer;
         }
-        .service-icon {
-            width: 50px; height: 50px;
-            background: var(--bg-card);
-            border-radius: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
+
+        /* 2. لوحة التحكم المالية الشاملة */
+        .main-container { max-width: 500px; margin: 0 auto; padding: 15px; }
+
+        .dashboard-card {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            border-radius: 28px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .balance-label { font-size: 12px; color: rgba(255,255,255,0.7); }
+        .balance-value { font-size: 36px; font-weight: 900; margin: 8px 0; font-family: 'Tajawal'; }
+
+        .stats-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr);
+            gap: 12px; margin-top: 20px;
+        }
+
+        .mini-stat {
+            background: rgba(255,255,255,0.05);
+            padding: 12px; border-radius: 16px;
             border: 1px solid var(--border);
         }
-        .service-label { font-size: 10px; color: var(--text-dim); font-weight: 700; }
 
-        /* القائمة التفاعلية */
-        .list-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .trans-item {
-            background: var(--bg-card);
-            padding: 14px;
-            border-radius: 18px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-            border: 1px solid var(--border);
+        /* 3. فلاتر العرض الزمني */
+        .time-filters {
+            display: flex; gap: 8px; margin-bottom: 20px;
+            overflow-x: auto; padding-bottom: 5px;
         }
-        .trans-info { display: flex; gap: 12px; align-items: center; }
-        .trans-icon { width: 40px; height: 40px; background: var(--bg-body); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .filter-btn {
+            background: var(--bg-card); border: 1px solid var(--border);
+            color: var(--text-muted); padding: 8px 20px;
+            border-radius: 12px; font-size: 12px; cursor: pointer; white-space: nowrap;
+        }
+        .filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* شريط التنقل */
-        .nav-bar {
-            position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background: rgba(18, 22, 34, 0.95);
-            backdrop-filter: blur(15px);
-            height: 80px;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
+        /* 4. التحليل والمقارنة (الرسوم البيانية) */
+        .chart-box {
+            background: var(--bg-card);
+            border-radius: 24px; padding: 20px;
+            margin-bottom: 20px; border: 1px solid var(--border);
+        }
+
+        .bar-chart {
+            display: flex; align-items: flex-end; gap: 10px;
+            height: 120px; margin-top: 20px;
+        }
+        .bar { flex: 1; border-radius: 6px 6px 0 0; position: relative; }
+        .bar.current { background: var(--primary); }
+        .bar.prev { background: var(--text-muted); opacity: 0.3; }
+
+        /* 5. القائمة السفلية (حل مشكلة عدم الاستجابة) */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; right: 0;
+            background: rgba(22, 27, 41, 0.98);
+            height: 85px; display: flex;
+            justify-content: space-around; align-items: center;
             border-top: 1px solid var(--border);
-            padding-bottom: 15px;
-        }
-        .nav-btn { font-size: 24px; color: var(--text-dim); cursor: pointer; }
-        .nav-btn.active { color: var(--primary); }
-        .nav-center {
-            width: 60px; height: 60px;
-            background: var(--primary);
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-top: -50px;
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
-            font-size: 30px;
+            padding-bottom: 20px; z-index: 2000;
         }
 
-        /* نافذة الإضافة */
-        .add-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center;
+            gap: 4px; color: var(--text-muted); font-size: 10px;
+            cursor: pointer; background: none; border: none; width: 20%;
+        }
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 22px; margin-bottom: 2px; }
+
+        .center-add {
+            width: 60px; height: 60px;
+            background: var(--primary); border-radius: 20px;
+            display: flex; align-items: center; justify-content: center;
+            color: white; font-size: 30px; margin-top: -45px;
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        /* نافذة الإدخال (Modal) */
+        .modal {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.85);
+            display: none; justify-content: center; align-items: flex-end;
+            z-index: 3000;
         }
         .modal-content {
-            background: var(--bg-card);
-            width: 90%;
-            max-width: 400px;
-            padding: 25px;
-            border-radius: 25px;
-        }
-        input, select {
-            width: 100%;
-            background: var(--bg-body);
-            border: 1px solid var(--border);
-            padding: 15px;
-            border-radius: 12px;
-            color: white;
-            margin-bottom: 15px;
-            font-family: var(--font-main);
+            background: var(--bg-card); width: 100%;
+            border-radius: 30px 30px 0 0; padding: 30px;
+            animation: slideUp 0.4s ease-out;
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.7; }
-            100% { transform: scale(1); opacity: 1; }
+        input, select {
+            width: 100%; background: var(--bg-deep);
+            border: 1px solid var(--border); color: white;
+            padding: 15px; border-radius: 15px; margin-bottom: 15px;
+            font-family: var(--font-display);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
     </style>
 </head>
 <body>
 
-    <header class="header">
-        <div class="logo-section">
-            <img src="Vlogo2.svg" class="logo-img" alt="Flounce">
-            <span class="logo-name">فلونس</span>
+    <header class="app-header">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="Vlogo2.svg" style="height: 35px;" alt="Logo">
+            <span style="font-weight: 900; font-size: 20px;">تدبير</span>
         </div>
-        <div style="font-size: 20px;">🌙</div>
+        <div class="streak-container" onclick="recordAttendance()">
+            <span>🔥</span>
+            <span id="streakDays">14 يوم</span>
+        </div>
     </header>
 
-    <div class="container">
-        
+    <main class="main-container">
         <div class="dashboard-card">
-            <div class="balance-title">إجمالي الميزانية المتبقية</div>
-            <div class="balance-value" id="balance">14,250.00 <span style="font-size: 14px;">SAR</span></div>
+            <span class="balance-label">المتبقي من الميزانية</span>
+            <div class="balance-value" id="balanceDisplay">12,450.00 SAR</div>
             
-            <div class="stats-row">
-                <div class="stat-box">
-                    <span class="stat-label">الدخل</span>
-                    <span class="stat-num" style="color: var(--success);">18,000</span>
+            <div style="display: flex; justify-content: space-between; font-size: 11px; margin-top: 15px;">
+                <span>نسبة الإنفاق من الدخل</span>
+                <span id="spendPercent">32%</span>
+            </div>
+            <div style="height: 6px; background: rgba(255,255,255,0.1); border-radius: 10px; margin-top: 8px; overflow: hidden;">
+                <div id="progressBar" style="width: 32%; height: 100%; background: var(--success);"></div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="mini-stat">
+                    <span class="balance-label">الدخل</span>
+                    <div style="color: var(--success); font-weight: 700;">+18,000</div>
                 </div>
-                <div class="stat-box">
-                    <span class="stat-label">المصروف</span>
-                    <span class="stat-num" style="color: var(--danger);">3,750</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-label">الادخار</span>
-                    <span class="stat-num" style="color: var(--accent);">2,500</span>
+                <div class="mini-stat">
+                    <span class="balance-label">المصاريف</span>
+                    <div style="color: var(--danger); font-weight: 700;">-5,550</div>
                 </div>
             </div>
         </div>
 
-        <div class="ai-unit">
-            <div class="ai-icon">🤖</div>
-            <div class="ai-content" id="aiTip">
-                <b>تحليل فلونس:</b> لقد أنفقت 400 ريال على "الترفيه" هذا الأسبوع. إذا استمر هذا المعدل، قد تتجاوز ميزانيتك المقررة بـ 12%. أنصحك بتقليل المصاريف غير الضرورية اليوم.
+        <div class="time-filters">
+            <button class="filter-btn active">اليوم</button>
+            <button class="filter-btn">الأسبوع</button>
+            <button class="filter-btn">الشهر</button>
+            <button class="filter-btn">السنوات</button>
+        </div>
+
+        <div class="chart-box">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-weight: 800;">تحليل المصاريف المقارن</span>
+                <span style="font-size: 10px; color: var(--text-muted);">الشهر الحالي vs السابق</span>
+            </div>
+            <div class="bar-chart">
+                <div class="bar prev" style="height: 70%;"></div>
+                <div class="bar current" style="height: 50%;"></div>
+                <div class="bar prev" style="height: 90%;"></div>
+                <div class="bar current" style="height: 80%;"></div>
+                <div class="bar prev" style="height: 40%;"></div>
+                <div class="bar current" style="height: 30%;"></div>
             </div>
         </div>
 
-        <div class="services-grid">
-            <div class="service-item">
-                <div class="service-icon">📊</div>
-                <span class="service-label">تقارير</span>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div class="mini-stat" style="text-align: center; cursor: pointer;">
+                <span>🛒</span>
+                <div style="font-size: 12px; margin-top: 5px;">مشتريات يومية</div>
             </div>
-            <div class="service-item">
-                <div class="service-icon">🛡️</div>
-                <span class="service-label">تأمين</span>
-            </div>
-            <div class="service-item">
-                <div class="service-icon">💰</div>
-                <span class="service-label">ديون</span>
-            </div>
-            <div class="service-item">
-                <div class="service-icon">📈</div>
-                <span class="service-label">استثمار</span>
+            <div class="mini-stat" style="text-align: center; cursor: pointer;">
+                <span>🏠</span>
+                <div style="font-size: 12px; margin-top: 5px;">مصاريف ثابتة</div>
             </div>
         </div>
+    </main>
 
-        <div class="list-header">
-            <span style="font-weight: 800;">العمليات الأخيرة</span>
-            <span style="color: var(--primary); font-size: 12px; font-weight: 700;">فلترة العمليات</span>
-        </div>
-
-        <div id="transactions">
-            <div class="trans-item">
-                <div class="trans-info">
-                    <div class="trans-icon">🍔</div>
-                    <div>
-                        <div style="font-weight: 700; font-size: 14px;">مطعم شاورما</div>
-                        <div style="font-size: 10px; color: var(--text-dim);">اليوم - 1:45 م</div>
-                    </div>
-                </div>
-                <div style="font-weight: 800; color: var(--danger);">-45.00</div>
-            </div>
-            
-            <div class="trans-item">
-                <div class="trans-info">
-                    <div class="trans-icon">⛽</div>
-                    <div>
-                        <div style="font-weight: 700; font-size: 14px;">محطة الوقود</div>
-                        <div style="font-size: 10px; color: var(--text-dim);">أمس - 10:20 م</div>
-                    </div>
-                </div>
-                <div style="font-weight: 800; color: var(--danger);">-120.00</div>
-            </div>
-        </div>
-
-    </div>
-
-    <div class="add-modal" id="modal">
+    <div class="modal" id="addModal">
         <div class="modal-content">
-            <h3 style="margin-top: 0; margin-bottom: 20px;">إضافة عملية</h3>
-            <input type="text" id="tName" placeholder="اسم البند">
-            <input type="number" id="tAmount" placeholder="المبلغ">
-            <select id="tCat">
-                <option value="غذاء">غذاء</option>
-                <option value="تسوق">تسوق</option>
-                <option value="ترفيه">ترفيه</option>
-                <option value="أخرى">أخرى</option>
+            <h3 style="margin-top: 0; margin-bottom: 20px;">تسجيل عملية مالية</h3>
+            <select id="transType">
+                <option value="expense">مصروف (سحب)</option>
+                <option value="income">دخل (إيداع)</option>
+                <option value="saving">توفير (هدف)</option>
             </select>
-            <button onclick="saveTransaction()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 800; cursor: pointer;">حفظ العملية</button>
-            <button onclick="closeModal()" style="width: 100%; background: transparent; color: var(--text-dim); border: none; padding: 10px; margin-top: 5px; cursor: pointer;">إلغاء</button>
+            <input type="text" id="transName" placeholder="وصف العملية (مثلاً: فاتورة الكهرباء)">
+            <input type="number" id="transAmount" placeholder="المبلغ">
+            <button onclick="processTransaction()" style="width: 100%; background: var(--primary); color: white; border: none; padding: 18px; border-radius: 15px; font-weight: 900; cursor: pointer;">تأكيد وحفظ</button>
+            <button onclick="closeModal()" style="width: 100%; background: transparent; color: var(--text-muted); border: none; padding: 10px; margin-top: 10px; cursor: pointer;">إلغاء</button>
         </div>
     </div>
 
-    <nav class="nav-bar">
-        <div class="nav-btn active">🏠</div>
-        <div class="nav-btn">🧭</div>
-        <div class="nav-center" onclick="openModal()">+</div>
-        <div class="nav-btn">💎</div>
-        <div class="nav-btn">👤</div>
+    <nav class="bottom-nav">
+        <button class="nav-item active"><span>🏠</span><span>الرئيسية</span></button>
+        <button class="nav-item"><span>📊</span><span>التقارير</span></button>
+        <button class="center-add" onclick="openModal()"><span>+</span></button>
+        <button class="nav-item"><span>🎯</span><span>الأهداف</span></button>
+        <button class="nav-item"><span>⚙️</span><span>الإعدادات</span></button>
     </nav>
 
     <script>
-        let currentBalance = 14250.00;
+        // 1. حل مشكلة استجابة الأزرار: التأكد من تحميل العناصر قبل ربط الدوال
+        let state = {
+            balance: 12450.00,
+            streak: 14,
+            lastAttendance: null
+        };
 
-        function openModal() { document.getElementById('modal').style.display = 'flex'; }
-        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+        function openModal() {
+            document.getElementById('addModal').style.display = 'flex';
+        }
 
-        function saveTransaction() {
-            const name = document.getElementById('tName').value;
-            const amount = parseFloat(document.getElementById('tAmount').value);
-            
-            if(name && amount) {
-                currentBalance -= amount;
-                document.getElementById('balance').innerHTML = currentBalance.toLocaleString() + ' <span style="font-size: 14px;">SAR</span>';
-                
-                const list = document.getElementById('transactions');
-                const html = `
-                    <div class="trans-item" style="animation: slideUp 0.3s ease;">
-                        <div class="trans-info">
-                            <div class="trans-icon">💸</div>
-                            <div>
-                                <div style="font-weight: 700; font-size: 14px;">${name}</div>
-                                <div style="font-size: 10px; color: var(--text-dim);">الآن</div>
-                            </div>
-                        </div>
-                        <div style="font-weight: 800; color: var(--danger);">-${amount.toFixed(2)}</div>
-                    </div>
-                `;
-                list.insertAdjacentHTML('afterbegin', html);
-                
-                // تحديث نص الذكاء الاصطناعي بشكل عشوائي لمحاكاة التحليل
-                const tips = [
-                    "<b>تحليل فلونس:</b> بدأت مصروفاتك اليومية بالارتفاع، حاول الالتزام بميزانية الغد.",
-                    "<b>تحليل فلونس:</b> تم رصد العملية بنجاح. رصيدك المتبقي يكفيك لـ 12 يوماً حسب معدلك الحالي.",
-                    "<b>تحليل فلونس:</b> هل هذه المصروفات ضرورية؟ فكر في الادخار لتحقيق هدفك القادم."
-                ];
-                document.getElementById('aiTip').innerHTML = tips[Math.floor(Math.random()*tips.length)];
+        function closeModal() {
+            document.getElementById('addModal').style.display = 'none';
+        }
 
-                closeModal();
-                document.getElementById('tName').value = '';
-                document.getElementById('tAmount').value = '';
+        // 2. نظام الستريك (Daily Streak)
+        function recordAttendance() {
+            const now = new Date().toDateString();
+            if (state.lastAttendance !== now) {
+                state.streak++;
+                state.lastAttendance = now;
+                document.getElementById('streakDays').innerText = state.streak + " يوم";
+                alert("تم تسجيل حضورك بنجاح! 🔥");
+            } else {
+                alert("لقد قمت بتسجيل الحضور اليوم مسبقاً.");
             }
         }
-    </script>
 
-    <style>
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        // 3. معالجة العمليات المالية (الدخل، المصاريف، التوفير)
+        function processTransaction() {
+            const type = document.getElementById('transType').value;
+            const amount = parseFloat(document.getElementById('transAmount').value);
+            const name = document.getElementById('transName').value;
+
+            if (!amount || !name) return alert("يرجى إكمال البيانات");
+
+            if (type === 'expense') {
+                state.balance -= amount;
+            } else if (type === 'income') {
+                state.balance += amount;
+            }
+
+            // تحديث الواجهة
+            document.getElementById('balanceDisplay').innerText = state.balance.toLocaleString() + " SAR";
+            
+            // تحديث شريط التقدم (مثال)
+            let percent = Math.min((5550 / 18000) * 100, 100); 
+            document.getElementById('spendPercent').innerText = percent.toFixed(0) + "%";
+            document.getElementById('progressBar').style.width = percent + "%";
+
+            closeModal();
+            // تصفير الحقول
+            document.getElementById('transAmount').value = '';
+            document.getElementById('transName').value = '';
         }
-    </style>
+
+        // إغلاق المودال عند الضغط خارجه
+        window.onclick = function(event) {
+            const modal = document.getElementById('addModal');
+            if (event.target == modal) closeModal();
+        }
+    </script>
 </body>
 </html>
