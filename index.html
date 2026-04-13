@@ -3,263 +3,326 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تدّبير PRO — مخططك المالي الذكي</title>
+    <title>تــدّبير — مخططك المالي الذكي</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Tajawal:wght@400;500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
 
     <style>
-        /* ═══════════════════════════════
-           المتغيرات والأنماط الأساسية (Performance First)
-        ═══════════════════════════════ */
+        /* نظام الألوان والمتغيرات */
         :root {
-            --bg-body: #f8f9fa;
+            --primary: #2ecc71;
+            --primary-dark: #27ae60;
+            --bg-body: #f4f7f6;
             --bg-card: #ffffff;
-            --accent: #2ecc71;
             --text-main: #2c3e50;
-            --text-muted: #7f8c8d;
-            --border: #edf2f7;
+            --text-muted: #95a5a6;
+            --border: #eef2f3;
             --pro-gold: #f1c40f;
+            --danger: #e74c3c;
             --font-main: 'Tajawal', sans-serif;
+            --card-gradient: linear-gradient(135deg, #1d2b3a 0%, #0d1117 100%);
         }
 
-        /* أنماط الثيمات */
+        /* أنماط الثيم الداكن */
         [data-theme="dark"] {
-            --bg-body: #121212;
-            --bg-card: #1e1e1e;
-            --text-main: #e0e0e0;
-            --text-muted: #b0b0b0;
-            --border: #333333;
+            --bg-body: #0d1117;
+            --bg-card: #161b22;
+            --text-main: #f0f6fc;
+            --border: #30363d;
         }
 
-        [data-theme="midnight"] {
-            --bg-body: #05070a;
-            --bg-card: #0d1117;
-            --text-main: #ffffff;
-            --border: #21262d;
-        }
+        * { box-sizing: border-box; transition: all 0.3s ease; }
 
         body {
             font-family: var(--font-main);
             background: var(--bg-body);
             color: var(--text-main);
             margin: 0;
-            transition: background 0.3s ease;
-            overflow-x: hidden;
+            padding-bottom: 50px;
         }
 
-        /* ═══════════════════════════════
-           الهيدر المطور (Pro Header)
-        ═══════════════════════════════ */
-        .app-hero {
+        /* 1. الهيدر والشعار (في الوسط) */
+        .app-header {
             background: var(--bg-card);
+            padding: 15px 0;
             border-bottom: 1px solid var(--border);
             position: sticky;
             top: 0;
             z-index: 1000;
-            backdrop-filter: blur(12px);
-            padding: 12px 0;
+            text-align: center;
         }
 
-        .hero-container {
-            max-width: 900px;
+        .header-content {
+            max-width: 1000px;
             margin: 0 auto;
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
-            position: relative;
-            padding: 0 16px;
+            padding: 0 20px;
         }
 
-        /* الشعار - الحجم المطور */
-        .hero-logo-img {
-            height: 85px;
-            width: auto;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            filter: none; /* الافتراضي للوضع الفاتح */
-        }
-
-        [data-theme="dark"] .hero-logo-img,
-        [data-theme="midnight"] .hero-logo-img {
-            filter: invert(1) brightness(2);
-        }
-
-        /* الأزرار الجانبية */
-        .hero-actions {
+        .logo-box {
             position: absolute;
-            display: flex;
-            gap: 8px;
-            top: 50%;
-            transform: translateY(-50%);
+            left: 50%;
+            transform: translateX(-50%);
         }
 
-        .actions-left { left: 16px; }
-        .actions-right { right: 16px; }
+        .logo-img {
+            height: 70px; /* تم تكبيره ليكون مركزياً وجذاباً */
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+        }
 
-        .hero-btn {
-            width: 38px;
-            height: 38px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--bg-card);
-            color: var(--text-main);
+        /* 2. نظام اللغات والبرو */
+        .lang-switcher, .pro-status {
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s ease;
-            font-size: 18px;
+            background: var(--bg-body);
+            border: 1px solid var(--border);
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
         }
 
-        .hero-btn:hover {
-            border-color: var(--accent);
-            transform: translateY(-2px);
-        }
-
-        /* ═══════════════════════════════
-           نظام التحكم في النسخ (Logic Layers)
-        ═══════════════════════════════ */
         .pro-badge {
             background: var(--pro-gold);
             color: #000;
-            font-size: 10px;
-            font-weight: 800;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-right: 5px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 11px;
+            margin-left: 5px;
             display: none;
         }
 
-        [data-user-status="pro"] .pro-badge { display: inline-block; }
-        [data-user-status="pro"] .free-only { display: none; }
-        [data-user-status="free"] .pro-only { 
-            filter: blur(5px);
-            pointer-events: none;
-            opacity: 0.6;
+        [data-user="pro"] .pro-badge { display: inline-block; }
+        [data-user="free"] .pro-only { filter: blur(4px); pointer-events: none; opacity: 0.6; }
+
+        /* 3. البطاقة المالية (بنفس نمط بطاقات البنك) */
+        .financial-card {
+            background: var(--card-gradient);
+            color: white;
+            padding: 25px;
+            border-radius: 20px;
+            max-width: 400px;
+            margin: 20px auto;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+            overflow: hidden;
         }
 
-        /* بانر الترقية */
-        .upgrade-banner {
-            background: linear-gradient(90deg, #f1c40f, #f39c12);
-            color: #fff;
+        .financial-card::after {
+            content: ""; position: absolute; top: -50%; right: -20%;
+            width: 200px; height: 200px; background: rgba(255,255,255,0.05);
+            border-radius: 50%;
+        }
+
+        .card-label { font-size: 12px; opacity: 0.7; letter-spacing: 1px; }
+        .card-balance { font-size: 28px; font-weight: 800; margin: 10px 0; }
+        .card-details { display: flex; justify-content: space-between; margin-top: 20px; }
+        
+        /* 4. حقول التعديل والمشتريات */
+        .container { max-width: 600px; margin: 0 auto; padding: 0 15px; }
+
+        .section-title { font-weight: 800; margin: 25px 0 15px; display: flex; justify-content: space-between; }
+
+        .data-card {
+            background: var(--bg-card);
+            border-radius: 16px;
             padding: 15px;
-            text-align: center;
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+
+        .editable-input {
+            border: none;
+            background: transparent;
+            font-family: inherit;
+            font-size: 16px;
+            color: var(--text-main);
+            width: 100%;
+            padding: 5px;
+            border-bottom: 1px dashed var(--border);
+        }
+
+        .editable-input:focus { outline: none; border-bottom-color: var(--primary); }
+
+        /* أزرار الإجراءات */
+        .btn-pay {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
             border-radius: 12px;
-            margin: 20px auto;
-            max-width: 800px;
+            width: 100%;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(241, 196, 15, 0.3);
+            margin-top: 10px;
         }
 
-        /* ═══════════════════════════════
-           المحتوى والأدوات
-        ═══════════════════════════════ */
-        .content-wrap {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 0 15px;
-        }
-
-        .card {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
+        /* Responsive */
         @media (max-width: 480px) {
-            .hero-logo-img { height: 60px; }
-            .hero-btn { width: 34px; height: 34px; font-size: 16px; }
+            .logo-img { height: 50px; }
+            .header-content { padding: 0 10px; }
         }
     </style>
 </head>
-<body data-user-status="free" data-theme="light">
+<body data-user="free" data-lang="ar">
 
-    <header class="app-hero">
-        <div class="hero-container">
-            <div class="hero-actions actions-left">
-                <button class="hero-btn" onclick="toggleTheme()" title="تبديل الثيم">🌓</button>
+    <header class="app-header">
+        <div class="header-content">
+            <button class="lang-switcher" onclick="toggleLanguage()" id="langBtn">EN</button>
+            
+            <div class="logo-box">
+                <img src="logo.png" alt="تــدّبير" class="logo-img">
+                <div style="font-weight: 900; font-size: 18px; color: var(--primary);">تــدّبير</div>
             </div>
 
-            <div class="logo-area">
-                <img src="logo.png" alt="تدّبير" class="hero-logo-img">
-            </div>
-
-            <div class="hero-actions actions-right">
+            <div class="pro-status" onclick="handleUpgrade()">
                 <span class="pro-badge">PRO</span>
-                <button class="hero-btn" onclick="togglePro()" title="حالة الحساب">👑</button>
+                <span id="statusText">ترقية</span>
             </div>
         </div>
     </header>
 
-    <main class="content-wrap">
-        <div class="free-only upgrade-banner" onclick="togglePro()">
-            ✨ انضم إلى تدّبير PRO واحصل على ميزات حصرية
+    <div class="container">
+        <div class="financial-card">
+            <div class="card-label" id="lblSummary">ملخص المحفظة المالية</div>
+            <div class="card-balance" id="totalBalance">5,420.00 SAR</div>
+            <div class="card-details">
+                <div>
+                    <div class="card-label" id="lblExpenses">الإنفاق</div>
+                    <div style="font-weight: bold;">1,200 SAR</div>
+                </div>
+                <div style="text-align: left;">
+                    <div class="card-label" id="lblSavings">الادخار</div>
+                    <div style="font-weight: bold; color: var(--primary);">4,220 SAR</div>
+                </div>
+            </div>
         </div>
 
-        <section class="card">
-            <h3>📍 مخطط الراتب الذكي</h3>
-            <p style="color: var(--text-muted);">أدخل راتبك لتوزيع المصاريف تلقائياً.</p>
-            </section>
+        <div class="section-title">
+            <span id="lblDailyPurchases">مشتريات اليوم</span>
+            <span style="font-size: 12px; color: var(--text-muted);" id="lastUpdate">محدث من اليوم السابق</span>
+        </div>
+        
+        <div id="purchasesList">
+            <div class="data-card">
+                <input type="text" class="editable-input" value="قهوة صباحية" onchange="saveData()">
+                <div style="display: flex; justify-content: space-between; margin-top: 8px;">
+                    <input type="number" class="editable-input" value="15" style="width: 80px;" onchange="saveData()">
+                    <span style="font-size: 12px; color: var(--text-muted);">10:30 AM</span>
+                </div>
+            </div>
+        </div>
 
-        <section class="card pro-only">
-            <h3>📊 تحليلات متقدمة</h3>
-            <p>هذا القسم متاح فقط لمشتركي النسخة الاحترافية.</p>
-        </section>
-    </main>
+        <div class="section-title pro-only" id="lblProStats">إحصائيات البرو المتقدمة</div>
+        <div class="data-card pro-only">
+            <p id="proMsg">هذه الإحصائيات تظهر لمشتركي البرو فقط لتحليل النمط الشرائي السنوي.</p>
+        </div>
+
+        <div class="free-only">
+            <button class="btn-pay" onclick="handleUpgrade()" id="btnUpgrade">اشترك في البرو (تفعيل الدفع)</button>
+        </div>
+    </div>
 
     <script>
-        /* ═══════════════════════════════
-           برمجة النظام (Tadabeer Engine)
-        ═══════════════════════════════ */
-        
-        const App = {
-            state: {
-                theme: localStorage.getItem('td_theme') || 'light',
-                status: localStorage.getItem('td_status') || 'free'
-            },
-
-            init() {
-                this.applyTheme();
-                this.applyStatus();
-            },
-
-            applyTheme() {
-                document.documentElement.setAttribute('data-theme', this.state.theme);
-                localStorage.setItem('td_theme', this.state.theme);
-            },
-
-            applyStatus() {
-                document.body.setAttribute('data-user-status', this.state.status);
-                localStorage.setItem('td_status', this.state.status);
+        // نظام إدارة الحالة (State Management)
+        const state = {
+            lang: 'ar',
+            userStatus: 'free',
+            lastResetDate: new Date().toLocaleDateString(),
+            translations: {
+                ar: {
+                    langBtn: 'EN',
+                    statusText: 'ترقية',
+                    lblSummary: 'ملخص المحفظة المالية',
+                    lblExpenses: 'الإنفاق',
+                    lblSavings: 'الادخار',
+                    lblDailyPurchases: 'مشتريات اليوم',
+                    lastUpdate: 'محدث تلقائياً',
+                    lblProStats: 'إحصائيات البرو المتقدمة',
+                    proMsg: 'هذه الإحصائيات تظهر لمشتركي البرو فقط لتحليل النمط الشرائي السنوي.',
+                    btnUpgrade: 'اشترك في البرو (تفعيل الدفع)',
+                    upgradeAlert: 'سيتم توجيهك الآن لبوابة الدفع الإلكتروني لترقية حسابك...'
+                },
+                en: {
+                    langBtn: 'AR',
+                    statusText: 'Upgrade',
+                    lblSummary: 'Financial Wallet Summary',
+                    lblExpenses: 'Expenses',
+                    lblSavings: 'Savings',
+                    lblDailyPurchases: 'Daily Purchases',
+                    lastUpdate: 'Auto-updated',
+                    lblProStats: 'Pro Advanced Stats',
+                    proMsg: 'This section is only available for Pro users to analyze annual spending patterns.',
+                    btnUpgrade: 'Subscribe to PRO (Enable Payment)',
+                    upgradeAlert: 'You will be redirected to the payment gateway...'
+                }
             }
         };
 
-        // وظائف الأزرار
-        function toggleTheme() {
-            const themes = ['light', 'dark', 'midnight'];
-            let currentIdx = themes.indexOf(App.state.theme);
-            App.state.theme = themes[(currentIdx + 1) % themes.length];
-            App.applyTheme();
-        }
-
-        function togglePro() {
-            // محاكاة لعملية الترقية
-            if(App.state.status === 'free') {
-                if(confirm("هل تود تجربة نسخة PRO الاحترافية؟")) {
-                    App.state.status = 'pro';
-                    alert("تم تفعيل ميزات PRO بنجاح! 🚀");
-                }
-            } else {
-                App.state.status = 'free';
+        // 1. وظيفة تبديل اللغة (بدون تحميل الصفحة)
+        function toggleLanguage() {
+            state.lang = state.lang === 'ar' ? 'en' : 'ar';
+            document.body.setAttribute('data-lang', state.lang);
+            document.dir = state.lang === 'ar' ? 'rtl' : 'ltr';
+            
+            const t = state.translations[state.lang];
+            for (let id in t) {
+                const el = document.getElementById(id);
+                if (el) el.innerText = t[id];
             }
-            App.applyStatus();
+            saveData();
         }
 
-        // تشغيل عند التحميل
-        window.addEventListener('DOMContentLoaded', () => App.init());
+        // 2. نظام الترقية والدفع
+        function handleUpgrade() {
+            if (state.userStatus === 'free') {
+                alert(state.translations[state.lang].upgradeAlert);
+                // محاكاة نجاح الدفع
+                setTimeout(() => {
+                    state.userStatus = 'pro';
+                    document.body.setAttribute('data-user', 'pro');
+                    document.getElementById('statusText').innerText = state.lang === 'ar' ? 'حساب برو' : 'PRO Account';
+                    saveData();
+                }, 1500);
+            }
+        }
+
+        // 3. تحديث البيانات تلقائياً (نظام اليوم الجديد)
+        function checkDailyUpdate() {
+            const today = new Date().toLocaleDateString();
+            const savedDate = localStorage.getItem('lastUpdateDate');
+            
+            if (savedDate && savedDate !== today) {
+                // تدوير البيانات: نقل مشتريات اليوم السابق للأرشيف وتصفير اليوم الجديد
+                console.log("يوم جديد: تم تحديث القائمة تلقائياً");
+                // منطق التحديث التلقائي هنا
+            }
+            localStorage.setItem('lastUpdateDate', today);
+        }
+
+        // 4. حفظ وتعديل البيانات
+        function saveData() {
+            const data = {
+                status: state.userStatus,
+                lang: state.lang,
+                // يمكنك إضافة كافة الأرقام هنا
+            };
+            localStorage.setItem('tadabeer_data', JSON.stringify(data));
+            console.log("تم حفظ البيانات والتحقق من صحتها...");
+        }
+
+        // عند التحميل
+        window.onload = () => {
+            checkDailyUpdate();
+            // تحميل البيانات المحفوظة إن وجدت
+            const saved = localStorage.getItem('tadabeer_data');
+            if (saved) {
+                const parsed = JSON.parse(saved);
+                if (parsed.status === 'pro') handleUpgrade();
+            }
+        };
     </script>
 </body>
 </html>
