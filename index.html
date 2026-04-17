@@ -5406,29 +5406,33 @@ info.innerHTML = m === ‘hanafi’
 function all() {
 const tab = store.get(‘tab’);
 const y = store.get(‘year’), m = store.get(‘month’);
-DOM.setText($(’#monthLbl’), `${MONTHS[m]} ${y}`);
+try { DOM.setText($(’#monthLbl’), `${MONTHS[m]} ${y}`); } catch(e) { Logger.error(‘monthLbl’, e); }
 
 ```
+const safeCall = (name, fn) => {
+  try { fn(); } catch(e) { Logger.error('Render.' + name, e); }
+};
+
 if (tab === 'monthly') {
-  greeting();
-  bankCard();
-  summary();
-  income();
-  fixed();
-  variable();
-  goals();
-  budgets();
-  streak();
-  ai();
-  leaks(false);
-  pts();
-  achievements();
-  periodChart();
-  salary();
+  safeCall('greeting', greeting);
+  safeCall('bankCard', bankCard);
+  safeCall('summary', summary);
+  safeCall('income', income);
+  safeCall('fixed', fixed);
+  safeCall('variable', variable);
+  safeCall('goals', goals);
+  safeCall('budgets', budgets);
+  safeCall('streak', streak);
+  safeCall('ai', ai);
+  safeCall('leaks', () => leaks(false));
+  safeCall('pts', pts);
+  safeCall('achievements', achievements);
+  safeCall('periodChart', periodChart);
+  safeCall('salary', salary);
 } else if (tab === 'yearly') {
-  yearly();
+  safeCall('yearly', yearly);
 }
-notifBell();
+safeCall('notifBell', notifBell);
 ```
 
 }
@@ -5451,6 +5455,7 @@ const R = Renderers;
 
 // ═══ TABS ═══
 function showTab(tab) {
+try {
 const valid = [‘monthly’, ‘yearly’, ‘friends’, ‘zakat’, ‘settings’];
 if (!valid.includes(tab)) tab = ‘monthly’;
 store.set(‘tab’, tab);
@@ -5459,14 +5464,18 @@ const el = $(’#tab-’ + t);
 if (el) el.style.display = t === tab ? ‘’ : ‘none’;
 }
 $$(’.tab-btn’).forEach(btn => {
-btn.classList.toggle(‘active’, btn.dataset.tab === tab);
+try { btn.classList.toggle(‘active’, btn.dataset.tab === tab); } catch(e) {}
 });
-$(’#monthBar’).style.display = (tab === ‘monthly’) ? ‘’ : ‘none’;
-R.scheduledAll();
-if (tab === ‘zakat’) R.nisab();
+const mb = $(’#monthBar’);
+if (mb) mb.style.display = (tab === ‘monthly’) ? ‘’ : ‘none’;
+try { R.scheduledAll(); } catch(e) { console.error(‘scheduledAll failed:’, e); }
+if (tab === ‘zakat’) { try { R.nisab(); } catch(e) {} }
 if (tab === ‘friends’ && typeof Social !== ‘undefined’) {
 try { Social.renderFriendsTab(); }
 catch (e) { console.error(‘renderFriendsTab failed:’, e); }
+}
+} catch (err) {
+console.error(‘showTab failed:’, err);
 }
 }
 
