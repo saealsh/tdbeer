@@ -3371,87 +3371,130 @@ body::before {
 
 <div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
 
-<!-- Firebase SDK v8 (maximum compatibility, loads synchronously) -->
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
-
-<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+<!-- Firebase SDK v8 with fallback CDNs for maximum reliability -->
 
 <script>
+  // Load Firebase scripts with fallback support
   (function() {
-    try {
-      const firebaseConfig = {
-        apiKey: "AIzaSyB2GzbIFGbvb6keWuBu5XsYVXy-qfeE6Og",
-        authDomain: "tadbeer-f76e4.firebaseapp.com",
-        projectId: "tadbeer-f76e4",
-        storageBucket: "tadbeer-f76e4.firebasestorage.app",
-        messagingSenderId: "721485864761",
-        appId: "1:721485864761:web:b45d21ec24b6fc090652e8"
-      };
-      
-      if (typeof firebase === 'undefined') {
-        console.error('Firebase SDK failed to load');
-        return;
+    const SOURCES = [
+      'https://www.gstatic.com/firebasejs/8.10.1/',
+      'https://cdnjs.cloudflare.com/ajax/libs/firebase/8.10.1/',
+      'https://cdn.jsdelivr.net/npm/firebase@8.10.1/'
+    ];
+    const FILES = ['firebase-app.js', 'firebase-auth.js', 'firebase-firestore.js'];
+    
+    function loadScript(src) {
+      return new Promise((resolve, reject) => {
+        const s = document.createElement('script');
+        s.src = src;
+        s.onload = () => resolve(src);
+        s.onerror = () => reject(src);
+        document.head.appendChild(s);
+      });
+    }
+    
+    async function loadWithFallback(file) {
+      for (const base of SOURCES) {
+        try {
+          await loadScript(base + file);
+          return true;
+        } catch (e) {
+          console.warn('Failed:', base + file);
+        }
+      }
+      return false;
+    }
+    
+    (async function() {
+      for (const file of FILES) {
+        const ok = await loadWithFallback(file);
+        if (!ok) {
+          console.error('Could not load ' + file + ' from any CDN');
+          return;
+        }
       }
       
-      firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const db = firebase.firestore();
-      
-      // Expose to global window with API matching modular version
-      window.FB = {
-        auth, db,
-        signIn: (a, email, pass) => auth.signInWithEmailAndPassword(email, pass),
-        signUp: (a, email, pass) => auth.createUserWithEmailAndPassword(email, pass),
-        signOut: (a) => auth.signOut(),
-        onAuthStateChanged: (a, cb) => auth.onAuthStateChanged(cb),
-        googleProvider: new firebase.auth.GoogleAuthProvider(),
-        signInWithPopup: (a, provider) => auth.signInWithPopup(provider),
-        sendPasswordResetEmail: (a, email) => auth.sendPasswordResetEmail(email),
-        updateProfile: (user, data) => user.updateProfile(data),
-        doc: function(dbOrColl, collName, docId) {
-          if (arguments.length === 3) return dbOrColl.collection(collName).doc(docId);
-          if (arguments.length === 2) return dbOrColl.doc(collName);
-          return dbOrColl;
-        },
-        setDoc: (docRef, data) => docRef.set(data),
-        getDoc: async (docRef) => {
-          const snap = await docRef.get();
-          // In v8, `exists` is a property (boolean). In v9+, it's a method.
-          // Wrap to match v9+ API that our code expects.
-          return {
-            exists: () => snap.exists,
-            data: () => snap.data(),
-            id: snap.id,
-            ref: snap.ref
-          };
-        },
-        updateDoc: (docRef, data) => docRef.update(data),
-        deleteDoc: (docRef) => docRef.delete(),
-        collection: (db, name) => db.collection(name),
-        query: (collRef, ...filters) => {
-          let q = collRef;
-          filters.forEach(f => { if (f && f._apply) q = f._apply(q); });
-          return q;
-        },
-        where: (field, op, val) => ({ _apply: (q) => q.where(field, op, val) }),
-        orderBy: (field, dir) => ({ _apply: (q) => q.orderBy(field, dir) }),
-        limit: (n) => ({ _apply: (q) => q.limit(n) }),
-        getDocs: (q) => q.get(),
-        onSnapshot: (q, cb, errCb) => q.onSnapshot(cb, errCb),
-        addDoc: (collRef, data) => collRef.add(data),
-        writeBatch: () => db.batch(),
-        serverTimestamp: () => firebase.firestore.FieldValue.serverTimestamp(),
-        ready: true
-      };
-      
-      window.dispatchEvent(new CustomEvent('fb-ready'));
-      console.log('Firebase loaded successfully');
-    } catch (err) {
-      console.error('Firebase init error:', err.message || err);
-    }
+      // All loaded, now initialize
+      try {
+        const firebaseConfig = {
+          apiKey: "AIzaSyB2GzbIFGbvb6keWuBu5XsYVXy-qfeE6Og",
+          authDomain: "tadbeer-f76e4.firebaseapp.com",
+          projectId: "tadbeer-f76e4",
+          storageBucket: "tadbeer-f76e4.firebasestorage.app",
+          messagingSenderId: "721485864761",
+          appId: "1:721485864761:web:b45d21ec24b6fc090652e8"
+        };
+        
+        if (typeof firebase === 'undefined') {
+          console.error('Firebase object missing after script load');
+          return;
+        }
+        
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        
+        // iOS Safari fix: force long-polling instead of WebSocket
+        // (WebSocket can be unreliable on mobile Safari)
+        try {
+          db.settings({
+            experimentalForceLongPolling: true,
+            merge: true
+          });
+        } catch (e) {
+          console.warn('Firestore settings failed:', e.message);
+        }
+        
+        window.FB = {
+          auth, db,
+          signIn: (a, email, pass) => auth.signInWithEmailAndPassword(email, pass),
+          signUp: (a, email, pass) => auth.createUserWithEmailAndPassword(email, pass),
+          signOut: (a) => auth.signOut(),
+          onAuthStateChanged: (a, cb) => auth.onAuthStateChanged(cb),
+          googleProvider: new firebase.auth.GoogleAuthProvider(),
+          signInWithPopup: (a, provider) => auth.signInWithPopup(provider),
+          sendPasswordResetEmail: (a, email) => auth.sendPasswordResetEmail(email),
+          updateProfile: (user, data) => user.updateProfile(data),
+          doc: function(dbOrColl, collName, docId) {
+            if (arguments.length === 3) return dbOrColl.collection(collName).doc(docId);
+            if (arguments.length === 2) return dbOrColl.doc(collName);
+            return dbOrColl;
+          },
+          setDoc: (docRef, data) => docRef.set(data),
+          getDoc: async (docRef) => {
+            const snap = await docRef.get();
+            return {
+              exists: () => snap.exists,
+              data: () => snap.data(),
+              id: snap.id,
+              ref: snap.ref
+            };
+          },
+          updateDoc: (docRef, data) => docRef.update(data),
+          deleteDoc: (docRef) => docRef.delete(),
+          collection: (db, name) => db.collection(name),
+          query: (collRef, ...filters) => {
+            let q = collRef;
+            filters.forEach(f => { if (f && f._apply) q = f._apply(q); });
+            return q;
+          },
+          where: (field, op, val) => ({ _apply: (q) => q.where(field, op, val) }),
+          orderBy: (field, dir) => ({ _apply: (q) => q.orderBy(field, dir) }),
+          limit: (n) => ({ _apply: (q) => q.limit(n) }),
+          getDocs: (q) => q.get(),
+          onSnapshot: (q, cb, errCb) => q.onSnapshot(cb, errCb),
+          addDoc: (collRef, data) => collRef.add(data),
+          writeBatch: () => db.batch(),
+          serverTimestamp: () => firebase.firestore.FieldValue.serverTimestamp(),
+          ready: true
+        };
+        
+        window.dispatchEvent(new CustomEvent('fb-ready'));
+        console.log('Firebase loaded successfully');
+      } catch (err) {
+        console.error('Firebase init error:', err.message || err);
+      }
+    })();
   })();
 </script>
 
