@@ -2537,7 +2537,7 @@ body::before {
   </div>
   <h1>تدّبير <span class="accent">المال</span></h1>
   <p class="landing-sub">مخططك المالي الذكي باللغة العربية — تتبع دخلك ومصاريفك، احسب زكاتك، وحقق أهدافك المالية بثقة.</p>
-  <button class="landing-cta" id="openAppBtn" onclick="(function(){try{document.getElementById('landing').style.display='none';document.getElementById('appModal').classList.add('open');}catch(e){alert('خطأ في فتح التطبيق، أعد التحميل');}})();return false;">ابدأ الآن ←</button>
+  <button class="landing-cta" id="openAppBtn" onclick="(function(){try{document.getElementById('landing').style.display='none';document.getElementById('appModal').classList.add('open');if(typeof Renderers!=='undefined'&&Renderers.scheduledAll)Renderers.scheduledAll();}catch(e){alert('خطأ في فتح التطبيق، أعد التحميل');}})();return false;">ابدأ الآن ←</button>
 
   <div class="landing-features">
     <div class="landing-feature">
@@ -3434,17 +3434,6 @@ body::before {
         const auth = firebase.auth();
         const db = firebase.firestore();
         
-        // iOS Safari fix: force long-polling instead of WebSocket
-        // (WebSocket can be unreliable on mobile Safari)
-        try {
-          db.settings({
-            experimentalForceLongPolling: true,
-            merge: true
-          });
-        } catch (e) {
-          console.warn('Firestore settings failed:', e.message);
-        }
-        
         window.FB = {
           auth, db,
           signIn: (a, email, pass) => auth.signInWithEmailAndPassword(email, pass),
@@ -3509,16 +3498,20 @@ body::before {
 (function() {
   if (!new URLSearchParams(location.search).has('debug')) return;
   const box = document.createElement('div');
-  box.style.cssText = 'position:fixed;top:env(safe-area-inset-top);left:0;right:0;z-index:99999;background:#000;color:#0f0;font-family:monospace;font-size:11px;padding:8px;max-height:40vh;overflow:auto;border-bottom:2px solid #0f0;white-space:pre-wrap;word-break:break-all';
+  box.style.cssText = 'position:fixed;top:env(safe-area-inset-top);left:0;right:0;z-index:99999;background:#000;color:#0f0;font-family:monospace;font-size:11px;padding:8px;max-height:30vh;overflow:auto;border-bottom:2px solid #0f0;white-space:pre-wrap;word-break:break-all;display:none';
   box.id = '__errorBox';
   const closeBtn = document.createElement('button');
   closeBtn.textContent = '✕ إخفاء';
-  closeBtn.style.cssText = 'position:fixed;top:env(safe-area-inset-top);right:8px;z-index:100000;background:#f00;color:#fff;border:none;padding:4px 10px;border-radius:4px;font-size:11px';
-  closeBtn.onclick = () => box.style.display = 'none';
+  closeBtn.style.cssText = 'position:fixed;top:env(safe-area-inset-top);right:8px;z-index:100000;background:#f00;color:#fff;border:none;padding:4px 10px;border-radius:4px;font-size:11px;display:none';
+  closeBtn.id = '__errorCloseBtn';
+  closeBtn.onclick = () => { box.style.display = 'none'; closeBtn.style.display = 'none'; };
   document.addEventListener('DOMContentLoaded', () => {
     document.body.appendChild(box);
     document.body.appendChild(closeBtn);
   });
+  function showBox() {
+    if (box.parentNode) { box.style.display = 'block'; closeBtn.style.display = 'block'; }
+  }
   function log(type, args) {
     if (!box) return;
     const msg = Array.from(args).map(a => {
@@ -3531,6 +3524,8 @@ body::before {
     line.textContent = '[' + type + '] ' + msg;
     box.appendChild(line);
     box.scrollTop = box.scrollHeight;
+    // Only auto-show on errors/warnings — keep hidden for info logs
+    if (type === 'error' || type === 'warn') showBox();
   }
   const origErr = console.error;
   const origWarn = console.warn;
@@ -5469,7 +5464,10 @@ btn.classList.toggle(‘active’, btn.dataset.tab === tab);
 $(’#monthBar’).style.display = (tab === ‘monthly’) ? ‘’ : ‘none’;
 R.scheduledAll();
 if (tab === ‘zakat’) R.nisab();
-if (tab === ‘friends’ && typeof Social !== ‘undefined’) Social.renderFriendsTab();
+if (tab === ‘friends’ && typeof Social !== ‘undefined’) {
+try { Social.renderFriendsTab(); }
+catch (e) { console.error(‘renderFriendsTab failed:’, e); }
+}
 }
 
 function changeMonth(delta) {
@@ -6790,8 +6788,23 @@ try {
     if (!name) throw { code: 'invalid-name' };
     if (!username || username.length < 3) throw { code: 'invalid-username' };
     
-    // Check username availability
-    const usernameDoc = await FB.getDoc(FB.doc(FB.db, 'usernames', username));
+    // Check username availability with retry for offline errors
+    let usernameDoc;
+    let retries = 3;
+    while (retries > 0) {
+      try {
+        usernameDoc = await FB.getDoc(FB.doc(FB.db, 'usernames', username));
+        break;
+      } catch (err) {
+        if (err.code === 'unavailable' || (err.message && err.message.includes('offline'))) {
+          retries--;
+          if (retries === 0) throw err;
+          await new Promise(r => setTimeout(r, 1500));
+        } else {
+          throw err;
+        }
+      }
+    }
     if (usernameDoc.exists()) throw { code: 'username-taken' };
     
     const cred = await FB.signUp(FB.auth, email, pass);
