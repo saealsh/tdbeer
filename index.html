@@ -2786,6 +2786,134 @@ body::before {
   .tier-card { width: 240px; padding: 18px; }
   .tier-num { font-size: 50px; }
 }
+
+/* ── LANDING FOOTER ── */
+.landing-footer {
+  margin-top: 60px;
+  padding: 40px 20px 30px;
+  border-top: 1px solid var(--border);
+  text-align: center;
+  position: relative;
+}
+.landing-footer::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+.footer-logo {
+  width: 36px;
+  height: 22px;
+  margin: 0 auto 14px;
+  opacity: .8;
+}
+.footer-logo svg { width: 100%; height: 100%; }
+.footer-tagline {
+  font-size: 13px;
+  color: var(--text3);
+  margin-bottom: 22px;
+  line-height: 1.7;
+}
+.footer-tagline b {
+  color: var(--accent-2);
+  font-weight: 700;
+}
+.footer-socials {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+.footer-social {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text2);
+  transition: all var(--t-med);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+.footer-social::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  opacity: 0;
+  transition: opacity var(--t-med);
+  z-index: 0;
+}
+.footer-social:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+  box-shadow: 0 8px 20px var(--accent-glow);
+}
+.footer-social:hover::before { opacity: 1; }
+.footer-social svg {
+  width: 20px;
+  height: 20px;
+  position: relative;
+  z-index: 1;
+  transition: color var(--t-med);
+}
+.footer-social:hover svg { color: #0a0600; }
+.footer-social.email:hover { color: #0a0600; }
+
+.footer-handle {
+  font-family: 'Courier New', monospace;
+  font-size: 13px;
+  color: var(--accent-2);
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+  direction: ltr;
+}
+.footer-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  color: var(--text3);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: 10px;
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  transition: all var(--t-fast);
+  margin-bottom: 20px;
+  direction: ltr;
+}
+.footer-email:hover {
+  border-color: var(--accent);
+  color: var(--accent-2);
+  transform: translateY(-1px);
+}
+.footer-email svg { width: 14px; height: 14px; }
+.footer-copy {
+  font-size: 11px;
+  color: var(--text3);
+  opacity: .7;
+  letter-spacing: 0.5px;
+}
+.footer-copy b {
+  color: var(--accent-2);
+  font-weight: 700;
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .landing-footer { margin-top: 40px; padding: 32px 16px 24px; }
+  .footer-social { width: 40px; height: 40px; }
+}
 </style>
 </head>
 <body>
@@ -2997,6 +3125,38 @@ body::before {
     <div><span class="landing-stat-num">0 ﷼</span><span class="landing-stat-lbl">مجاني</span></div>
     <div><span class="landing-stat-num">PWA</span><span class="landing-stat-lbl">يعمل أوفلاين</span></div>
   </div>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="landing-footer">
+    <div class="footer-logo">
+      <svg viewBox="0 0 540 325" fill="var(--accent-2)"><path d="M216.45 37.73C226.48 16.28 243.13 4.36 266.50 3.54C287.23 2.82 306.24 12.42 317.56 33.46C325.74 48.67 327.25 65.23 325.93 82.20C323.86 109 314.65 133.69 303.21 157.63C290.95 183.27 279.27 209.14 270.14 236.11C269.7 237.39 269.49 238.88 268.10 239.66C266.32 239.57 266.29 238.03 265.91 236.89C256.65 208.98 244.69 182.21 231.98 155.73C222.96 136.93 215.38 117.55 211.84 96.86C208.65 78.22 208.26 59.67 214.88 41.54C215.32 40.33 215.85 39.16 216.45 37.73Z"/><path d="M507.78 222.63C533.82 237.59 540.14 269.80 527.05 293.34C519.76 306.47 507.98 314.48 493.91 318.79C472.26 325.43 450.65 322.71 429.21 317.19C405.55 311.10 383.25 301.42 361.07 291.40C340.06 281.91 318.79 273.12 296.54 266.93C295.75 266.71 294.99 266.39 294.26 266.04C293.99 265.91 293.83 265.55 293.46 265.10C295.59 263.11 298.38 263.05 300.83 262.44C323 256.92 344.56 249.61 365.68 240.92C388.50 231.54 411.35 222.29 435.61 217.09C454.47 213.04 473.30 212.11 492.22 216.60C497.6 217.88 502.7 219.86 507.78 222.63Z"/><path d="M182.21 246.27C201.52 253.63 221.03 259.51 240.69 264.31C240.57 266.34 239.46 266.48 238.64 266.69C212.40 273.30 188.10 284.80 163.70 296.11C144.06 305.22 124.10 313.51 102.91 318.46C90.33 321.39 77.63 323.39 64.70 322.39C48.89 321.18 33.59 317.96 20.87 307.62C7.96 297.13 2.68 283.02 2.75 266.78C2.85 240.20 21.43 222.07 44.22 216.57C63.71 211.87 82.92 213.23 102.16 217.61C122.53 222.25 141.89 229.86 161.13 237.82C168.04 240.68 175.01 243.39 182.21 246.27Z"/></svg>
+    </div>
+    <p class="footer-tagline">تابعنا على منصات التواصل لـ <b>نصائح مالية يومية</b> وتحديثات التطبيق</p>
+
+    <div class="footer-handle">@tdbeerksa</div>
+
+    <div class="footer-socials">
+      <a href="https://x.com/tdbeerksa" target="_blank" rel="noopener noreferrer" class="footer-social" aria-label="X (Twitter)" title="تابعنا على X">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/tdbeerksa" target="_blank" rel="noopener noreferrer" class="footer-social" aria-label="Instagram" title="تابعنا على Instagram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+      </a>
+      <a href="https://www.tiktok.com/@tdbeerksa" target="_blank" rel="noopener noreferrer" class="footer-social" aria-label="TikTok" title="تابعنا على TikTok">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005.8 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1.84-.1z"/></svg>
+      </a>
+      <a href="mailto:tdbeerksa@gmail.com" class="footer-social email" aria-label="Email" title="راسلنا">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      </a>
+    </div>
+
+    <a href="mailto:tdbeerksa@gmail.com" class="footer-email">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      tdbeerksa@gmail.com
+    </a>
+
+    <div class="footer-copy">© 2025 <b>تـدّبير</b> — صُنع بحب في المملكة العربية السعودية 🇸🇦</div>
+  </footer>
 </div>
 
 <!-- ═══ APP MODAL ═══ -->
