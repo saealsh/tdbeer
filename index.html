@@ -11012,6 +11012,7 @@ const Social = (() => {
 
   function subscribeToConversations() {
     if (!state.user) return;
+    let isFirstSnapshot = true; // علم للتعرف على أول تحميل
     const sub = subscribeWithRetry('convsSnap', (errCb) => {
       const ref = window.FB.query(
         window.FB.collection(window.FB.db, 'users', state.user.uid, 'conversations'),
@@ -11019,45 +11020,59 @@ const Social = (() => {
         window.FB.limit(50)
       );
       return window.FB.onSnapshot(ref, (snap) => {
-        const prevUnreadTotal = state.conversations.reduce((s, c) => s + (c.unread || 0), 0);
         const prevConvsMap = new Map(state.conversations.map(c => [c.peerUid, c]));
-        state.conversations = [];
-        snap.forEach(doc => state.conversations.push({ id: doc.id, ...doc.data() }));
-        const newUnreadTotal = state.conversations.reduce((s, c) => s + (c.unread || 0), 0);
+        const newConversations = [];
+        snap.forEach(doc => newConversations.push({ id: doc.id, ...doc.data() }));
+        
+        const newUnreadTotal = newConversations.reduce((s, c) => s + (c.unread || 0), 0);
 
         // Update tab badge
         if (window.ChatNotifications) {
           window.ChatNotifications.updateBadge(newUnreadTotal);
         }
 
-        // Detect new messages (unread count increased OR new conversation)
-        if (newUnreadTotal > prevUnreadTotal && state.profile) {
-          // Find which conversation got the new message
-          const newMsgConv = state.conversations.find(c => {
-            const prev = prevConvsMap.get(c.peerUid);
-            return (c.unread || 0) > (prev?.unread || 0);
-          });
+        // Detect new messages (only after first snapshot - skip historical notifications)
+        if (!isFirstSnapshot && state.profile) {
+          // ابحث عن أي محادثة فيها lastMessageAt أحدث من السابق
+          for (const conv of newConversations) {
+            const prev = prevConvsMap.get(conv.peerUid);
+            
+            // الشروط للإشعار:
+            // 1. محادثة جديدة (prev === undefined) ومعها رسالة
+            // 2. أو آخر رسالة فيها timestamp أحدث من السابق
+            // 3. والـ unread زاد (يعني فعلاً رسالة وصلت، مو أنا اللي أرسلت)
+            
+            const isNewConv = !prev && conv.lastMessage;
+            const hasNewMessage = prev && 
+              conv.lastMessageAt && prev.lastMessageAt &&
+              conv.lastMessageAt.seconds > (prev.lastMessageAt.seconds || 0);
+            const unreadIncreased = (conv.unread || 0) > (prev?.unread || 0);
+            
+            // فقط إذا فيه رسالة جديدة + الـ unread زاد (رسالة من الطرف الآخر، مو منّي)
+            if ((isNewConv || hasNewMessage) && unreadIncreased) {
+              // تأكد إني مو مفتّح المحادثة معه حالياً
+              if (!state.activeChat || state.activeChat.peerUid !== conv.peerUid) {
+                const friend = state.friends.find(f => f.uid === conv.peerUid);
+                const photoData = friend?.photoData || conv.peerPhotoData || null;
 
-          if (newMsgConv && (!state.activeChat || state.activeChat.peerUid !== newMsgConv.peerUid)) {
-            // Get peer photo from friend list
-            const friend = state.friends.find(f => f.uid === newMsgConv.peerUid);
-            const photoData = friend?.photoData || null;
-
-            // Trigger rich notification
-            if (window.ChatNotifications) {
-              window.ChatNotifications.notifyNewMessage({
-                peerUid: newMsgConv.peerUid,
-                peerName: newMsgConv.peerName,
-                peerUsername: newMsgConv.peerUsername,
-                text: newMsgConv.lastMessage,
-                photoData
-              });
+                // Trigger rich notification
+                if (window.ChatNotifications) {
+                  window.ChatNotifications.notifyNewMessage({
+                    peerUid: conv.peerUid,
+                    peerName: conv.peerName || friend?.displayName || 'مستخدم',
+                    peerUsername: conv.peerUsername || friend?.username || '',
+                    text: conv.lastMessage || 'رسالة جديدة',
+                    photoData
+                  });
+                }
+              }
             }
-
-            // Vibration
-            try { if (navigator.vibrate) navigator.vibrate([50, 30, 50]); } catch {}
           }
         }
+        
+        // حدّث state
+        state.conversations = newConversations;
+        isFirstSnapshot = false; // بعد أول snapshot صار false
 
         renderFriendsTab();
       }, errCb);
