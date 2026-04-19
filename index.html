@@ -11406,7 +11406,9 @@ const Social = (() => {
 
   function subscribeToConversations() {
     if (!state.user) return;
-    let isFirstSnapshot = true; // علم للتعرف على أول تحميل
+    let isFirstSnapshot = true;
+    const myUid = state.user.uid;
+    
     const sub = subscribeWithRetry('convsSnap', (errCb) => {
       const ref = window.FB.query(
         window.FB.collection(window.FB.db, 'users', state.user.uid, 'conversations'),
@@ -11414,59 +11416,97 @@ const Social = (() => {
         window.FB.limit(50)
       );
       return window.FB.onSnapshot(ref, (snap) => {
-        const prevConvsMap = new Map(state.conversations.map(c => [c.peerUid, c]));
+        // احفظ نسخة سابقة قبل التحديث
+        const prevConvsMap = new Map(state.conversations.map(c => [c.peerUid, {...c}]));
+        
         const newConversations = [];
         snap.forEach(doc => newConversations.push({ id: doc.id, ...doc.data() }));
         
         const newUnreadTotal = newConversations.reduce((s, c) => s + (c.unread || 0), 0);
 
-        // Update tab badge
+        // Update tab badge دائماً
         if (window.ChatNotifications) {
           window.ChatNotifications.updateBadge(newUnreadTotal);
         }
 
-        // Detect new messages (only after first snapshot - skip historical notifications)
-        if (!isFirstSnapshot && state.profile) {
-          // ابحث عن أي محادثة فيها lastMessageAt أحدث من السابق
+        // التحقق من الإشعارات (بعد أول snapshot)
+        if (!isFirstSnapshot) {
+          console.log('[Notif] Snapshot update - checking for new messages');
+          console.log('[Notif] Prev count:', prevConvsMap.size, 'New count:', newConversations.length);
+          
           for (const conv of newConversations) {
             const prev = prevConvsMap.get(conv.peerUid);
             
-            // الشروط للإشعار:
-            // 1. محادثة جديدة (prev === undefined) ومعها رسالة
-            // 2. أو آخر رسالة فيها timestamp أحدث من السابق
-            // 3. والـ unread زاد (يعني فعلاً رسالة وصلت، مو أنا اللي أرسلت)
+            // الحالات:
+            // 1. محادثة جديدة تماماً (لم تكن موجودة قبل)
+            const isCompletelyNew = !prev;
             
-            const isNewConv = !prev && conv.lastMessage;
-            const hasNewMessage = prev && 
-              conv.lastMessageAt && prev.lastMessageAt &&
-              conv.lastMessageAt.seconds > (prev.lastMessageAt.seconds || 0);
-            const unreadIncreased = (conv.unread || 0) > (prev?.unread || 0);
+            // 2. محادثة موجودة لكن فيها رسالة جديدة
+            const prevUnread = prev?.unread || 0;
+            const nowUnread = conv.unread || 0;
+            const unreadIncreased = nowUnread > prevUnread;
             
-            // فقط إذا فيه رسالة جديدة + الـ unread زاد (رسالة من الطرف الآخر، مو منّي)
-            if ((isNewConv || hasNewMessage) && unreadIncreased) {
-              // تأكد إني مو مفتّح المحادثة معه حالياً
-              if (!state.activeChat || state.activeChat.peerUid !== conv.peerUid) {
+            // 3. تغير آخر رسالة (لو الـ timestamp تغير)
+            const prevTime = prev?.lastMessageAt?.seconds || prev?.lastMessageAt?._seconds || 0;
+            const nowTime = conv.lastMessageAt?.seconds || conv.lastMessageAt?._seconds || 0;
+            const timestampChanged = nowTime > prevTime;
+            
+            // 4. هل الرسالة من الطرف الآخر (مش مني)؟
+            const isFromPeer = conv.lastMessageFrom && conv.lastMessageFrom !== myUid;
+            
+            console.log('[Notif]', conv.peerUid.substring(0,8), {
+              isCompletelyNew,
+              unreadIncreased,
+              timestampChanged,
+              isFromPeer,
+              prevUnread,
+              nowUnread,
+              lastMessageFrom: conv.lastMessageFrom?.substring(0,8),
+              myUid: myUid.substring(0,8)
+            });
+            
+            // شروط الإشعار:
+            // - الرسالة من الطرف الآخر
+            // - إما محادثة جديدة، أو الـ unread زاد، أو timestamp جديد
+            const shouldNotify = isFromPeer && (isCompletelyNew || unreadIncreased || timestampChanged);
+            
+            if (shouldNotify) {
+              // تأكد إن المحادثة مو مفتوحة
+              const isCurrentlyOpen = state.activeChat && state.activeChat.peerUid === conv.peerUid;
+              
+              if (!isCurrentlyOpen) {
+                console.log('[Notif] 🔔 TRIGGERING notification for:', conv.peerName);
+                
                 const friend = state.friends.find(f => f.uid === conv.peerUid);
                 const photoData = friend?.photoData || conv.peerPhotoData || null;
 
-                // Trigger rich notification
-                if (window.ChatNotifications) {
-                  window.ChatNotifications.notifyNewMessage({
-                    peerUid: conv.peerUid,
-                    peerName: conv.peerName || friend?.displayName || 'مستخدم',
-                    peerUsername: conv.peerUsername || friend?.username || '',
-                    text: conv.lastMessage || 'رسالة جديدة',
-                    photoData
-                  });
+                if (window.ChatNotifications && typeof window.ChatNotifications.notifyNewMessage === 'function') {
+                  try {
+                    window.ChatNotifications.notifyNewMessage({
+                      peerUid: conv.peerUid,
+                      peerName: conv.peerName || friend?.displayName || 'مستخدم',
+                      peerUsername: conv.peerUsername || friend?.username || '',
+                      text: conv.lastMessage || 'رسالة جديدة',
+                      photoData
+                    });
+                  } catch (e) {
+                    console.error('[Notif] Error triggering notification:', e);
+                  }
+                } else {
+                  console.warn('[Notif] ChatNotifications not available');
                 }
+              } else {
+                console.log('[Notif] Chat is currently open - skipping notification');
               }
             }
           }
+        } else {
+          console.log('[Notif] First snapshot - skipping notifications (initial load)');
         }
         
-        // حدّث state
+        // حدّث state بعد التحقق
         state.conversations = newConversations;
-        isFirstSnapshot = false; // بعد أول snapshot صار false
+        isFirstSnapshot = false;
 
         renderFriendsTab();
       }, errCb);
