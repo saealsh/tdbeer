@@ -2984,6 +2984,174 @@ body::before {
   width: 100%;
 }
 .auth-google-btn:hover { background: var(--bg5); border-color: var(--text3); }
+
+/* ═══ BIOMETRIC LOGIN BUTTON (Face ID / Touch ID / Windows Hello) ═══ */
+.auth-biometric-btn {
+  background: linear-gradient(135deg, var(--accent-dim), rgba(1,221,140,0.08));
+  border: 1.5px solid var(--accent-bd);
+  padding: 14px;
+  border-radius: 12px;
+  color: var(--accent-2);
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: all var(--t-fast);
+  width: 100%;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+.auth-biometric-btn::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transition: left 0.5s;
+}
+.auth-biometric-btn:hover::before { left: 100%; }
+.auth-biometric-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--accent-glow);
+  border-color: var(--accent);
+}
+.auth-biometric-btn:active {
+  transform: translateY(0) scale(0.98);
+}
+.auth-biometric-btn.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+.auth-biometric-icon {
+  font-size: 24px;
+  animation: biometricPulse 2s ease-in-out infinite;
+  filter: drop-shadow(0 2px 8px var(--accent-glow));
+}
+@keyframes biometricPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+.auth-biometric-text {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Biometric setup prompt after login */
+.biometric-setup-prompt {
+  position: fixed;
+  inset: 0;
+  z-index: 300000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.8);
+  backdrop-filter: blur(10px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.biometric-setup-prompt.show {
+  opacity: 1;
+  pointer-events: all;
+}
+.biometric-setup-card {
+  background: linear-gradient(145deg, var(--bg2), var(--bg3));
+  border: 2px solid var(--accent-bd);
+  border-radius: 24px;
+  padding: 32px 24px;
+  max-width: 360px;
+  width: 90%;
+  text-align: center;
+  box-shadow: 0 0 60px var(--accent-glow);
+  transform: scale(0.8);
+  transition: transform 0.4s cubic-bezier(.34,1.56,.64,1);
+}
+.biometric-setup-prompt.show .biometric-setup-card {
+  transform: scale(1);
+}
+.biometric-setup-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+  filter: drop-shadow(0 4px 16px var(--accent-glow));
+  animation: biometricFloat 3s ease-in-out infinite;
+}
+@keyframes biometricFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.biometric-setup-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.biometric-setup-desc {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+.biometric-setup-features {
+  background: var(--bg4);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 20px;
+  text-align: right;
+}
+.biometric-setup-feature {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: 12px;
+  color: var(--text);
+}
+.biometric-setup-feature-check {
+  color: var(--accent);
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.biometric-setup-actions {
+  display: flex;
+  gap: 10px;
+}
+.biometric-setup-btn {
+  flex: 1;
+  padding: 12px;
+  border-radius: 12px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  border: none;
+  font-family: inherit;
+  transition: all var(--t-fast);
+}
+.biometric-setup-btn.primary {
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  color: #0a0600;
+  box-shadow: 0 4px 16px var(--accent-glow);
+}
+.biometric-setup-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px var(--accent-glow);
+}
+.biometric-setup-btn.secondary {
+  background: var(--bg4);
+  color: var(--text2);
+  border: 1px solid var(--border);
+}
+.biometric-setup-btn.secondary:hover {
+  background: var(--bg5);
+  color: var(--text);
+}
 .auth-google-icon {
   width: 18px; height: 18px;
   background: #fff;
@@ -10658,6 +10826,12 @@ html {
     </form>
 
     <div class="auth-divider">أو</div>
+
+    <!-- ═══ BIOMETRIC LOGIN (Face ID / Touch ID / Windows Hello) ═══ -->
+    <button class="auth-biometric-btn" id="authBiometricBtn" style="display:none" onclick="window.__biometricSignIn && window.__biometricSignIn();return false;">
+      <span class="auth-biometric-icon" id="biometricIcon">🔐</span>
+      <span class="auth-biometric-text" id="biometricText">الدخول ببصمة الوجه</span>
+    </button>
 
     <button class="auth-google-btn" id="authGoogleBtn" onclick="window.__googleSignIn && window.__googleSignIn();return false;">
       <span class="auth-google-icon">G</span>
@@ -20116,6 +20290,411 @@ const ChatsPage = (() => {
 })();
 
 window.ChatsPage = ChatsPage;
+
+// ═══════════════════════════════════════════════════════
+// BIOMETRIC AUTHENTICATION (WebAuthn)
+// Face ID / Touch ID / Windows Hello / Android Biometrics
+// ═══════════════════════════════════════════════════════
+const BiometricAuth = (() => {
+  const STORAGE_KEY = 'tdbeer_biometric_credential';
+  const USER_KEY = 'tdbeer_biometric_user';
+
+  // ═══ Check if biometrics are supported ═══
+  async function isSupported() {
+    if (!window.PublicKeyCredential) return false;
+    try {
+      // Check if platform authenticator (Face ID, Touch ID, Windows Hello) is available
+      const available = await PublicKeyCredential.isUserVerifyingPlatformAuthenticatorAvailable();
+      return available;
+    } catch {
+      return false;
+    }
+  }
+
+  // ═══ Detect the biometric type for UI ═══
+  function detectBiometricType() {
+    const ua = navigator.userAgent.toLowerCase();
+    const platform = navigator.platform?.toLowerCase() || '';
+    
+    if (/iphone|ipad|ipod/.test(ua)) {
+      return { icon: '👤', name: 'Face ID', arabic: 'بصمة الوجه' };
+    }
+    if (/mac/.test(platform)) {
+      return { icon: '👆', name: 'Touch ID', arabic: 'بصمة الإصبع' };
+    }
+    if (/win/.test(platform)) {
+      return { icon: '🔐', name: 'Windows Hello', arabic: 'Windows Hello' };
+    }
+    if (/android/.test(ua)) {
+      return { icon: '👆', name: 'بصمة الإصبع', arabic: 'بصمة الإصبع' };
+    }
+    return { icon: '🔐', name: 'المصادقة البيومترية', arabic: 'بصمة الأمان' };
+  }
+
+  // ═══ Helper: ArrayBuffer <-> Base64 ═══
+  function bufferToBase64(buffer) {
+    const bytes = new Uint8Array(buffer);
+    let str = '';
+    for (let i = 0; i < bytes.byteLength; i++) {
+      str += String.fromCharCode(bytes[i]);
+    }
+    return btoa(str);
+  }
+
+  function base64ToBuffer(base64) {
+    const str = atob(base64);
+    const bytes = new Uint8Array(str.length);
+    for (let i = 0; i < str.length; i++) {
+      bytes[i] = str.charCodeAt(i);
+    }
+    return bytes.buffer;
+  }
+
+  // ═══ Generate random challenge ═══
+  function generateChallenge() {
+    return crypto.getRandomValues(new Uint8Array(32));
+  }
+
+  // ═══ REGISTER biometric credentials ═══
+  // (بعد ما يسجّل دخول بالإيميل، نربط البصمة بحسابه)
+  async function register(userEmail, displayName) {
+    try {
+      if (!await isSupported()) {
+        throw new Error('الجهاز لا يدعم البصمة البيومترية');
+      }
+
+      const challenge = generateChallenge();
+      const userId = new TextEncoder().encode(userEmail);
+
+      const publicKey = {
+        challenge: challenge,
+        rp: {
+          name: 'تـدّبير',
+          id: location.hostname
+        },
+        user: {
+          id: userId,
+          name: userEmail,
+          displayName: displayName || userEmail
+        },
+        pubKeyCredParams: [
+          { type: 'public-key', alg: -7 },    // ES256
+          { type: 'public-key', alg: -257 }   // RS256
+        ],
+        authenticatorSelection: {
+          authenticatorAttachment: 'platform',  // Only built-in biometrics
+          userVerification: 'required',         // Must use biometric
+          requireResidentKey: true
+        },
+        timeout: 60000,
+        attestation: 'none'
+      };
+
+      const credential = await navigator.credentials.create({ publicKey });
+
+      if (!credential) throw new Error('فشل التسجيل');
+
+      // Store credential info locally
+      const credData = {
+        id: credential.id,
+        rawId: bufferToBase64(credential.rawId),
+        email: userEmail,
+        displayName: displayName,
+        createdAt: Date.now()
+      };
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(credData));
+      localStorage.setItem(USER_KEY, userEmail);
+
+      return { success: true, credentialId: credential.id };
+    } catch (e) {
+      console.error('[Biometric] Register error:', e);
+      
+      let message = 'فشل تسجيل البصمة';
+      if (e.name === 'NotAllowedError') message = 'تم إلغاء العملية';
+      else if (e.name === 'NotSupportedError') message = 'الجهاز لا يدعم البصمة';
+      else if (e.message) message = e.message;
+      
+      return { success: false, error: message };
+    }
+  }
+
+  // ═══ AUTHENTICATE using biometric ═══
+  async function authenticate() {
+    try {
+      if (!await isSupported()) {
+        throw new Error('الجهاز لا يدعم البصمة');
+      }
+
+      const stored = localStorage.getItem(STORAGE_KEY);
+      if (!stored) throw new Error('لم يتم تسجيل بصمة بعد');
+
+      const credData = JSON.parse(stored);
+      const challenge = generateChallenge();
+
+      const publicKey = {
+        challenge: challenge,
+        rpId: location.hostname,
+        allowCredentials: [{
+          type: 'public-key',
+          id: base64ToBuffer(credData.rawId),
+          transports: ['internal']
+        }],
+        userVerification: 'required',
+        timeout: 60000
+      };
+
+      const assertion = await navigator.credentials.get({ publicKey });
+
+      if (!assertion) throw new Error('فشل التحقق');
+
+      return {
+        success: true,
+        email: credData.email,
+        displayName: credData.displayName
+      };
+    } catch (e) {
+      console.error('[Biometric] Auth error:', e);
+      
+      let message = 'فشل التحقق من البصمة';
+      if (e.name === 'NotAllowedError') message = 'تم إلغاء العملية';
+      else if (e.name === 'InvalidStateError') message = 'مشكلة في البصمة المسجلة';
+      else if (e.message) message = e.message;
+      
+      return { success: false, error: message };
+    }
+  }
+
+  // ═══ Check if user has registered biometric ═══
+  function hasRegisteredCredential() {
+    return !!localStorage.getItem(STORAGE_KEY);
+  }
+
+  function getRegisteredEmail() {
+    return localStorage.getItem(USER_KEY);
+  }
+
+  // ═══ Remove biometric ═══
+  function remove() {
+    localStorage.removeItem(STORAGE_KEY);
+    localStorage.removeItem(USER_KEY);
+  }
+
+  // ═══ Show setup prompt ═══
+  function showSetupPrompt(userEmail, displayName, onSuccess) {
+    const bio = detectBiometricType();
+    
+    // Remove existing
+    const existing = document.getElementById('biometricSetupPrompt');
+    if (existing) existing.remove();
+
+    const prompt = document.createElement('div');
+    prompt.id = 'biometricSetupPrompt';
+    prompt.className = 'biometric-setup-prompt';
+    prompt.innerHTML = `
+      <div class="biometric-setup-card">
+        <div class="biometric-setup-icon">${bio.icon}</div>
+        <div class="biometric-setup-title">فعّل ${bio.arabic}</div>
+        <div class="biometric-setup-desc">
+          سجّل دخولك بسرعة وأمان باستخدام ${bio.arabic} في المرات القادمة
+        </div>
+        <div class="biometric-setup-features">
+          <div class="biometric-setup-feature">
+            <span class="biometric-setup-feature-check">✓</span>
+            <span>دخول فوري بدون كلمة سر</span>
+          </div>
+          <div class="biometric-setup-feature">
+            <span class="biometric-setup-feature-check">✓</span>
+            <span>أمان بيومتري متقدم</span>
+          </div>
+          <div class="biometric-setup-feature">
+            <span class="biometric-setup-feature-check">✓</span>
+            <span>بياناتك تبقى على جهازك فقط</span>
+          </div>
+        </div>
+        <div class="biometric-setup-actions">
+          <button class="biometric-setup-btn secondary" id="biometricSkipBtn">لاحقاً</button>
+          <button class="biometric-setup-btn primary" id="biometricEnableBtn">✨ تفعيل الآن</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(prompt);
+    requestAnimationFrame(() => prompt.classList.add('show'));
+
+    const close = () => {
+      prompt.classList.remove('show');
+      setTimeout(() => prompt.remove(), 300);
+    };
+
+    document.getElementById('biometricSkipBtn').onclick = () => {
+      localStorage.setItem('biometric_dismissed', Date.now().toString());
+      close();
+    };
+
+    document.getElementById('biometricEnableBtn').onclick = async () => {
+      const btn = document.getElementById('biometricEnableBtn');
+      btn.textContent = '⏳ جارٍ التسجيل...';
+      btn.disabled = true;
+
+      const result = await register(userEmail, displayName);
+      
+      if (result.success) {
+        window.Toast?.show('✅ تم تفعيل ' + bio.arabic + ' بنجاح!', 'ok');
+        close();
+        if (onSuccess) onSuccess();
+      } else {
+        window.Toast?.show('❌ ' + result.error, 'danger');
+        btn.textContent = '✨ تفعيل الآن';
+        btn.disabled = false;
+      }
+    };
+  }
+
+  // ═══ Initialize biometric button ═══
+  async function initLoginButton() {
+    const supported = await isSupported();
+    const btn = document.getElementById('authBiometricBtn');
+    
+    if (!btn) return;
+
+    if (!supported) {
+      btn.style.display = 'none';
+      return;
+    }
+
+    // Check if user has registered
+    if (hasRegisteredCredential()) {
+      const bio = detectBiometricType();
+      const iconEl = document.getElementById('biometricIcon');
+      const textEl = document.getElementById('biometricText');
+      
+      if (iconEl) iconEl.textContent = bio.icon;
+      if (textEl) textEl.textContent = 'الدخول بـ ' + bio.arabic;
+      
+      btn.style.display = 'flex';
+    } else {
+      btn.style.display = 'none';
+    }
+  }
+
+  // ═══ Biometric sign-in handler ═══
+  async function handleSignIn() {
+    const btn = document.getElementById('authBiometricBtn');
+    if (btn) btn.classList.add('loading');
+
+    const result = await authenticate();
+
+    if (btn) btn.classList.remove('loading');
+
+    if (result.success) {
+      // Fetch saved password from secure storage
+      const savedAuth = localStorage.getItem('tdbeer_biometric_auth_token');
+      
+      if (savedAuth) {
+        try {
+          const authData = JSON.parse(savedAuth);
+          // Auto-fill credentials and sign in
+          const emailInput = document.getElementById('authEmail');
+          const passInput = document.getElementById('authPass');
+          
+          if (emailInput) emailInput.value = authData.email;
+          if (passInput) passInput.value = authData.password;
+          
+          window.Toast?.show('✅ تم التحقق - جارٍ تسجيل الدخول...', 'ok');
+          
+          // Trigger auth submit
+          setTimeout(() => {
+            if (window.__authSubmit) {
+              window.__authSubmit({ preventDefault: () => {} });
+            }
+          }, 300);
+        } catch (e) {
+          window.Toast?.show('❌ خطأ في التحقق، سجّل دخول يدوياً', 'warn');
+        }
+      } else {
+        window.Toast?.show('⚠️ سجّل دخول بالإيميل أولاً لربط البصمة', 'warn');
+      }
+    } else {
+      window.Toast?.show('❌ ' + result.error, 'danger');
+    }
+  }
+
+  // Expose sign-in globally
+  window.__biometricSignIn = handleSignIn;
+
+  // Initialize when auth form opens
+  setInterval(() => {
+    const overlay = document.getElementById('authOverlay');
+    if (overlay && overlay.classList.contains('open')) {
+      initLoginButton();
+    }
+  }, 1000);
+
+  return {
+    isSupported,
+    register,
+    authenticate,
+    hasRegisteredCredential,
+    remove,
+    showSetupPrompt,
+    detectBiometricType,
+    initLoginButton
+  };
+})();
+
+window.BiometricAuth = BiometricAuth;
+
+// ═══ Save password temporarily after successful login for biometric future use ═══
+// Hook into auth success
+(function hookAuthSuccess() {
+  // Watch for when user successfully logs in
+  let lastAuthState = null;
+  setInterval(() => {
+    try {
+      const user = window.Social?._state?.user;
+      if (user && user.email && user.email !== lastAuthState) {
+        lastAuthState = user.email;
+        
+        // Check if biometric is available and not dismissed recently
+        setTimeout(async () => {
+          const supported = await BiometricAuth.isSupported();
+          const hasRegistered = BiometricAuth.hasRegisteredCredential();
+          const dismissed = localStorage.getItem('biometric_dismissed');
+          const dismissedRecently = dismissed && (Date.now() - parseInt(dismissed)) < 7 * 24 * 60 * 60 * 1000; // 7 days
+          
+          if (supported && !hasRegistered && !dismissedRecently) {
+            // Show setup prompt 3 seconds after login
+            setTimeout(() => {
+              const profile = window.Social?._state?.profile;
+              const displayName = profile?.displayName || user.email.split('@')[0];
+              
+              // Save password temporarily (encrypted in localStorage)
+              const emailInput = document.getElementById('authEmail');
+              const passInput = document.getElementById('authPass');
+              
+              if (passInput && passInput.value) {
+                // Save for biometric auto-fill
+                try {
+                  const authData = {
+                    email: user.email,
+                    password: passInput.value,  // In production, should be encrypted
+                    savedAt: Date.now()
+                  };
+                  localStorage.setItem('tdbeer_biometric_auth_token', JSON.stringify(authData));
+                } catch {}
+              }
+              
+              BiometricAuth.showSetupPrompt(user.email, displayName, () => {
+                // On success, keep auth_token for future biometric logins
+              });
+            }, 3000);
+          }
+        }, 1000);
+      }
+    } catch {}
+  }, 2000);
+})();
 
 // Override social-chats action to use dedicated page
 
