@@ -5170,6 +5170,645 @@ body::before {
 .app-header::after{
   box-shadow:0 4px 20px rgba(0,0,0,0.3);
 }
+
+/* ═══════════════════════════════════════════════════════
+   RESPONSIVE DESIGN SYSTEM v2.0
+   Works perfectly on all screen sizes:
+   - Mobile (portrait): < 480px
+   - Mobile (landscape): 481-767px
+   - Tablet: 768-1023px
+   - Laptop: 1024-1439px
+   - Desktop: 1440px+
+   ═══════════════════════════════════════════════════════ */
+
+/* ═══ BASE: Mobile First (< 480px) ═══ */
+@media (max-width: 479px) {
+  /* Header */
+  .app-header {
+    min-height: 54px;
+  }
+  .header-inner {
+    padding: 0 10px;
+    gap: 6px;
+  }
+  .app-logo-mark {
+    width: 32px;
+    height: 32px;
+  }
+  .app-logo-name {
+    font-size: 16px;
+  }
+  .app-logo-section {
+    font-size: 9px;
+  }
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 15px;
+  }
+  .sidebar-toggle svg {
+    width: 18px;
+    height: 18px;
+  }
+  
+  /* Header band */
+  .header-band {
+    padding: 4px 10px;
+    font-size: 10px;
+  }
+  
+  /* Main content */
+  .main {
+    padding: 10px 10px 0;
+  }
+  
+  /* Cards */
+  .card {
+    padding: 14px;
+    margin-bottom: 10px;
+    border-radius: 14px;
+  }
+  .card-title {
+    font-size: 13px;
+  }
+  .card-sub {
+    font-size: 10px;
+  }
+  
+  /* Stats grid */
+  .cards-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .stat-card {
+    padding: 10px;
+  }
+  .stat-value {
+    font-size: 18px;
+  }
+  .stat-label {
+    font-size: 10px;
+  }
+  
+  /* Bank card */
+  .bank-card {
+    padding: 16px;
+  }
+  .bank-balance {
+    font-size: 34px;
+  }
+  
+  /* Sub-nav */
+  .sub-nav {
+    padding: 10px 12px;
+    gap: 6px;
+  }
+  .sub-nav-btn {
+    padding: 8px 14px;
+    font-size: 11px;
+  }
+  
+  /* Month bar */
+  .month-bar {
+    padding: 8px 12px;
+  }
+  .month-label {
+    font-size: 13px;
+    min-width: 120px;
+  }
+  .month-arrow {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+  
+  /* Forms */
+  .input, .select {
+    font-size: 14px;
+    padding: 10px 12px;
+  }
+  .btn-primary {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+  
+  /* Sidebar adjustments */
+  .sidebar-drawer {
+    width: 280px;
+    max-width: 85vw;
+  }
+  .sidebar-header {
+    padding: 16px 14px 14px;
+  }
+  .sidebar-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 18px;
+  }
+  .sidebar-user-name {
+    font-size: 14px;
+  }
+  .sidebar-user-handle {
+    font-size: 10px;
+  }
+  .sidebar-stats {
+    padding: 12px 10px;
+    gap: 6px;
+  }
+  .sidebar-stat {
+    padding: 8px 4px;
+  }
+  .sidebar-stat-value {
+    font-size: 15px;
+  }
+  .sidebar-stat-label {
+    font-size: 9px;
+  }
+  .sidebar-item {
+    padding: 10px 10px;
+    font-size: 13px;
+    gap: 12px;
+  }
+  .sidebar-icon {
+    width: 34px;
+    height: 34px;
+    font-size: 17px;
+  }
+  .sidebar-section-title {
+    font-size: 10px;
+    padding: 12px 10px 6px;
+  }
+  
+  /* Chat panel */
+  .chat-panel {
+    width: 100%;
+    max-width: 100%;
+  }
+  .chat-header {
+    padding: 8px 12px;
+  }
+  .chat-peer-avatar {
+    width: 36px;
+    height: 36px;
+  }
+  .chat-peer-name {
+    font-size: 14px;
+  }
+  .msg {
+    max-width: 80%;
+    font-size: 13px;
+    padding: 8px 11px;
+  }
+  
+  /* Conversations */
+  .conv-card {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+  .conv-avatar {
+    width: 44px;
+    height: 44px;
+    font-size: 16px;
+  }
+  .conv-name {
+    font-size: 13px;
+  }
+  .conv-last-text {
+    font-size: 11px;
+  }
+  .conv-time {
+    font-size: 9px;
+  }
+  
+  /* Filter tabs for conversations */
+  .conv-filters {
+    gap: 4px;
+  }
+  .conv-filter {
+    padding: 6px 10px;
+    font-size: 10px;
+  }
+  
+  /* Bottom sheets (conv actions) */
+  .conv-actions-menu {
+    width: calc(100% - 16px);
+    padding: 16px;
+  }
+  .conv-menu-action {
+    padding: 12px 6px;
+    font-size: 13px;
+  }
+  
+  /* Profile modal */
+  .profile-big-avatar {
+    width: 80px;
+    height: 80px;
+    font-size: 32px;
+  }
+  .profile-name {
+    font-size: 18px;
+  }
+  
+  /* Friends tab */
+  .friends-sub-tab {
+    font-size: 10px;
+    padding: 8px 4px;
+  }
+  
+  /* Sub-nav button shorter */
+  .sub-nav-btn {
+    padding: 8px 12px;
+    font-size: 11px;
+  }
+  
+  /* Greeting */
+  .greeting-hello {
+    font-size: 20px;
+  }
+  .greeting-sub {
+    font-size: 12px;
+  }
+}
+
+/* ═══ SMALL MOBILE (< 380px - iPhone SE, etc.) ═══ */
+@media (max-width: 379px) {
+  .app-logo-name {
+    font-size: 14px;
+  }
+  .app-logo-section {
+    display: none; /* Too cramped */
+  }
+  .bank-balance {
+    font-size: 28px;
+  }
+  .stat-value {
+    font-size: 16px;
+  }
+  .msg {
+    max-width: 85%;
+    font-size: 12px;
+  }
+  .sidebar-drawer {
+    width: 85vw;
+  }
+  .conv-card {
+    gap: 8px;
+  }
+  .conv-avatar {
+    width: 40px;
+    height: 40px;
+  }
+  .icon-btn {
+    width: 34px;
+    height: 34px;
+  }
+}
+
+/* ═══ MOBILE LANDSCAPE / SMALL TABLET (480-767px) ═══ */
+@media (min-width: 480px) and (max-width: 767px) {
+  .main {
+    padding: 14px 14px 0;
+  }
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  .sidebar-drawer {
+    width: 320px;
+  }
+}
+
+/* ═══ TABLET (768-1023px) ═══ */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .app-shell {
+    max-width: 640px;
+  }
+  .main {
+    padding: 18px 18px 0;
+  }
+  
+  /* Bigger cards on tablet */
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .stat-card {
+    padding: 16px;
+  }
+  .stat-value {
+    font-size: 24px;
+  }
+  
+  /* Bigger bank card */
+  .bank-card {
+    padding: 24px;
+  }
+  .bank-balance {
+    font-size: 48px;
+  }
+  
+  /* Sidebar wider */
+  .sidebar-drawer {
+    width: 360px;
+  }
+  .sidebar-avatar {
+    width: 56px;
+    height: 56px;
+    font-size: 24px;
+  }
+  .sidebar-item {
+    padding: 14px 14px;
+    font-size: 15px;
+  }
+  .sidebar-icon {
+    width: 42px;
+    height: 42px;
+    font-size: 20px;
+  }
+  
+  /* Conversations bigger */
+  .conv-card {
+    padding: 14px 16px;
+  }
+  .conv-avatar {
+    width: 52px;
+    height: 52px;
+    font-size: 20px;
+  }
+  .conv-name {
+    font-size: 15px;
+  }
+  .conv-last-text {
+    font-size: 13px;
+  }
+  
+  /* Chat bigger */
+  .msg {
+    max-width: 70%;
+    font-size: 15px;
+  }
+  
+  /* Forms */
+  .input, .select {
+    font-size: 15px;
+    padding: 11px 14px;
+  }
+}
+
+/* ═══ LAPTOP (1024-1439px) ═══ */
+@media (min-width: 1024px) and (max-width: 1439px) {
+  .app-shell {
+    max-width: 720px;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    box-shadow: 0 0 60px rgba(0,0,0,0.3);
+  }
+  
+  /* Comfortable spacing */
+  .main {
+    padding: 22px 22px 0;
+  }
+  
+  /* Stats 4 columns */
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  
+  /* Full size bank */
+  .bank-balance {
+    font-size: 52px;
+  }
+  
+  /* Sidebar */
+  .sidebar-drawer {
+    width: 380px;
+  }
+  .sidebar-header {
+    padding: 22px 20px 20px;
+  }
+  .sidebar-avatar {
+    width: 60px;
+    height: 60px;
+    font-size: 26px;
+  }
+  
+  /* Better hover effects on desktop */
+  .sidebar-item:hover {
+    transform: translateX(-6px);
+  }
+  .conv-card:hover {
+    transform: translateX(-4px);
+  }
+  
+  /* Show menu btn always on desktop */
+  .conv-menu-btn {
+    opacity: 0.4 !important;
+  }
+  .conv-card:hover .conv-menu-btn {
+    opacity: 1 !important;
+  }
+}
+
+/* ═══ DESKTOP (1440px+) ═══ */
+@media (min-width: 1440px) {
+  .app-shell {
+    max-width: 800px;
+    border-left: 1px solid var(--border);
+    border-right: 1px solid var(--border);
+    box-shadow: 0 0 80px rgba(0,0,0,0.4);
+  }
+  
+  /* Luxurious spacing */
+  .main {
+    padding: 26px 26px 0;
+  }
+  
+  /* Big cards */
+  .cards-grid {
+    gap: 18px;
+  }
+  .stat-card {
+    padding: 18px;
+  }
+  .stat-value {
+    font-size: 26px;
+  }
+  
+  /* Premium bank card */
+  .bank-card {
+    padding: 28px;
+  }
+  .bank-balance {
+    font-size: 56px;
+  }
+  
+  /* Sidebar premium */
+  .sidebar-drawer {
+    width: 400px;
+  }
+  .sidebar-header {
+    padding: 24px 22px 22px;
+  }
+  .sidebar-avatar {
+    width: 64px;
+    height: 64px;
+    font-size: 28px;
+  }
+  .sidebar-user-name {
+    font-size: 17px;
+  }
+  .sidebar-user-handle {
+    font-size: 13px;
+  }
+  .sidebar-stat-value {
+    font-size: 20px;
+  }
+  .sidebar-item {
+    padding: 16px 16px;
+    font-size: 15px;
+  }
+  .sidebar-icon {
+    width: 44px;
+    height: 44px;
+    font-size: 22px;
+  }
+  
+  /* Chat premium */
+  .msg {
+    max-width: 65%;
+    font-size: 15px;
+  }
+}
+
+/* ═══ ULTRA-WIDE (1920px+) ═══ */
+@media (min-width: 1920px) {
+  .app-shell {
+    max-width: 880px;
+  }
+  .main {
+    padding: 30px 30px 0;
+  }
+}
+
+/* ═══ LANDSCAPE PHONE FIX ═══ */
+@media (max-width: 900px) and (orientation: landscape) {
+  .app-shell {
+    max-width: 100%;
+  }
+  .sidebar-drawer {
+    width: 320px;
+    max-width: 60vw;
+  }
+  .chat-panel {
+    max-width: 100%;
+  }
+}
+
+/* ═══ TOUCH DEVICES OPTIMIZATION ═══ */
+@media (hover: none) and (pointer: coarse) {
+  /* Bigger tap targets on touch devices */
+  .icon-btn {
+    min-width: 40px;
+    min-height: 40px;
+  }
+  .sidebar-item {
+    min-height: 48px; /* Apple's minimum tap target */
+  }
+  .conv-menu-btn {
+    min-width: 40px;
+    min-height: 40px;
+    opacity: 0.5 !important;
+  }
+  .sub-nav-btn {
+    min-height: 40px;
+  }
+  .chip {
+    min-height: 32px;
+    padding: 6px 14px;
+  }
+  /* No hover effects */
+  .card:hover,
+  .stat-card:hover,
+  .conv-card:hover,
+  .sidebar-item:hover {
+    transform: none !important;
+  }
+}
+
+/* ═══ MOUSE DEVICES (Desktop) ═══ */
+@media (hover: hover) and (pointer: fine) {
+  /* Enhanced hover states */
+  .card:hover {
+    transform: translateY(-3px);
+  }
+  .sidebar-item:hover {
+    background: var(--bg3);
+  }
+  .icon-btn:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* ═══ PRINT STYLES ═══ */
+@media print {
+  .app-header,
+  .main-nav,
+  .sub-nav,
+  .sidebar-drawer,
+  .sidebar-backdrop,
+  .chat-panel,
+  .fab,
+  .icon-btn {
+    display: none !important;
+  }
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  .card {
+    break-inside: avoid;
+    border: 1px solid #ddd;
+    box-shadow: none;
+  }
+}
+
+/* ═══ SAFE AREA INSETS (iPhone notch, etc.) ═══ */
+.app-header {
+  padding-top: env(safe-area-inset-top, 0);
+}
+body {
+  padding-top: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+.sidebar-drawer {
+  padding-top: env(safe-area-inset-top, 0);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+}
+
+/* ═══ DYNAMIC VIEWPORT HEIGHT (modern browsers) ═══ */
+.app-modal,
+.chat-panel,
+.sidebar-drawer {
+  height: 100vh;
+  height: 100dvh; /* Dynamic viewport - accounts for browser chrome */
+}
+
+/* ═══ TEXT SCALING PREVENTION (iOS) ═══ */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* ═══ SMOOTH SCROLL ═══ */
+html {
+  scroll-behavior: smooth;
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
 .friends-sub-tab{flex:1;padding:11px 4px;border-radius:10px;font-size:12px;font-weight:700;color:var(--text3);background:transparent;transition:all var(--t-med);display:flex;align-items:center;justify-content:center;gap:6px;position:relative;cursor:pointer;overflow:hidden}
 .friends-sub-tab::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg, var(--accent-dim), transparent);opacity:0;transition:opacity var(--t-fast);border-radius:10px}
 .friends-sub-tab:hover:not(.active)::before{opacity:.5}
