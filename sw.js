@@ -3,8 +3,24 @@
    استراتيجية: Cache First للـ assets، Network First للـ Firestore
 ═══════════════════════════════════════════════════ */
 
-const CACHE_NAME = 'tdbeer-v1';
-const CACHE_VERSION = '1.0.0';
+const CACHE_NAME = 'tdbeer-v2';
+const CACHE_VERSION = '2.0.0';
+const BUILD_TIME = '2026-04-25';
+
+// تحقق من الـ version في كل طلب navigate
+async function checkVersion() {
+  try {
+    const res = await fetch('./?v=' + Date.now(), { cache: 'no-store' });
+    if (res.ok) {
+      const text = await res.text();
+      // إذا تغير الـ HTML، أبلّغ الـ clients
+      const clients_list = await self.clients.matchAll({ type: 'window' });
+      for (const client of clients_list) {
+        client.postMessage({ type: 'NEW_VERSION_AVAILABLE' });
+      }
+    }
+  } catch {}
+}
 
 // الملفات الأساسية اللي تشتغل أوفلاين
 const CORE_ASSETS = [
@@ -140,9 +156,27 @@ self.addEventListener('notificationclick', (event) => {
   );
 });
 
-// ─── BACKGROUND SYNC (مستقبلاً) ───
+// ─── BACKGROUND SYNC ───
 self.addEventListener('sync', (event) => {
+  if (event.tag === 'sync-streak') {
+    event.waitUntil(syncStreak());
+  }
   if (event.tag === 'sync-data') {
-    // يمكن لاحقاً مزامنة البيانات لما يعود الإنترنت
+    event.waitUntil(syncData());
   }
 });
+
+async function syncStreak() {
+  // لما يعود الإنترنت، نبلّغ الـ clients لتشغّل syncStreak
+  const clients_list = await self.clients.matchAll({ type: 'window' });
+  for (const client of clients_list) {
+    client.postMessage({ type: 'SYNC_STREAK' });
+  }
+}
+
+async function syncData() {
+  const clients_list = await self.clients.matchAll({ type: 'window' });
+  for (const client of clients_list) {
+    client.postMessage({ type: 'SYNC_DATA' });
+  }
+}
