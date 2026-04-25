@@ -1,6 +1,32 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl" data-theme="midnight">
 <head>
+  <!-- Content Security Policy -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline'
+      https://www.gstatic.com
+      https://www.googleapis.com
+      https://apis.google.com
+      https://cdn.jsdelivr.net
+      https://cdnjs.cloudflare.com;
+    style-src 'self' 'unsafe-inline'
+      https://fonts.googleapis.com;
+    font-src 'self'
+      https://fonts.gstatic.com;
+    img-src 'self' data: blob:
+      https://*.googleusercontent.com
+      https://firebasestorage.googleapis.com;
+    connect-src 'self'
+      https://*.googleapis.com
+      https://*.firebaseio.com
+      https://identitytoolkit.googleapis.com
+      https://securetoken.googleapis.com
+      wss://*.firebaseio.com;
+    frame-src 'none';
+    object-src 'none';
+    base-uri 'self';
+  ">
 <meta charset="UTF-8">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -9878,7 +9904,7 @@ html {
   </div>
   <h1>تـدّبير <span class="accent">المال</span></h1>
   <p class="landing-sub">مخططك المالي الذكي باللغة العربية — تابع دخلك ومصاريفك، احسب زكاتك، وحقق أهدافك المالية بثقة.</p>
-  <button class="landing-cta" id="openAppBtn" onclick="(function(){try{document.getElementById('landing').style.display='none';document.getElementById('appModal').classList.add('open');if(typeof Renderers!=='undefined'&&Renderers.scheduledAll)Renderers.scheduledAll();}catch(e){alert('خطأ في فتح التطبيق، أعد التحميل');}})();return false;">ابدأ الحين ←</button>
+  <button type="button" class="landing-cta" id="openAppBtn" onclick="(function(){try{document.getElementById('landing').style.display='none';document.getElementById('appModal').classList.add('open');if(typeof Renderers!=='undefined'&&Renderers.scheduledAll)Renderers.scheduledAll();}catch(e){alert('خطأ في فتح التطبيق، أعد التحميل');}})();return false;">ابدأ الحين ←</button>
   <span class="landing-cta-hint">🎁 <b>مجاني بالكامل</b> • بدون إعلانات</span>
 
   <div class="landing-features">
@@ -10095,7 +10121,7 @@ html {
 <!-- ═══ APP MODAL ═══ -->
 <div class="app-modal" id="appModal" role="dialog" aria-label="تطبيق تـدّبير">
   <div class="app-shell">
-    <button class="app-close" id="closeAppBtn" aria-label="إغلاق">✕</button>
+    <button type="button" class="app-close" id="closeAppBtn" aria-label="إغلاق">✕</button>
 
     <!-- Header -->
     <header class="app-header">
@@ -10104,7 +10130,7 @@ html {
         <span class="header-band-text" id="headerGreeting">مخططك المالي الذكي</span>
       </div>
       <div class="header-inner">
-        <button class="icon-btn sidebar-toggle" id="sidebarToggle" aria-label="القائمة">
+        <button type="button" class="icon-btn sidebar-toggle" id="sidebarToggle" aria-label="القائمة">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
             <line x1="3" y1="6" x2="21" y2="6"/>
             <line x1="3" y1="12" x2="21" y2="12"/>
@@ -10121,7 +10147,7 @@ html {
           </div>
         </div>
         <div class="header-spacer"></div>
-        <button class="icon-btn" id="bellBtn" aria-label="تنبيهات">🔔<span class="icon-dot" id="bellDot"></span></button>
+        <button type="button" class="icon-btn" id="bellBtn" aria-label="تنبيهات">🔔<span class="icon-dot" id="bellDot"></span></button>
       </div>
     </header>
 
@@ -10129,7 +10155,7 @@ html {
     <div class="chats-page" id="chatsPage" aria-hidden="true">
       <!-- Header -->
       <header class="chats-page-header">
-        <button class="chats-page-newchat" id="chatsPageNewChat" aria-label="محادثة جديدة" title="اضف صديق جديد">
+        <button type="button" class="chats-page-newchat" id="chatsPageNewChat" aria-label="محادثة جديدة" title="اضف صديق جديد">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 5v14M5 12h14"/>
           </svg>
@@ -10138,7 +10164,7 @@ html {
           <div class="chats-page-title">💬 سواليف</div>
           <div class="chats-page-subtitle" id="chatsPageSubtitle">جميع رسائلك</div>
         </div>
-        <button class="chats-page-back" id="chatsPageBack" aria-label="رجوع">
+        <button type="button" class="chats-page-back" id="chatsPageBack" aria-label="رجوع">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M15 18l-6-6 6-6"/>
           </svg>
@@ -10153,25 +10179,25 @@ html {
             <line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
           <input type="text" class="chats-page-search-input" id="chatsPageSearchInput" placeholder="ابحث في الدردشات...">
-          <button class="chats-page-search-clear" id="chatsPageSearchClear" style="display:none" aria-label="مسح">✕</button>
+          <button type="button" class="chats-page-search-clear" id="chatsPageSearchClear" style="display:none" aria-label="مسح">✕</button>
         </div>
         <div class="chats-page-filters" id="chatsPageFilters">
-          <button class="chats-page-filter active" data-filter="all">
+          <button type="button" class="chats-page-filter active" data-filter="all">
             <span>💬</span>
             <span>الكل</span>
             <span class="chats-page-filter-count" id="filterCountAll">0</span>
           </button>
-          <button class="chats-page-filter" data-filter="unread">
+          <button type="button" class="chats-page-filter" data-filter="unread">
             <span>🔴</span>
             <span>ما انقرت</span>
             <span class="chats-page-filter-count" id="filterCountUnread">0</span>
           </button>
-          <button class="chats-page-filter" data-filter="pinned">
+          <button type="button" class="chats-page-filter" data-filter="pinned">
             <span>📌</span>
             <span>مثبتة</span>
             <span class="chats-page-filter-count" id="filterCountPinned">0</span>
           </button>
-          <button class="chats-page-filter" data-filter="archived">
+          <button type="button" class="chats-page-filter" data-filter="archived">
             <span>📦</span>
             <span>أرشيف</span>
             <span class="chats-page-filter-count" id="filterCountArchived">0</span>
@@ -10189,7 +10215,7 @@ html {
         <div class="chats-page-empty-icon">💬</div>
         <div class="chats-page-empty-title">ابدأ أول سواليفك!</div>
         <div class="chats-page-empty-desc">أضف ربعك واستمتع بالرسايل المشفرة</div>
-        <button class="chats-page-empty-btn" id="chatsPageEmptyBtn">
+        <button type="button" class="chats-page-empty-btn" id="chatsPageEmptyBtn">
           <span>👥</span>
           <span>أضف أصدقاء</span>
         </button>
@@ -10207,7 +10233,7 @@ html {
 
     <!-- ═══════ SIDEBAR DRAWER (Slide-in Menu) ═══════ -->
     <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
-    <aside class="sidebar-drawer" id="sidebarDrawer" aria-hidden="true">
+    <aside class="sidebar-drawer" id="sidebarDrawer" role="dialog" aria-modal="true" aria-label="القائمة الجانبية" aria-hidden="true">
       <!-- Header -->
       <div class="sidebar-header">
         <div class="sidebar-user" id="sidebarUser">
@@ -10219,7 +10245,7 @@ html {
             <div class="sidebar-user-handle" id="sidebarUserHandle">سجّل دخولك عشان تبدأ</div>
           </div>
         </div>
-        <button class="sidebar-close" id="sidebarClose" aria-label="إغلاق">✕</button>
+        <button type="button" class="sidebar-close" id="sidebarClose" aria-label="إغلاق">✕</button>
       </div>
 
       <!-- Stats Section -->
@@ -10242,7 +10268,7 @@ html {
       <nav class="sidebar-nav">
         
         <!-- 🏠 الرئيسية (مختصرة) -->
-        <button class="sidebar-item sidebar-item-primary" data-action="tab" data-tab="home">
+        <button type="button" class="sidebar-item sidebar-item-primary" data-action="tab" data-tab="home">
           <span class="sidebar-icon">🏠</span>
           <span class="sidebar-label">الرئيسية</span>
           <span class="sidebar-arrow">›</span>
@@ -10250,25 +10276,25 @@ html {
 
         <!-- 💰 فلوسي (Dropdown) -->
         <div class="sidebar-group" data-group="money">
-          <button class="sidebar-item sidebar-group-header" data-toggle="money">
+          <button type="button" class="sidebar-item sidebar-group-header" data-toggle="money">
             <span class="sidebar-icon">💰</span>
             <span class="sidebar-label">فلوسي</span>
             <span class="sidebar-chevron">▼</span>
           </button>
           <div class="sidebar-submenu" data-submenu="money">
-            <button class="sidebar-subitem" data-action="tab" data-tab="money:monthly">
+            <button type="button" class="sidebar-subitem" data-action="tab" data-tab="money:monthly">
               <span class="sidebar-sub-icon">💵</span>
               <span>الشهر الحالي</span>
             </button>
-            <button class="sidebar-subitem" data-action="tab" data-tab="money:yearly">
+            <button type="button" class="sidebar-subitem" data-action="tab" data-tab="money:yearly">
               <span class="sidebar-sub-icon">📅</span>
               <span>تقرير السنة</span>
             </button>
-            <button class="sidebar-subitem" data-action="page" data-page="goals-budget">
+            <button type="button" class="sidebar-subitem" data-action="page" data-page="goals-budget">
               <span class="sidebar-sub-icon">🎯</span>
               <span>الأهداف والميزانية</span>
             </button>
-            <button class="sidebar-subitem" data-action="tab" data-tab="money:zakat">
+            <button type="button" class="sidebar-subitem" data-action="tab" data-tab="money:zakat">
               <span class="sidebar-sub-icon">🕌</span>
               <span>حاسبة الزكاة</span>
             </button>
@@ -10277,22 +10303,22 @@ html {
 
         <!-- 👥 اجتماعي (Dropdown) -->
         <div class="sidebar-group" data-group="social">
-          <button class="sidebar-item sidebar-group-header" data-toggle="social">
+          <button type="button" class="sidebar-item sidebar-group-header" data-toggle="social">
             <span class="sidebar-icon">👥</span>
             <span class="sidebar-label">اجتماعي</span>
             <span class="sidebar-unread-dot" id="sidebarUnreadDot"></span>
             <span class="sidebar-chevron">▼</span>
           </button>
           <div class="sidebar-submenu" data-submenu="social">
-            <button class="sidebar-subitem" data-action="social-chats">
+            <button type="button" class="sidebar-subitem" data-action="social-chats">
               <span class="sidebar-sub-icon">💬</span>
               <span>الدردشات</span>
             </button>
-            <button class="sidebar-subitem" data-action="social-friends">
+            <button type="button" class="sidebar-subitem" data-action="social-friends">
               <span class="sidebar-sub-icon">👥</span>
               <span>الأصدقاء</span>
             </button>
-            <button class="sidebar-subitem" data-action="social-requests">
+            <button type="button" class="sidebar-subitem" data-action="social-requests">
               <span class="sidebar-sub-icon">✉️</span>
               <span>طلبات الصداقة</span>
             </button>
@@ -10301,25 +10327,25 @@ html {
 
         <!-- 👤 حسابي (Dropdown) -->
         <div class="sidebar-group" data-group="account">
-          <button class="sidebar-item sidebar-group-header" data-toggle="account">
+          <button type="button" class="sidebar-item sidebar-group-header" data-toggle="account">
             <span class="sidebar-icon">👤</span>
             <span class="sidebar-label">حسابي</span>
             <span class="sidebar-chevron">▼</span>
           </button>
           <div class="sidebar-submenu" data-submenu="account">
-            <button class="sidebar-subitem" data-action="page" data-page="my-profile">
+            <button type="button" class="sidebar-subitem" data-action="page" data-page="my-profile">
               <span class="sidebar-sub-icon">📝</span>
               <span>ملفي الشخصي</span>
             </button>
-            <button class="sidebar-subitem" data-action="page" data-page="achievements">
+            <button type="button" class="sidebar-subitem" data-action="page" data-page="achievements">
               <span class="sidebar-sub-icon">🏆</span>
               <span>إنجازاتي</span>
             </button>
-            <button class="sidebar-subitem" data-action="page" data-page="themes">
+            <button type="button" class="sidebar-subitem" data-action="page" data-page="themes">
               <span class="sidebar-sub-icon">🎨</span>
               <span>شكل التطبيق</span>
             </button>
-            <button class="sidebar-subitem" data-action="page" data-page="notif-settings">
+            <button type="button" class="sidebar-subitem" data-action="page" data-page="notif-settings">
               <span class="sidebar-sub-icon">🔔</span>
               <span>التنبيهات</span>
             </button>
@@ -10328,21 +10354,21 @@ html {
 
         <!-- ℹ️ معلومات (Dropdown) -->
         <div class="sidebar-group" data-group="info">
-          <button class="sidebar-item sidebar-group-header" data-toggle="info">
+          <button type="button" class="sidebar-item sidebar-group-header" data-toggle="info">
             <span class="sidebar-icon">ℹ️</span>
             <span class="sidebar-label">معلومات</span>
             <span class="sidebar-chevron">▼</span>
           </button>
           <div class="sidebar-submenu" data-submenu="info">
-            <button class="sidebar-subitem" data-action="install-app">
+            <button type="button" class="sidebar-subitem" data-action="install-app">
               <span class="sidebar-sub-icon">📲</span>
               <span>ثبّت التطبيق</span>
             </button>
-            <button class="sidebar-subitem" data-action="share">
+            <button type="button" class="sidebar-subitem" data-action="share">
               <span class="sidebar-sub-icon">📤</span>
               <span>شارك التطبيق</span>
             </button>
-            <button class="sidebar-subitem" data-action="support">
+            <button type="button" class="sidebar-subitem" data-action="support">
               <span class="sidebar-sub-icon">💬</span>
               <span>كلّمنا</span>
             </button>
@@ -10350,14 +10376,14 @@ html {
         </div>
 
         <!-- Logout -->
-        <button class="sidebar-item sidebar-logout" data-action="logout" id="sidebarLogout" style="display:none">
+        <button type="button" class="sidebar-item sidebar-logout" data-action="logout" id="sidebarLogout" style="display:none">
           <span class="sidebar-icon">🚪</span>
           <span class="sidebar-label">تسجيل الخروج</span>
           <span class="sidebar-arrow">›</span>
         </button>
 
         <!-- Login (shows when not logged in) -->
-        <button class="sidebar-item sidebar-login" data-action="login" id="sidebarLogin">
+        <button type="button" class="sidebar-item sidebar-login" data-action="login" id="sidebarLogin">
           <span class="sidebar-icon">🔐</span>
           <span class="sidebar-label">تسجيل الدخول</span>
           <span class="sidebar-arrow">›</span>
@@ -10372,9 +10398,9 @@ html {
     </aside>
 
     <!-- ═══════ DEDICATED PAGE MODAL ═══════ -->
-    <div class="page-modal" id="pageModal" aria-hidden="true">
+    <div class="page-modal" id="pageModal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="pageModalTitle">
       <div class="page-modal-header">
-        <button class="page-modal-back" id="pageModalBack" aria-label="رجوع">
+        <button type="button" class="page-modal-back" id="pageModalBack" aria-label="رجوع">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
             <path d="M9 18l6-6-6-6"/>
           </svg>
@@ -10397,15 +10423,15 @@ html {
         <div class="pwa-install-title">ثبّت تـدّبير على جوالك!</div>
         <div class="pwa-install-desc">دخول أسرع + إشعارات + يعمل زي التطبيق</div>
       </div>
-      <button class="pwa-install-btn" id="pwaInstallBtn">ثبّت</button>
-      <button class="pwa-install-dismiss" id="pwaInstallDismiss" aria-label="إغلاق">✕</button>
+      <button type="button" class="pwa-install-btn" id="pwaInstallBtn">ثبّت</button>
+      <button type="button" class="pwa-install-dismiss" id="pwaInstallDismiss" aria-label="إغلاق">✕</button>
     </div>
 
     <!-- ═══════ PWA INSTALL INSTRUCTIONS MODAL (iOS) ═══════ -->
-    <div class="pwa-ios-modal" id="pwaIosModal" style="display:none" aria-hidden="true">
+    <div class="pwa-ios-modal" id="pwaIosModal" role="dialog" aria-modal="true" aria-label="تثبيت التطبيق" style="display:none" aria-hidden="true">
       <div class="pwa-ios-backdrop" id="pwaIosBackdrop"></div>
       <div class="pwa-ios-card">
-        <button class="pwa-ios-close" id="pwaIosClose" aria-label="إغلاق">✕</button>
+        <button type="button" class="pwa-ios-close" id="pwaIosClose" aria-label="إغلاق">✕</button>
         <div class="pwa-ios-icon">📱</div>
         <div class="pwa-ios-title">ثبّت التطبيق على iPhone</div>
         <div class="pwa-ios-subtitle">اتّبع الخطوات اللي بعدهة بالترتيب:</div>
@@ -10438,26 +10464,26 @@ html {
           ✨ إشعارات فورية<br>
           ✨ يعمل زي التطبيق تماماً
         </div>
-        <button class="pwa-ios-got-it" id="pwaIosGotIt">فهمت ✓</button>
+        <button type="button" class="pwa-ios-got-it" id="pwaIosGotIt">فهمت ✓</button>
       </div>
     </div>
 
     <!-- Main Nav (4 tabs - New redesigned structure) -->
     <nav class="main-nav">
       <div class="main-nav-inner">
-        <button class="tab-btn active" data-tab="home">
+        <button type="button" class="tab-btn active" data-tab="home">
           <span class="tab-icon">🏠</span>
           <span class="tab-label">الرئيسية</span>
         </button>
-        <button class="tab-btn" data-tab="money">
+        <button type="button" class="tab-btn" data-tab="money">
           <span class="tab-icon">💰</span>
           <span class="tab-label">فلوسي</span>
         </button>
-        <button class="tab-btn" data-tab="social">
+        <button type="button" class="tab-btn" data-tab="social">
           <span class="tab-icon">👥</span>
           <span class="tab-label">اجتماعي</span>
         </button>
-        <button class="tab-btn" data-tab="profile">
+        <button type="button" class="tab-btn" data-tab="profile">
           <span class="tab-icon">👤</span>
           <span class="tab-label">الملف</span>
         </button>
@@ -10466,22 +10492,22 @@ html {
 
     <!-- Sub-nav for Money tab -->
     <div class="sub-nav" id="moneySubNav" style="display:none">
-      <button class="sub-nav-btn active" data-sub="monthly">📊 هالشهر</button>
-      <button class="sub-nav-btn" data-sub="yearly">📅 هالسنة</button>
-      <button class="sub-nav-btn" data-sub="zakat">🕌 الزكاة</button>
+      <button type="button" class="sub-nav-btn active" data-sub="monthly">📊 هالشهر</button>
+      <button type="button" class="sub-nav-btn" data-sub="yearly">📅 هالسنة</button>
+      <button type="button" class="sub-nav-btn" data-sub="zakat">🕌 الزكاة</button>
     </div>
 
     <!-- Sub-nav for Profile tab -->
     <div class="sub-nav" id="profileSubNav" style="display:none">
-      <button class="sub-nav-btn active" data-sub="achievements">🏆 إنجازاتي</button>
-      <button class="sub-nav-btn" data-sub="settings">⚙️ الإعدادات</button>
+      <button type="button" class="sub-nav-btn active" data-sub="achievements">🏆 إنجازاتي</button>
+      <button type="button" class="sub-nav-btn" data-sub="settings">⚙️ الإعدادات</button>
     </div>
 
     <!-- Month bar -->
     <div class="month-bar" id="monthBar">
-      <button class="month-arrow" data-nav="-1" aria-label="اللي راح">‹</button>
+      <button type="button" class="month-arrow" data-nav="-1" aria-label="اللي راح">‹</button>
       <div class="month-label" id="monthLbl"></div>
-      <button class="month-arrow" data-nav="1" aria-label="اللي بعده">›</button>
+      <button type="button" class="month-arrow" data-nav="1" aria-label="اللي بعده">›</button>
     </div>
 
     <div class="app-scroll" id="appScroll">
@@ -10553,15 +10579,15 @@ html {
               <div class="card-title">🛠️ الأدوات الذكية</div>
             </div>
             <div class="smart-tools-grid">
-              <button class="smart-tool-btn" id="btnOpenGift2" aria-label="صندوق اليوم">
+              <button type="button" class="smart-tool-btn" id="btnOpenGift2" aria-label="صندوق اليوم">
                 <div class="smart-tool-icon">🎁</div>
                 <div class="smart-tool-label">صندوق<br>اليوم</div>
               </button>
-              <button class="smart-tool-btn" id="btnOpenSimulator2" aria-label="ماذا لو؟">
+              <button type="button" class="smart-tool-btn" id="btnOpenSimulator2" aria-label="ماذا لو؟">
                 <div class="smart-tool-icon">🔮</div>
                 <div class="smart-tool-label">ماذا<br>لو؟</div>
               </button>
-              <button class="smart-tool-btn" id="btnOpenVoice2" aria-label="سجّل بصوتك">
+              <button type="button" class="smart-tool-btn" id="btnOpenVoice2" aria-label="سجّل بصوتك">
                 <div class="smart-tool-icon">🎙️</div>
                 <div class="smart-tool-label">سجّل<br>بصوتك</div>
               </button>
@@ -10707,7 +10733,7 @@ html {
               <input type="text" id="monthlySearchInput" placeholder="ابحث في بنودك..." 
                      aria-label="بحث في البنود المالية"
                      style="flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:inherit;font-size:14px">
-              <button id="monthlySearchClear" style="display:none;background:var(--bg4);border:none;color:var(--text2);width:20px;height:20px;border-radius:50%;font-size:10px;cursor:pointer">✕</button>
+              <button type="button" id="monthlySearchClear" style="display:none;background:var(--bg4);border:none;color:var(--text2);width:20px;height:20px;border-radius:50%;font-size:10px;cursor:pointer">✕</button>
             </div>
             <div id="monthlySearchResults" style="margin-top:8px;display:none"></div>
           </div>
@@ -10729,7 +10755,7 @@ html {
               </div>
               <div style="display:flex;gap:8px;align-items:center">
                 <div class="section-total" id="incTotal">0 ﷼</div>
-                <button class="section-add" data-toggle-form="incomeForm">+ إضافة</button>
+                <button type="button" class="section-add" data-toggle-form="incomeForm">+ إضافة</button>
               </div>
             </div>
             <div class="items" id="incList"></div>
@@ -10742,7 +10768,7 @@ html {
               </div>
               <div class="form-row">
                 <input type="text" class="input" id="incName" aria-label="اسم مصدر الدخل" placeholder="اسم المصدر" maxlength="60" required>
-                <input type="number" class="input" id="incAmt" aria-label="مبلغ الدخل" placeholder="المبلغ" min="0" step="0.01" required>
+                <input type="number" class="input" id="incAmt" min="0" max="10000000" aria-label="مبلغ الدخل" placeholder="المبلغ" min="0" max="10000000" min="0" step="0.01" required>
                 <button type="submit" class="btn-primary">إضافة</button>
               </div>
             </form>
@@ -10757,7 +10783,7 @@ html {
               </div>
               <div style="display:flex;gap:8px;align-items:center">
                 <div class="section-total" id="fixTotal" style="color:var(--danger)">0 ﷼</div>
-                <button class="section-add" data-toggle-form="fixedForm">+ إضافة</button>
+                <button type="button" class="section-add" data-toggle-form="fixedForm">+ إضافة</button>
               </div>
             </div>
             <div class="items" id="fixList"></div>
@@ -10771,7 +10797,7 @@ html {
               </div>
               <div class="form-row">
                 <input type="text" class="input" id="fixName" aria-label="اسم المصروف الثابت" placeholder="اسم المصروف" maxlength="60" required>
-                <input type="number" class="input" id="fixAmt" aria-label="مبلغ المصروف الثابت" placeholder="المبلغ" min="0" step="0.01" required>
+                <input type="number" class="input" id="fixAmt" min="0" max="10000000" aria-label="مبلغ المصروف الثابت" placeholder="المبلغ" min="0" max="10000000" min="0" step="0.01" required>
                 <button type="submit" class="btn-primary">إضافة</button>
               </div>
             </form>
@@ -10786,7 +10812,7 @@ html {
               </div>
               <div style="display:flex;gap:8px;align-items:center">
                 <div class="section-total" id="varTotal" style="color:var(--danger)">0 ﷼</div>
-                <button class="section-add" data-toggle-form="varForm">+ إضافة</button>
+                <button type="button" class="section-add" data-toggle-form="varForm">+ إضافة</button>
               </div>
             </div>
             <div id="varList"></div>
@@ -10800,7 +10826,7 @@ html {
               </div>
               <div class="form-row">
                 <input type="text" class="input" id="varName" aria-label="اسم المصروف اليومي" placeholder="ماذا اشتريت؟" maxlength="60" required>
-                <input type="number" class="input" id="varAmt" aria-label="مبلغ المصروف" placeholder="المبلغ" min="0" step="0.01" required>
+                <input type="number" class="input" id="varAmt" min="0" max="10000000" aria-label="مبلغ المصروف" placeholder="المبلغ" min="0" max="10000000" min="0" step="0.01" required>
                 <button type="submit" class="btn-primary">إضافة</button>
               </div>
             </form>
@@ -10815,7 +10841,7 @@ html {
             <div class="streak-num" id="streakNum">0</div>
             <div class="streak-sub">يوم متتالي</div>
             <div class="streak-dots" id="streakDots"></div>
-            <button class="streak-btn" id="streakBtn">🔥 سجّل حضورك اليوم</button>
+            <button type="button" class="streak-btn" id="streakBtn">🔥 سجّل حضورك اليوم</button>
             <div class="streak-msg" id="streakMsg"></div>
             <div class="streak-stats">
               <div class="streak-stat">
@@ -10862,7 +10888,7 @@ html {
                 <div class="card-title">🎯 الأهداف</div>
                 <div class="card-sub">ما تريد تحققه</div>
               </div>
-              <button class="section-add" data-toggle-form="goalForm">+ إضافة</button>
+              <button type="button" class="section-add" data-toggle-form="goalForm">+ إضافة</button>
             </div>
             <div id="goalList"></div>
             <form class="form" id="goalForm">
@@ -10875,11 +10901,15 @@ html {
               </div>
               <div class="form-row">
                 <input type="text" class="input" id="goalName" aria-label="اسم الهدف المالي" placeholder="اسم الهدف" maxlength="60" required>
-                <input type="number" class="input" id="goalTarget" aria-label="المبلغ المطلوب للهدف" placeholder="المبلغ المطلوب" min="1" step="0.01" required style="flex:0 0 120px">
+                <input type="number" class="input" id="goalTarget" aria-label="المبلغ المطلوب للهدف" placeholder="المبلغ المطلوب" min="1" max="10000000" min="1" step="0.01" required style="flex:0 0 120px">
               </div>
               <div class="form-row" style="margin-top:6px">
                 <input type="number" class="input" id="goalSaved" placeholder="وفرت حتى الحين (اختياري)" min="0" step="0.01" value="0">
                 <button type="submit" class="btn-primary">إضافة</button>
+              </div>
+              <div class="form-row" style="margin-top:6px">
+                <input type="date" class="input" id="goalDeadline" aria-label="تاريخ تحقيق الهدف (اختياري)" style="flex:1;color:var(--text);background:var(--bg4)" title="تاريخ الهدف (اختياري)">
+                <div style="font-size:11px;color:var(--text3);display:flex;align-items:center;padding:0 6px">📅 الموعد النهائي (اختياري)</div>
               </div>
             </form>
           </section>
@@ -10891,9 +10921,9 @@ html {
                 <div class="card-title">🛡️ حد الصرف</div>
                 <div class="card-sub">ضع حد أقصى لكل فئة</div>
               </div>
-              <button class="section-add" data-toggle-form="budgetForm">+ إضافة</button>
+              <button type="button" class="section-add" data-toggle-form="budgetForm">+ إضافة</button>
             </div>
-            <div id="budgetAlert" style="display:none;margin-bottom:8px;padding:8px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);border-radius:8px;font-size:11px;color:var(--warn)"></div>
+            <div id="budgetAlert" aria-live="assertive" role="alert" style="display:none;margin-bottom:8px;padding:8px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.3);border-radius:8px;font-size:11px;color:var(--warn)"></div>
             <div id="budgetItems"></div>
             <form class="form" id="budgetForm">
               <div class="chips" data-chips="budget">
@@ -10917,10 +10947,10 @@ html {
               <div class="card-title">📊 الإحصائيات</div>
             </div>
             <div class="period-tabs" id="periodTabs">
-              <button class="period-tab active" data-period="daily">يومي</button>
-              <button class="period-tab" data-period="weekly">أسبوعي</button>
-              <button class="period-tab" data-period="monthly">شهري</button>
-              <button class="period-tab" data-period="yearly">سنوي</button>
+              <button type="button" class="period-tab active" data-period="daily">يومي</button>
+              <button type="button" class="period-tab" data-period="weekly">أسبوعي</button>
+              <button type="button" class="period-tab" data-period="monthly">شهري</button>
+              <button type="button" class="period-tab" data-period="yearly">سنوي</button>
             </div>
             <div class="bar-chart" id="periodChart"></div>
             <div class="chart-legend">
@@ -11025,7 +11055,7 @@ html {
         شاهد سلاسلهم، راسلهم فورياً، وتحفّزوا معاً<br>
         بياناتك المالية تبقى في جهازك فقط 🔒
       </div>
-      <button class="sign-in-prompt-btn" id="friendsSignInBtn"
+      <button type="button" class="sign-in-prompt-btn" id="friendsSignInBtn"
               onclick="document.getElementById('authOverlay').classList.add('open');return false;">
         🔐 ادخل / إنشاء حساب
       </button>
@@ -11039,7 +11069,7 @@ html {
           <div class="my-code-label">كود صداقتك</div>
           <div class="my-username" id="myUsername">@...</div>
         </div>
-        <button class="export-btn" id="copyMyCodeBtn" style="min-width:auto;padding:6px 12px">📋 نسخ</button>
+        <button type="button" class="export-btn" id="copyMyCodeBtn" style="min-width:auto;padding:6px 12px">📋 نسخ</button>
       </div>
       <div class="friends-stat-row">
         <div class="friends-stat">
@@ -11058,25 +11088,25 @@ html {
     </div>
 
     <div class="friends-sub-tabs" id="friendsSubTabs">
-      <button class="friends-sub-tab active" data-fsub="chats">💬 سواليف<span class="sub-count" id="cntChats">0</span></button>
-      <button class="friends-sub-tab" data-fsub="list">👥 ربعي<span class="sub-count" id="cntList">0</span></button>
-      <button class="friends-sub-tab" data-fsub="requests">🔔<span class="sub-count" id="cntReq">0</span></button>
-      <button class="friends-sub-tab" data-fsub="blocked">🚫<span class="sub-count" id="cntBlocked">0</span></button>
+      <button type="button" class="friends-sub-tab active" data-fsub="chats">💬 سواليف<span class="sub-count" id="cntChats">0</span></button>
+      <button type="button" class="friends-sub-tab" data-fsub="list">👥 ربعي<span class="sub-count" id="cntList">0</span></button>
+      <button type="button" class="friends-sub-tab" data-fsub="requests">🔔<span class="sub-count" id="cntReq">0</span></button>
+      <button type="button" class="friends-sub-tab" data-fsub="blocked">🚫<span class="sub-count" id="cntBlocked">0</span></button>
     </div>
 
     <!-- CHATS PANEL (الأهم - في البداية) -->
     <div class="fsub-panel" id="fsub-chats">
       <!-- Smart Tools Grid في بداية الدردشات -->
       <div class="smart-tools-grid">
-        <button class="smart-tool-btn" id="btnOpenGift" aria-label="صندوق اليوم">
+        <button type="button" class="smart-tool-btn" id="btnOpenGift" aria-label="صندوق اليوم">
           <div class="smart-tool-icon">🎁</div>
           <div class="smart-tool-label">صندوق<br>اليوم</div>
         </button>
-        <button class="smart-tool-btn" id="btnOpenSimulator" aria-label="ماذا لو؟">
+        <button type="button" class="smart-tool-btn" id="btnOpenSimulator" aria-label="ماذا لو؟">
           <div class="smart-tool-icon">🔮</div>
           <div class="smart-tool-label">ماذا<br>لو؟</div>
         </button>
-        <button class="smart-tool-btn" id="btnOpenVoice" aria-label="سجّل بصوتك">
+        <button type="button" class="smart-tool-btn" id="btnOpenVoice" aria-label="سجّل بصوتك">
           <div class="smart-tool-icon">🎙️</div>
           <div class="smart-tool-label">سجّل<br>بصوتك</div>
         </button>
@@ -11101,7 +11131,7 @@ html {
         <div class="user-search-row">
           <input type="text" class="user-search-input" id="userSearchInput"
                  placeholder="ابحث بالاسم أو @username" maxlength="30" autocomplete="off">
-          <button class="btn-primary" id="userSearchBtn">بحث</button>
+          <button type="button" class="btn-primary" id="userSearchBtn">بحث</button>
         </div>
         <div class="search-results" id="searchResults" style="display:none"></div>
       </div>
@@ -11119,7 +11149,7 @@ html {
     </div>
 
     <div style="margin-top:24px">
-      <button class="export-btn" id="signOutBtn"
+      <button type="button" class="export-btn" id="signOutBtn"
               style="width:100%;color:var(--danger);border-color:rgba(239,68,68,.3)">🚪 تسجيل الخروج</button>
     </div>
   </div>
@@ -11144,41 +11174,41 @@ html {
             </select>
             <div class="zakat-nisab-info" id="nisabInfo"></div>
             <div class="zakat-tabs">
-              <button class="zakat-tab active" data-zkt="cash">💵 نقدي</button>
-              <button class="zakat-tab" data-zkt="gold">🪙 ذهب/فضة</button>
-              <button class="zakat-tab" data-zkt="trade">📈 تجارة</button>
+              <button type="button" class="zakat-tab active" data-zkt="cash">💵 نقدي</button>
+              <button type="button" class="zakat-tab" data-zkt="gold">🪙 ذهب/فضة</button>
+              <button type="button" class="zakat-tab" data-zkt="trade">📈 تجارة</button>
             </div>
 
-            <div class="zakat-panel" id="zpanel-cash">
-              <div class="zakat-row"><div class="zakat-lbl">💵 نقد</div><input type="number" class="zakat-input" id="zk-cash" placeholder="0" min="0" step="0.01"></div>
-              <div class="zakat-row"><div class="zakat-lbl">🏦 مدخرات</div><input type="number" class="zakat-input" id="zk-savings" placeholder="0" min="0" step="0.01"></div>
-              <div class="zakat-row"><div class="zakat-lbl">📈 استثمارات</div><input type="number" class="zakat-input" id="zk-invest" placeholder="0" min="0" step="0.01"></div>
-              <div class="zakat-row"><div class="zakat-lbl">💚 ديون لك</div><input type="number" class="zakat-input" id="zk-debtsFor" placeholder="0" min="0" step="0.01"></div>
-              <div class="zakat-row"><div class="zakat-lbl">💔 ديون عليك</div><input type="number" class="zakat-input" id="zk-debtsOn" placeholder="0" min="0" step="0.01"></div>
-              <button class="zakat-calc-btn" data-zcalc="cash">احسب الزكاة</button>
+            <div class="zakat-panel" id="zpanel-cash" role="region" aria-label="النقد والادخار">
+              <div class="zakat-row"><div class="zakat-lbl">💵 نقد</div><input type="number" class="zakat-input" id="zk-cash" placeholder="0" min="0" max="100000000" step="0.01"></div>
+              <div class="zakat-row"><div class="zakat-lbl">🏦 مدخرات</div><input type="number" class="zakat-input" id="zk-savings" placeholder="0" min="0" max="100000000" step="0.01"></div>
+              <div class="zakat-row"><div class="zakat-lbl">📈 استثمارات</div><input type="number" class="zakat-input" id="zk-invest" placeholder="0" min="0" max="100000000" step="0.01"></div>
+              <div class="zakat-row"><div class="zakat-lbl">💚 ديون لك</div><input type="number" class="zakat-input" id="zk-debtsFor" placeholder="0" min="0" max="100000000" step="0.01"></div>
+              <div class="zakat-row"><div class="zakat-lbl">💔 ديون عليك</div><input type="number" class="zakat-input" id="zk-debtsOn" placeholder="0" min="0" max="100000000" step="0.01"></div>
+              <button type="button" class="zakat-calc-btn" data-zcalc="cash">احسب الزكاة</button>
               <div class="zakat-result" id="zresult-cash">
                 <div class="zakat-result-amt" id="zamt-cash">0 ﷼</div>
                 <div class="zakat-result-note" id="znote-cash"></div>
               </div>
             </div>
 
-            <div class="zakat-panel" id="zpanel-gold" style="display:none">
-              <div class="zakat-row"><div class="zakat-lbl">🪙 جرامات الذهب</div><input type="number" class="zakat-input" id="zk-goldGrams" placeholder="0" min="0" step="0.01"></div>
-              <div class="zakat-row"><div class="zakat-lbl">سعر جرام الذهب</div><input type="number" class="zakat-input" id="zk-goldPrice" placeholder="220" value="220" min="0" step="0.01"></div>
-              <div class="zakat-row"><div class="zakat-lbl">⚪ جرامات الفضة</div><input type="number" class="zakat-input" id="zk-silverGrams" placeholder="0" min="0" step="0.01"></div>
-              <div class="zakat-row"><div class="zakat-lbl">سعر جرام الفضة</div><input type="number" class="zakat-input" id="zk-silverPrice" placeholder="3.2" value="3.2" min="0" step="0.01"></div>
-              <button class="zakat-calc-btn" data-zcalc="gold">احسب الزكاة</button>
+            <div class="zakat-panel" id="zpanel-gold" role="region" aria-label="الذهب والفضة" style="display:none">
+              <div class="zakat-row"><div class="zakat-lbl">🪙 جرامات الذهب</div><input type="number" class="zakat-input" id="zk-goldGrams" placeholder="0" min="0" max="100000" step="0.01"></div>
+              <div class="zakat-row"><div class="zakat-lbl">سعر جرام الذهب</div><input type="number" class="zakat-input" id="zk-goldPrice" placeholder="220" value="220" min="0" max="100000000" step="0.01"></div>
+              <div class="zakat-row"><div class="zakat-lbl">⚪ جرامات الفضة</div><input type="number" class="zakat-input" id="zk-silverGrams" placeholder="0" min="0" max="1000000" step="0.01"></div>
+              <div class="zakat-row"><div class="zakat-lbl">سعر جرام الفضة</div><input type="number" class="zakat-input" id="zk-silverPrice" placeholder="3.2" value="3.2" min="0" max="100000000" step="0.01"></div>
+              <button type="button" class="zakat-calc-btn" data-zcalc="gold">احسب الزكاة</button>
               <div class="zakat-result" id="zresult-gold">
                 <div class="zakat-result-amt" id="zamt-gold">0 ﷼</div>
                 <div class="zakat-result-note" id="znote-gold"></div>
               </div>
             </div>
 
-            <div class="zakat-panel" id="zpanel-trade" style="display:none">
-              <div class="zakat-row"><div class="zakat-lbl">📦 قيمة البضاعة</div><input type="number" class="zakat-input" id="zk-stock" placeholder="0" min="0" step="0.01"></div>
-              <div class="zakat-row"><div class="zakat-lbl">💚 ديون للتجارة</div><input type="number" class="zakat-input" id="zk-tradeDebt" placeholder="0" min="0" step="0.01"></div>
-              <div class="zakat-row"><div class="zakat-lbl">💔 ديون عليها</div><input type="number" class="zakat-input" id="zk-tradeOwed" placeholder="0" min="0" step="0.01"></div>
-              <button class="zakat-calc-btn" data-zcalc="trade">احسب الزكاة</button>
+            <div class="zakat-panel" id="zpanel-trade" role="region" aria-label="عروض التجارة" style="display:none">
+              <div class="zakat-row"><div class="zakat-lbl">📦 قيمة البضاعة</div><input type="number" class="zakat-input" id="zk-stock" placeholder="0" min="0" max="100000000" step="0.01"></div>
+              <div class="zakat-row"><div class="zakat-lbl">💚 ديون للتجارة</div><input type="number" class="zakat-input" id="zk-tradeDebt" placeholder="0" min="0" max="100000000" step="0.01"></div>
+              <div class="zakat-row"><div class="zakat-lbl">💔 ديون عليها</div><input type="number" class="zakat-input" id="zk-tradeOwed" placeholder="0" min="0" max="100000000" step="0.01"></div>
+              <button type="button" class="zakat-calc-btn" data-zcalc="trade">احسب الزكاة</button>
               <div class="zakat-result" id="zresult-trade">
                 <div class="zakat-result-amt" id="zamt-trade">0 ﷼</div>
                 <div class="zakat-result-note" id="znote-trade"></div>
@@ -11226,7 +11256,7 @@ html {
                 <div class="notif-toggle on" data-notif="badge" id="notifToggleBadge"></div>
               </div>
             </div>
-            <button class="btn-primary" id="testNotifBtn" style="width:100%;margin-top:14px">
+            <button type="button" class="btn-primary" id="testNotifBtn" style="width:100%;margin-top:14px">
               🎵 اختبار التنبيهات
             </button>
           </div>
@@ -11240,7 +11270,7 @@ html {
                 <div class="conv-avatar my-profile-avatar" id="settingsProfileAvatar" style="width:80px;height:80px;font-size:28px">👤</div>
               </div>
               <div style="flex:1">
-                <button class="btn-primary" id="changeProfilePicBtn" style="width:100%">
+                <button type="button" class="btn-primary" id="changeProfilePicBtn" style="width:100%">
                   📷 تغيير صورة العرض
                 </button>
                 <div style="font-size:11px;color:var(--text3);margin-top:6px">
@@ -11256,7 +11286,7 @@ html {
             </div>
             <div class="form-row">
               <input type="text" class="input" id="userNameInput" placeholder="اكتب اسمك هنا..." maxlength="30">
-              <button class="btn-primary" id="saveUserNameBtn">ااحفظ</button>
+              <button type="button" class="btn-primary" id="saveUserNameBtn">ااحفظ</button>
             </div>
             <div style="font-size:11px;color:var(--text3);margin-top:8px" id="currentUserName"></div>
           </div>
@@ -11266,11 +11296,11 @@ html {
               <div class="card-sub">اختر لغة واجهة التطبيق</div>
             </div>
             <div class="lang-grid">
-              <button class="lang-btn active" data-lang="ar">
+              <button type="button" class="lang-btn active" data-lang="ar">
                 <span style="font-size:18px">🇸🇦</span>
                 <span>العربية</span>
               </button>
-              <button class="lang-btn" data-lang="en">
+              <button type="button" class="lang-btn" data-lang="en">
                 <span style="font-size:18px">🇬🇧</span>
                 <span>English</span>
               </button>
@@ -11295,22 +11325,22 @@ html {
               <div class="card-title">🎨 الثيم</div>
             </div>
             <div class="theme-grid">
-              <button class="theme-swatch dark" data-theme="default">
+              <button type="button" class="theme-swatch dark" data-theme="default">
                 <span class="swatch-emoji">🌙</span>
                 <span class="swatch-name">داكن</span>
                 <span class="swatch-desc">الافتراضي</span>
               </button>
-              <button class="theme-swatch light" data-theme="light">
+              <button type="button" class="theme-swatch light" data-theme="light">
                 <span class="swatch-emoji">☀️</span>
                 <span class="swatch-name">فاتح</span>
                 <span class="swatch-desc">نهاري</span>
               </button>
-              <button class="theme-swatch midnight" data-theme="midnight">
+              <button type="button" class="theme-swatch midnight" data-theme="midnight">
                 <span class="swatch-emoji">🌌</span>
                 <span class="swatch-name">منتصف الليل</span>
                 <span class="swatch-desc">أخضر</span>
               </button>
-              <button class="theme-swatch rose" data-theme="rose">
+              <button type="button" class="theme-swatch rose" data-theme="rose">
                 <span class="swatch-emoji">🌸</span>
                 <span class="swatch-name">وردي</span>
                 <span class="swatch-desc">للبنات</span>
@@ -11323,9 +11353,9 @@ html {
               <div class="card-sub">اختر صيغة الملف</div>
             </div>
             <div class="export-row">
-              <button class="export-btn" data-export="csv">📊 CSV</button>
-              <button class="export-btn" data-export="txt">📄 نص</button>
-              <button class="export-btn" data-export="pdf">🖨 طباعة / PDF</button>
+              <button type="button" class="export-btn" data-export="csv">📊 CSV</button>
+              <button type="button" class="export-btn" data-export="txt">📄 نص</button>
+              <button type="button" class="export-btn" data-export="pdf">🖨 طباعة / PDF</button>
             </div>
           </div>
           <div class="card">
@@ -11333,9 +11363,9 @@ html {
               <div class="card-title">💾 البيانات</div>
             </div>
             <div style="display:flex;flex-direction:column;gap:8px">
-              <button class="export-btn" id="backupBtn">📥 نسخة احتياطية JSON</button>
-              <button class="export-btn" id="restoreBtn">📤 استعادة من ملف</button>
-              <button class="export-btn" id="clearBtn" style="color:var(--danger);border-color:rgba(239,68,68,.3)">🗑️ مسح كل البيانات</button>
+              <button type="button" class="export-btn" id="backupBtn">📥 نسخة احتياطية JSON</button>
+              <button type="button" class="export-btn" id="restoreBtn">📤 استعادة من ملف</button>
+              <button type="button" class="export-btn" id="clearBtn" style="color:var(--danger);border-color:rgba(239,68,68,.3)">🗑️ مسح كل البيانات</button>
             </div>
             <input type="file" id="restoreInput" accept="application/json" style="display:none">
           </div>
@@ -11388,11 +11418,11 @@ html {
     </div>
 
     <!-- Notifications footer (add form) -->
-    <div class="notif-overlay" id="notifOverlay"></div>
-    <aside class="notif-panel" id="notifPanel" aria-label="تنبيهات">
+    <div class="notif-overlay" id="notifOverlay" role="dialog" aria-modal="true" aria-label="لوحة الإشعارات"></div>
+    <aside class="notif-panel" id="notifPanel" aria-labelledby="notifPanelTitle" aria-label="تنبيهات">
       <div class="notif-head">
         <div class="notif-title">🔔 التنبيهات</div>
-        <button class="icon-btn" id="notifClose" aria-label="إغلاق">✕</button>
+        <button type="button" class="icon-btn" id="notifClose" aria-label="إغلاق">✕</button>
       </div>
       <div class="notif-body" id="notifPanelBody"></div>
       <div class="notif-footer">
@@ -11402,35 +11432,35 @@ html {
           <input type="number" class="input" id="ntfAmt" placeholder="مبلغ" min="0" step="0.01" style="width:80px">
           <input type="number" class="input" id="ntfDay" placeholder="يوم" min="1" max="31" style="width:60px">
         </div>
-        <button class="btn-primary" id="ntfAdd" style="width:100%">إضافة</button>
+        <button type="button" class="btn-primary" id="ntfAdd" style="width:100%">إضافة</button>
       </div>
     </aside>
 
     <!-- FAB + Drawer -->
-    <button class="fab" id="fab" aria-label="إضافة سريعة">+</button>
-    <div class="drawer-overlay" id="drawerOverlay"></div>
-    <aside class="drawer" id="drawer" aria-label="إضافة">
+    <button type="button" class="fab" id="fab" aria-label="إضافة سريعة">+</button>
+    <div class="drawer-overlay" id="drawerOverlay" aria-hidden="true"></div>
+    <aside class="drawer" id="drawer" role="dialog" aria-modal="true" aria-label="إضافة بند" aria-label="إضافة">
       <div class="drawer-handle"></div>
       <div class="drawer-header">
         <div class="drawer-type-row">
-          <button class="drawer-type-btn exp active" data-dtype="exp">📉 مصروف</button>
-          <button class="drawer-type-btn inc" data-dtype="inc">📈 دخل</button>
+          <button type="button" class="drawer-type-btn exp active" data-dtype="exp">📉 مصروف</button>
+          <button type="button" class="drawer-type-btn inc" data-dtype="inc">📈 دخل</button>
         </div>
       </div>
       <div class="drawer-body">
         <div class="drawer-cat-grid" id="drawerCats"></div>
         <div class="drawer-inputs">
           <input type="text" class="drawer-input" id="drName" aria-label="اسم البند" placeholder="اسم" maxlength="60">
-          <input type="number" class="drawer-input amount" id="drAmt" aria-label="المبلغ" placeholder="0" min="0" step="0.01">
+          <input type="number" class="drawer-input amount" id="drAmt" aria-label="المبلغ" placeholder="0" min="0" max="10000000" min="0" step="0.01">
         </div>
         <div class="drawer-shortcuts" id="drShortcuts"></div>
-        <button class="drawer-submit" id="drSubmit">💾 ااحفظ المصروف</button>
+        <button type="button" class="drawer-submit" id="drSubmit">💾 ااحفظ المصروف</button>
       </div>
     </aside>
 
     <!-- Save bar -->
     <div class="save-wrap" id="saveWrap">
-      <button class="save-btn" id="saveBtn">💾 ااحفظ</button>
+      <button type="button" class="save-btn" id="saveBtn">💾 ااحفظ</button>
     </div>
   </div>
 </div>
@@ -11439,7 +11469,7 @@ html {
 <!-- Auth Modal -->
 <div class="auth-overlay" id="authOverlay" role="dialog" aria-label="تسجيل الدخول">
   <div class="auth-box">
-    <button class="auth-close" id="authCloseBtn" onclick="document.getElementById('authOverlay').classList.remove('open');return false;" aria-label="إغلاق">✕</button>
+    <button type="button" class="auth-close" id="authCloseBtn" onclick="document.getElementById('authOverlay').classList.remove('open');return false;" aria-label="إغلاق">✕</button>
     <div class="auth-head">
       <div class="auth-icon">👤</div>
       <div class="auth-title" id="authTitle">تسجيل الدخول</div>
@@ -11447,8 +11477,8 @@ html {
     </div>
 
     <div class="auth-tabs">
-      <button class="auth-tab active" data-auth-mode="signin" onclick="window.__setAuthMode && window.__setAuthMode('signin');return false;">دخول</button>
-      <button class="auth-tab" data-auth-mode="signup" onclick="window.__setAuthMode && window.__setAuthMode('signup');return false;">فتح حساب</button>
+      <button type="button" class="auth-tab active" data-auth-mode="signin" onclick="window.__setAuthMode && window.__setAuthMode('signin');return false;">دخول</button>
+      <button type="button" class="auth-tab" data-auth-mode="signup" onclick="window.__setAuthMode && window.__setAuthMode('signup');return false;">فتح حساب</button>
     </div>
 
     <div class="auth-error" id="authError"></div>
@@ -11464,12 +11494,12 @@ html {
     <div class="auth-divider">أو</div>
 
     <!-- ═══ BIOMETRIC LOGIN (Face ID / Touch ID / Windows Hello) ═══ -->
-    <button class="auth-biometric-btn" id="authBiometricBtn" style="display:none" onclick="window.__biometricSignIn && window.__biometricSignIn();return false;">
+    <button type="button" class="auth-biometric-btn" id="authBiometricBtn" style="display:none" onclick="window.__biometricSignIn && window.__biometricSignIn();return false;">
       <span class="auth-biometric-icon" id="biometricIcon">🔐</span>
       <span class="auth-biometric-text" id="biometricText">خش بالبصمة</span>
     </button>
 
-    <button class="auth-google-btn" id="authGoogleBtn" onclick="window.__googleSignIn && window.__googleSignIn();return false;">
+    <button type="button" class="auth-google-btn" id="authGoogleBtn" onclick="window.__googleSignIn && window.__googleSignIn();return false;">
       <span class="auth-google-icon">G</span>
       كمل بحساب Google
     </button>
@@ -11481,10 +11511,10 @@ html {
 </div>
 
 <!-- PROFILE MODAL v2.2 -->
-<div class="profile-overlay" id="profileOverlay">
+<div class="profile-overlay" id="profileOverlay" role="dialog" aria-modal="true" aria-label="الملف الشخصي">
   <div class="profile-modal">
     <div class="profile-hero">
-      <button class="profile-close-btn" id="profileCloseBtn" aria-label="إغلاق">✕</button>
+      <button type="button" class="profile-close-btn" id="profileCloseBtn" aria-label="إغلاق">✕</button>
       <div class="profile-big-avatar" id="profileBigAvatar">?</div>
       <div class="profile-name" id="profileBigName">—</div>
       <div class="profile-handle" id="profileBigHandle">@...</div>
@@ -11526,16 +11556,16 @@ html {
 
 <!-- CHAT PANEL -->
 <div class="chat-overlay" id="chatOverlay"></div>
-<div class="chat-panel" id="chatPanel" aria-label="المحادثة">
+<div class="chat-panel" id="chatPanel" role="dialog" aria-modal="true" aria-label="المحادثة" aria-label="المحادثة">
   <div class="chat-header">
-    <button class="chat-back" id="chatBackBtn" aria-label="رجوع">›</button>
+    <button type="button" class="chat-back" id="chatBackBtn" aria-label="رجوع">›</button>
     <div class="chat-peer-avatar" id="chatPeerAvatar">?</div>
     <div class="chat-peer-info">
       <div class="chat-peer-name" id="chatPeerName">—</div>
       <div class="chat-peer-status" id="chatPeerStatus">@...</div>
     </div>
     <div class="chat-actions">
-      <button class="chat-action-btn" id="chatMenuBtn" aria-label="خيارات">⋮</button>
+      <button type="button" class="chat-action-btn" id="chatMenuBtn" aria-label="خيارات">⋮</button>
     </div>
   </div>
   <div class="chat-messages" id="chatMessages">
@@ -11546,17 +11576,17 @@ html {
     </div>
   </div>
   <div class="chat-input-bar" style="position:relative">
-    <button class="chat-attach-btn" id="chatAttachBtn" aria-label="إرفاق">📎</button>
+    <button type="button" class="chat-attach-btn" id="chatAttachBtn" aria-label="إرفاق">📎</button>
     <textarea class="chat-input" id="chatInput" placeholder="اكتب رسالة..." rows="1" maxlength="1000"></textarea>
-    <button class="chat-send" id="chatSendBtn" disabled aria-label="إرسال">➤</button>
+    <button type="button" class="chat-send" id="chatSendBtn" disabled aria-label="إرسال">➤</button>
 
     <!-- Attach Menu -->
     <div class="attach-menu" id="attachMenu">
-      <button class="attach-menu-item" data-attach="image">
+      <button type="button" class="attach-menu-item" data-attach="image">
         <span class="attach-menu-icon">🖼️</span>
         <span>صورة عادية</span>
       </button>
-      <button class="attach-menu-item" data-attach="ephemeral">
+      <button type="button" class="attach-menu-item" data-attach="ephemeral">
         <span class="attach-menu-icon">👁️</span>
         <span>صورة مؤقتة</span>
       </button>
@@ -11571,22 +11601,22 @@ html {
 
 <!-- Image Preview (before send) -->
 <div class="img-preview-overlay" id="imgPreviewOverlay">
-  <img class="img-preview-img" id="imgPreviewImg" alt="معاينة">
+  <img loading="lazy" class="img-preview-img" id="imgPreviewImg" alt="معاينة">
   <input type="text" class="img-preview-caption" id="imgPreviewCaption" placeholder="اكتب تعليقاً (اختياري)..." maxlength="200">
   <div class="img-preview-actions">
-    <button class="img-preview-btn cancel" id="imgPreviewCancelBtn">إلغاء</button>
-    <button class="img-preview-btn send" id="imgPreviewSendBtn">إرسال</button>
+    <button type="button" class="img-preview-btn cancel" id="imgPreviewCancelBtn">إلغاء</button>
+    <button type="button" class="img-preview-btn send" id="imgPreviewSendBtn">إرسال</button>
   </div>
 </div>
 
 <!-- Image Viewer -->
 <div class="img-viewer-overlay" id="imgViewerOverlay">
-  <button class="img-viewer-close" id="imgViewerCloseBtn" aria-label="إغلاق">✕</button>
+  <button type="button" class="img-viewer-close" id="imgViewerCloseBtn" aria-label="إغلاق">✕</button>
   <div class="img-viewer-timer" id="imgViewerTimer" style="display:none">
     <span>⏱️</span>
     <span id="imgViewerTimerText">10</span>
   </div>
-  <img class="img-viewer-img" id="imgViewerImg" alt="صورة">
+  <img loading="lazy" class="img-viewer-img" id="imgViewerImg" alt="صورة">
 </div>
 
 <!-- Profile Picture Upload -->
@@ -11595,13 +11625,13 @@ html {
     <div style="font-size:18px;font-weight:800;color:var(--accent-2);margin-bottom:6px">🎨 صورة العرض</div>
     <div style="font-size:12px;color:var(--text3);margin-bottom:16px">ستظهر لأصدقائك والمستخدمين</div>
     <div class="profile-pic-preview" id="profilePicPreview">
-      <img id="profilePicPreviewImg" alt="معاينة" style="display:none">
+      <img loading="lazy" id="profilePicPreviewImg" alt="معاينة" style="display:none">
       <div id="profilePicPreviewPlaceholder" style="display:flex;align-items:center;justify-content:center;height:100%;font-size:48px;color:var(--text3)">📷</div>
     </div>
-    <button class="btn-primary" id="profilePicChooseBtn" style="width:100%;margin-bottom:8px">📂 اختر صورة</button>
+    <button type="button" class="btn-primary" id="profilePicChooseBtn" style="width:100%;margin-bottom:8px">📂 اختر صورة</button>
     <div class="img-preview-actions" style="max-width:100%">
-      <button class="img-preview-btn cancel" id="profilePicCancelBtn">إلغاء</button>
-      <button class="img-preview-btn send" id="profilePicSaveBtn" disabled>ااحفظ</button>
+      <button type="button" class="img-preview-btn cancel" id="profilePicCancelBtn">إلغاء</button>
+      <button type="button" class="img-preview-btn send" id="profilePicSaveBtn" disabled>ااحفظ</button>
     </div>
   </div>
 </div>
@@ -11651,7 +11681,7 @@ html {
           await loadScript(base + file);
           return true;
         } catch (e) {
-          console.warn('Failed:', base + file);
+          if (!window.__PROD__) console.warn('Failed:', base + file);
         }
       }
       return false;
@@ -11661,7 +11691,7 @@ html {
       for (const file of FILES) {
         const ok = await loadWithFallback(file);
         if (!ok) {
-          console.error('Could not load ' + file + ' from any CDN');
+          if (!window.__PROD__) console.error('Could not load ' + file + ' from any CDN');
           return;
         }
       }
@@ -11678,7 +11708,7 @@ html {
         };
 
         if (typeof firebase === 'undefined') {
-          console.error('Firebase object missing after script load');
+          if (!window.__PROD__) console.error('Firebase object missing after script load');
           return;
         }
 
@@ -11773,7 +11803,7 @@ html {
 
         window.dispatchEvent(new CustomEvent('fb-ready'));
         } catch (err) {
-        console.error('Firebase init error:', err.message || err);
+        Logger.error('Firebase.init', err);
       }
     })();
   })();
@@ -11837,7 +11867,9 @@ const Tdbeer = (() => {
 
 // ═══ CONSTANTS ═══
 const MONTHS = ['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+Object.freeze(MONTHS);
 const DAY_NAMES = ['أح','إث','ثل','أر','خم','جم','سب'];
+Object.freeze(DAY_NAMES);
 const TIPS = [
   'قاعدة ٥٠/٣٠/٢٠: احتياجات، رغبات، ادخار 💡',
   'وفّر صندوق طوارئ بـ ١٠٠٠ ﷼ أولاً 🆘',
@@ -11848,6 +11880,7 @@ const TIPS = [
   'استثمر في نفسك — كورس أو كتاب 📚',
   'وفّر أولاً ثم أنفق — مو العكس 💰'
 ];
+Object.freeze(TIPS);
 const ACHIEVEMENTS = [
   {id:'first_save', icon:'🌱', name:'أول توفير', pts:50},
   {id:'no_exceed', icon:'🛡️', name:'ما تجاوزت', pts:100},
@@ -11856,6 +11889,7 @@ const ACHIEVEMENTS = [
   {id:'goal_done', icon:'🏆', name:'حققت هدف', pts:300},
   {id:'three_months', icon:'🔥', name:'٣ شهور', pts:500}
 ];
+Object.freeze(ACHIEVEMENTS);
 const LEVELS = [
   {min:0, name:'مبتدئ 🌱'},
   {min:100, name:'ذكي 💡'},
@@ -11864,7 +11898,9 @@ const LEVELS = [
   {min:1500, name:'ماهر 💎'},
   {min:3000, name:'أسطورة ⭐'}
 ];
+Object.freeze(LEVELS);
 const PIE_COLORS = ['#c9a84c','#10b981','#3b82f6','#ef4444','#8b5cf6','#f97316','#06b6d4','#84cc16','#ec4899','#14b8a6'];
+Object.freeze(PIE_COLORS);
 const GOLD_PRICE = 220;
 const SILVER_PRICE = 3.2;
 const STORAGE_VERSION = 2;
@@ -11882,6 +11918,17 @@ const CURRENCIES = {
   GBP: { symbol: '£',   name: 'جنيه إسترليني', flag: '🇬🇧', rate: 0.21  },
   EGP: { symbol: 'ج.م', name: 'جنيه مصري',   flag: '🇪🇬', rate: 13.2   }
 };
+Object.freeze(CURRENCIES);
+Object.keys(CURRENCIES).forEach(k => Object.freeze(CURRENCIES[k]));
+
+// ═══ PRODUCTION MODE ═══
+window.__PROD__ = !new URLSearchParams(location.search).has('debug') &&
+  location.hostname !== 'localhost' &&
+  !location.hostname.includes('127.0.0.1');
+if (window.__PROD__) {
+  window._origConsoleLog = console.log;
+  console.log = () => {};
+}
 
 // ═══ LOGGER ═══
 const Logger = {
@@ -12463,7 +12510,13 @@ const App = (() => {
   const Toast = (() => {
     const wrap = document.getElementById('toastWrap');
     return {
-      show(msg, type = 'success', duration = 2800) {
+      show(msg, type = 'success', duration = null) {
+        // Duration ذكية حسب النوع والطول
+        if (duration === null) {
+          const baseTime = type === 'danger' ? 4000 : type === 'warn' ? 3500 : 2800;
+          const extraPerChar = Math.max(0, (String(msg).length - 20) * 50);
+          duration = Math.min(baseTime + extraPerChar, 6000);
+        }
         if (!wrap) return;
         const el = DOM.h('div', { class: `toast ${type}` }, msg);
         wrap.appendChild(el);
@@ -12654,7 +12707,7 @@ const App = (() => {
 
   // ═══ GOALS ═══
   const Goals = {
-    add({ name, target, saved = 0, icon = '⭐' }) {
+    add({ name, target, saved = 0, icon = '⭐', deadline = '' }) {
       name = U.str(name, 60);
       target = U.num(target);
       saved = U.num(saved);
@@ -12662,8 +12715,10 @@ const App = (() => {
       const year = store.get('year'), month = store.get('month');
       const key = U.monthKey(year, month);
       const d = Sel.monthData(year, month);
+      const goal = { id: U.uid(), name, target, saved, icon };
+      if (deadline) goal.deadline = deadline;
       store.patch(`data.${key}`, {
-        goals: [...d.goals, { id: U.uid(), name, target, saved, icon }]
+        goals: [...d.goals, goal]
       });
       store.set('dirty', true);
       Pts.add(50);
@@ -12742,6 +12797,7 @@ const App = (() => {
         // هدية → 🎁
         '🎁': ['هدية', 'هدايا', 'عيدية', 'مناسبة'],
       };
+Object.freeze(SMART_CATEGORIES);
       
       // دالة: هل هذا اسم budget يتطابق مع هذا cat؟
       const categoriesMatch = (bName, cName) => {
@@ -12848,7 +12904,7 @@ const App = (() => {
         if (cur !== 'SAR' && CURRENCIES[cur]) {
           return Math.round(baseNisab * CURRENCIES[cur].rate);
         }
-      } catch {}
+      } catch { /* silent */ }
       return baseNisab;
     },
 
@@ -13369,6 +13425,26 @@ const Renderers = (() => {
     cont.innerHTML = '';
     for (const g of d.goals) {
       const pct = g.target > 0 ? Math.min(100, Math.round((g.saved / g.target) * 100)) : 0;
+      // حساب الـ deadline
+      let deadlineEl = null;
+      if (g.deadline) {
+        const dl = new Date(g.deadline);
+        const today = new Date();
+        today.setHours(0,0,0,0);
+        const daysLeft = Math.ceil((dl - today) / 86400000);
+        const dlStr = dl.toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric' });
+        const isOverdue = daysLeft < 0;
+        const isUrgent  = daysLeft >= 0 && daysLeft <= 7;
+        deadlineEl = DOM.h('div', {
+          style: `font-size:11px;margin-top:4px;color:${isOverdue ? 'var(--danger)' : isUrgent ? 'var(--warn)' : 'var(--text3)'}`
+        }, isOverdue
+          ? `⚠️ تجاوز الموعد (${dlStr})`
+          : daysLeft === 0
+          ? `🚨 الموعد اليوم!`
+          : `📅 ${dlStr} — بقي ${daysLeft} يوم`
+        );
+      }
+
       cont.appendChild(DOM.h('div', { class: 'goal' },
         DOM.h('div', { class: 'goal-head' },
           DOM.h('div', { class: 'goal-name' }, `${g.icon || '⭐'} ${g.name}`),
@@ -13381,7 +13457,8 @@ const Renderers = (() => {
         DOM.h('div', { class: 'goal-track' },
           DOM.h('div', { class: 'goal-fill', style: { width: pct + '%' } })
         ),
-        DOM.h('div', { class: 'goal-pct' }, `${pct}٪ ${pct >= 100 ? '🏆 تم!' : ''}`)
+        DOM.h('div', { class: 'goal-pct' }, `${pct}٪ ${pct >= 100 ? '🏆 تم!' : ''}`),
+        ...(deadlineEl ? [deadlineEl] : [])
       ));
     }
   }
@@ -13895,8 +13972,14 @@ const Renderers = (() => {
     DOM.setText($('#monthLbl'), `${MONTHS[store.get('month')]} ${store.get('year')}`);
   }
 
+  let _schedThrottle = null;
   function scheduledAll() {
-    Scheduler.schedule(all);
+    // Throttle: max مرة كل 100ms لتفادي burst re-renders
+    if (_schedThrottle) return;
+    _schedThrottle = setTimeout(() => {
+      _schedThrottle = null;
+      Scheduler.schedule(all);
+    }, 16); // frame-aligned
   }
 
   return { all, scheduledAll, greeting, bankCard, summary, income, fixed, variable,
@@ -14032,7 +14115,7 @@ const Controllers = (() => {
         if (streakEl) DOM.setText(streakEl, streak.current > 0 ? streak.current : '—');
         const xpEl = $('#homeStatXp');
         if (xpEl) DOM.setText(xpEl, points > 0 ? points : '—');
-      } catch {}
+      } catch { /* silent */ }
 
       // Fresh content
       try {
@@ -14048,7 +14131,7 @@ const Controllers = (() => {
             if (freshCard) freshCont.appendChild(freshCard);
           }
         }
-      } catch {}
+      } catch { /* silent */ }
 
       // Smart moments
       try {
@@ -14062,7 +14145,7 @@ const Controllers = (() => {
             if (section) momentsCont.appendChild(section);
           }
         }
-      } catch {}
+      } catch { /* silent */ }
 
       // Bot card
       try {
@@ -14071,9 +14154,9 @@ const Controllers = (() => {
           botCont.innerHTML = '';
           window.Bot.renderBotCard(botCont);
         }
-      } catch {}
+      } catch { /* silent */ }
     } catch (e) {
-      console.warn('renderHome:', e.message);
+      if (!window.__PROD__) console.warn('renderHome:', e.message);
     }
   }
 
@@ -14143,7 +14226,7 @@ const Controllers = (() => {
         R.scheduledAll();
         Toast.show('أُضيف الدخل ✅', 'success');
       } catch (err) {
-        console.error('[incomeForm] error:', err);
+        Logger.error('incomeForm', err);
         Toast.show('خطأ: ' + (err.message || 'بيانات غير صحيحة'), 'danger');
       }
     });
@@ -14175,7 +14258,7 @@ const Controllers = (() => {
         R.scheduledAll();
         Toast.show('أُضيف المصروف الثابت ✅', 'success');
       } catch (err) {
-        console.error('[fixedForm] error:', err);
+        Logger.error('fixedForm', err);
         Toast.show('خطأ: ' + (err.message || 'بيانات غير صحيحة'), 'danger');
       }
     });
@@ -14207,7 +14290,7 @@ const Controllers = (() => {
         R.scheduledAll();
         Toast.show('أُضيف ✅', 'success');
       } catch (err) {
-        console.error('[varForm] error:', err);
+        Logger.error('varForm', err);
         Toast.show('خطأ: ' + (err.message || 'بيانات غير صحيحة'), 'danger');
       }
     });
@@ -14219,9 +14302,12 @@ const Controllers = (() => {
           name: $('#goalName').value,
           target: $('#goalTarget').value,
           saved: $('#goalSaved').value || 0,
-          icon: selectedChips.goal
+          icon: selectedChips.goal,
+          deadline: $('#goalDeadline')?.value || ''
         });
-        $('#goalName').value = ''; $('#goalTarget').value = ''; $('#goalSaved').value = '0';
+        $('#goalName').value = ''; $('#goalTarget').value = '';
+        $('#goalSaved').value = '0';
+        if ($('#goalDeadline')) $('#goalDeadline').value = '';
         $('#goalForm').classList.remove('open');
         R.scheduledAll();
         Toast.show('أُضيف الهدف 🎯');
@@ -14737,7 +14823,7 @@ const Controllers = (() => {
       try {
         const settings = window.ChatNotifications?.getSettings() || {};
         toggle.classList.toggle('on', settings[key] !== false);
-      } catch {}
+      } catch { /* silent */ }
 
       toggle.addEventListener('click', () => {
         if (!window.ChatNotifications) return;
@@ -14771,7 +14857,7 @@ const Controllers = (() => {
       setTimeout(() => window.ChatNotifications.updateBadge(0), 3000);
 
       // Test vibration
-      try { if (navigator.vibrate) navigator.vibrate([50, 30, 50]); } catch {}
+      try { if (navigator.vibrate) navigator.vibrate([50, 30, 50]); } catch { /* silent */ }
     });
     bindData();
 
@@ -14856,7 +14942,7 @@ const Social = (() => {
         state.user = user;
         if (user) {
           // تأكد أن token وصل قبل أي عملية Firestore
-          try { if (user.getIdToken) await user.getIdToken(false); } catch {}
+          try { if (user.getIdToken) await user.getIdToken(false); } catch { /* silent */ }
           // اصبر قليلاً لضمان أن Firestore سيعرف token
           await new Promise(r => setTimeout(r, 300));
 
@@ -14892,12 +14978,12 @@ const Social = (() => {
 
   function cleanupSubs() {
     // Firestore subscriptions
-    for (const unsub of state.subs) { try { unsub(); } catch {} }
+    for (const unsub of state.subs) { try { unsub(); } catch { /* silent */ } }
     state.subs = [];
-    if (state.chatMsgUnsub) { try { state.chatMsgUnsub(); } catch {} state.chatMsgUnsub = null; }
+    if (state.chatMsgUnsub) { try { state.chatMsgUnsub(); } catch { /* silent */ } state.chatMsgUnsub = null; }
     // DOM listeners لعناصر ديناميكية
     for (const { el, type, fn } of _domListeners) {
-      try { el.removeEventListener(type, fn); } catch {}
+      try { el.removeEventListener(type, fn); } catch { /* silent */ }
     }
     _domListeners.length = 0;
   }
@@ -14920,7 +15006,7 @@ const Social = (() => {
       };
 
       // تأكد من token قبل أي عملية
-      try { if (user.getIdToken) await user.getIdToken(true); } catch {}
+      try { if (user.getIdToken) await user.getIdToken(true); } catch { /* silent */ }
 
       // حاول قراءة الملف من قاعدة البيانات
       const ref = window.FB.doc(window.FB.db, 'users', user.uid);
@@ -14959,7 +15045,7 @@ const Social = (() => {
           } else if (settingsAvatar && state.profile.displayName) {
             settingsAvatar.textContent = state.profile.displayName[0].toUpperCase();
           }
-        } catch {}
+        } catch { /* silent */ }
         // صحّح الملف إن كانت فيه حقول ناقصة
         if (!data.displayName || !data.username) {
           try {
@@ -14990,7 +15076,7 @@ const Social = (() => {
         }
       }
 
-      try { syncStreak(); } catch {}
+      try { syncStreak(); } catch { /* silent */ }
     } catch (e) {
       Logger.error('Social.loadProfile', e);
       // الملف الافتراضي موجود، لا مشكلة
@@ -15202,10 +15288,10 @@ const Social = (() => {
             window.ImageHandler.renderAvatarImage(avatarEl, peerData.photoData);
           }
         }
-      } catch (e) { console.warn('Failed to load peer avatar:', e.message); }
+      } catch (e) { Logger.warn('Avatar', e.message); }
     })();
 
-    if (state.chatMsgUnsub) { try { state.chatMsgUnsub(); } catch {} }
+    if (state.chatMsgUnsub) { try { state.chatMsgUnsub(); } catch { /* silent */ } }
     try {
       const q = window.FB.query(
         window.FB.collection(window.FB.db, 'chats', state.activeChat.chatId, 'messages'),
@@ -15226,7 +15312,7 @@ const Social = (() => {
   function closeChat() {
     $('#chatOverlay')?.classList.remove('open');
     $('#chatPanel')?.classList.remove('open');
-    if (state.chatMsgUnsub) { try { state.chatMsgUnsub(); } catch {} state.chatMsgUnsub = null; }
+    if (state.chatMsgUnsub) { try { state.chatMsgUnsub(); } catch { /* silent */ } state.chatMsgUnsub = null; }
     state.activeChat = null;
     state.activeChatMessages = [];
   }
@@ -15313,12 +15399,12 @@ const Social = (() => {
         });
       } catch (e) { Logger.error('Social.updatePeerConv', e); }
 
-      try { if (navigator.vibrate) navigator.vibrate(20); } catch {}
+      try { if (navigator.vibrate) navigator.vibrate(20); } catch { /* silent */ }
 
       // Play sent sound
       try {
         if (window.ChatNotifications) window.ChatNotifications.playSentSound();
-      } catch {}
+      } catch { /* silent */ }
     } catch (e) {
       Logger.error('Social.sendMsg', e);
       Toast.show('فشل الإرسال', 'danger');
@@ -15618,8 +15704,8 @@ const Social = (() => {
     else if (state.currentSubTab === 'blocked') renderBlockedPanel();
 
     // تحديث المحتوى الذكي
-    try { if (window.FreshContent) window.FreshContent.render(); } catch {}
-    try { if (window.SmartMoments) window.SmartMoments.render(); } catch {}
+    try { if (window.FreshContent) window.FreshContent.render(); } catch { /* silent */ }
+    try { if (window.SmartMoments) window.SmartMoments.render(); } catch { /* silent */ }
   }
 
   function renderFriendsList(myStreak) {
@@ -16524,6 +16610,14 @@ const Social = (() => {
   async function handleAuthSubmit(e) {
     if (e && e.preventDefault) e.preventDefault();
     if (!state.fbReady) { showAuthError('اصبر شوي...'); return; }
+
+    // ── Rate Limiting: تسجيل دخول فقط (لا signup) ──
+    if (state.authMode === 'login' && window.AuthRateLimit?.isBlocked()) {
+      const mins = window.AuthRateLimit.remainingMinutes();
+      showAuthError(`كثّرت المحاولات — انتظر ${mins} دقيقة ثم حاول مجدداً`);
+      return;
+    }
+
     const email = $('#authEmail')?.value?.trim();
     const pass = $('#authPass')?.value;
     if (!email || !pass) { showAuthError('كمّل البيانات اللي ناقصة'); return; }
@@ -16537,7 +16631,7 @@ const Social = (() => {
         const customUsername = U.str($('#authUsername')?.value, 20)
           .replace(/[^a-z0-9]/gi, '').toLowerCase();
         if (displayName) {
-          try { await window.FB.updateProfile(cred.user, { displayName }); } catch {}
+          try { await window.FB.updateProfile(cred.user, { displayName }); } catch(e) { Logger.warn("FB", e.message); }
         }
         if (customUsername) {
           const qq = window.FB.query(
@@ -16548,7 +16642,7 @@ const Social = (() => {
           const s = await window.FB.getDocs(qq);
           if (!s.empty) {
             showAuthError('اسم المستخدم مستخدم من قبل — اختار غيره');
-            try { await cred.user.delete(); } catch {}
+            try { await cred.user.delete(); } catch { /* silent */ }
             return;
           }
           const ref = window.FB.doc(window.FB.db, 'users', cred.user.uid);
@@ -16563,9 +16657,20 @@ const Social = (() => {
       } else {
         await window.FB.signIn(window.FB.auth, email, pass);
         Toast.show('أهلاً بعودتك 👋', 'success');
+        window.AuthRateLimit?.reset(); // نجح الدخول - امسح العداد
       }
       $('#authOverlay').classList.remove('open');
-    } catch (err) { showAuthError(friendlyAuthError(err)); }
+    } catch (err) {
+      showAuthError(friendlyAuthError(err));
+      // سجّل المحاولة الفاشلة لتسجيل الدخول فقط
+      if (state.authMode === 'login') {
+        window.AuthRateLimit?.record();
+        const attempts = 5 - (window.AuthRateLimit?.getAttempts?.()?.count || 0);
+        if (attempts > 0 && attempts <= 3) {
+          setTimeout(() => showAuthError(`تبقى ${attempts} محاولة قبل الإيقاف المؤقت`), 1500);
+        }
+      }
+    }
     finally {
       if (btn) {
         btn.disabled = false;
@@ -17471,7 +17576,7 @@ const SmartFeatures = (() => {
         Storage.save('giftLastOpen', Date.now());
 
         // Haptic feedback
-        try { if (navigator.vibrate) navigator.vibrate([50, 30, 100]); } catch {}
+        try { if (navigator.vibrate) navigator.vibrate([50, 30, 100]); } catch { /* silent */ }
       }, 1000);
     }
 
@@ -17776,7 +17881,7 @@ const SmartFeatures = (() => {
 
     function close() {
       if (isListening && recognition) {
-        try { recognition.stop(); } catch {}
+        try { recognition.stop(); } catch { /* silent */ }
       }
       $('#voiceOverlay')?.classList.remove('open');
     }
@@ -17789,7 +17894,7 @@ const SmartFeatures = (() => {
         }
       }
       if (isListening) {
-        try { recognition.stop(); } catch {}
+        try { recognition.stop(); } catch { /* silent */ }
         isListening = false;
         updateUI();
       } else {
@@ -17902,7 +18007,7 @@ const SmartFeatures = (() => {
           });
           Toast.show(`📉 أُضيف مصروف ${Fmt.c(parsedData.amount)}`, 'success');
         }
-        try { if (typeof Renderers !== 'undefined') Renderers.scheduledAll(); } catch {}
+        try { if (typeof Renderers !== 'undefined') Renderers.scheduledAll(); } catch { /* silent */ }
         Pts.add(10); // مكافأة استخدام الصوت
         close();
       } catch (e) {
@@ -17960,11 +18065,11 @@ const SmartFeatures = (() => {
   }
 
   function init() {
-    try { bindEvents(); } catch (e) { console.warn('SmartFeatures.bindEvents failed:', e.message); }
+    try { bindEvents(); } catch (e) { if (!window.__PROD__) console.warn('SmartFeatures.bindEvents failed:', e.message); }
     // تحقق من توفر الهدية بعد تحميل DOM
-    try { setTimeout(() => { try { Gift.checkAvailability(); } catch {} }, 500); } catch {}
+    try { setTimeout(() => { try { Gift.checkAvailability(); } catch { /* silent */ } }, 500); } catch { /* silent */ }
     // افحص كل دقيقة
-    try { setInterval(() => { try { Gift.checkAvailability(); } catch {} }, 60000); } catch {}
+    try { setInterval(() => { try { Gift.checkAvailability(); } catch { /* silent */ } }, 60000); } catch { /* silent */ }
   }
 
   return { init, Gift, Simulator, Voice };
@@ -18344,7 +18449,7 @@ const SmartMoments = (() => {
     for (const m of moments.slice(0, 4)) {
       const card = DOM.h('div', {
         class: 'moment-card ' + (m.type || 'info'),
-        onclick: () => { try { m.action(); } catch {} }
+        onclick: () => { try { m.action(); } catch { /* silent */ } }
       },
         DOM.h('div', { class: 'moment-icon' }, m.icon),
         DOM.h('div', { class: 'moment-body' },
@@ -18451,7 +18556,7 @@ const FreshContent = (() => {
     if (!today.read) {
       today.read = true;
       Storage.save('fresh_today', today);
-      try { Pts.add(5); } catch {}
+      try { Pts.add(5); } catch { /* silent */ }
     }
   }
 
@@ -18461,7 +18566,7 @@ const FreshContent = (() => {
     Storage.save('fresh_today', today);
     if (today.liked) {
       Toast.show('❤️ شكراً لملاحظاتك!', 'success');
-      try { Pts.add(3); } catch {}
+      try { Pts.add(3); } catch { /* silent */ }
     }
     render();
   }
@@ -18906,7 +19011,7 @@ const ImageHandler = (() => {
         });
 
     } catch (e) {
-      console.warn('[Image] markViewed error:', e.message);
+      Logger.warn('Image.markViewed', e.message);
     }
   }
 
@@ -19091,7 +19196,7 @@ const ChatNotifications = (() => {
       state.audioCtx = new AudioCtx();
       return state.audioCtx;
     } catch (e) {
-      console.warn('[Notifications] AudioContext not supported');
+      if (!window.__PROD__) console.warn('[Notifications] AudioContext not supported');
       return null;
     }
   }
@@ -19135,7 +19240,7 @@ const ChatNotifications = (() => {
       createTone(880, now + 0.12, 0.2); // A5
 
     } catch (e) {
-      console.warn('[Notifications] Sound error:', e.message);
+      Logger.warn('Notifications.sound', e.message);
     }
   }
 
@@ -19234,7 +19339,7 @@ const ChatNotifications = (() => {
     const toast = document.getElementById('chatToast');
     if (!toast) return;
     toast.classList.remove('show');
-    setTimeout(() => { try { toast.remove(); } catch {} }, 300);
+    setTimeout(() => { try { toast.remove(); } catch { /* silent */ } }, 300);
   }
 
   function escapeHtml(s) {
@@ -19278,13 +19383,13 @@ const ChatNotifications = (() => {
       } else {
         document.title = document.title.replace(/^\(\d+\+?\)\s*/, '');
       }
-    } catch {}
+    } catch { /* silent */ }
 
     // Favicon badge (dot indicator) - subtle
     try {
       const favicons = document.querySelectorAll('link[rel="icon"]');
       // Could draw a red dot on canvas if needed, skipping for simplicity
-    } catch {}
+    } catch { /* silent */ }
   }
 
   // ═══ MAIN NOTIFY FUNCTION ═══
@@ -19308,10 +19413,10 @@ const ChatNotifications = (() => {
         // Only show a subtle badge update (already done in badge update)
         return;
       }
-    } catch {}
+    } catch { /* silent */ }
 
     // 1. Vibration
-    try { if (navigator.vibrate) navigator.vibrate([50, 30, 50]); } catch {}
+    try { if (navigator.vibrate) navigator.vibrate([50, 30, 50]); } catch { /* silent */ }
 
     // 2. Sound
     playMessageSound();
@@ -19335,12 +19440,12 @@ const ChatNotifications = (() => {
             const friend = social?._state?.friends?.find(f => f.uid === peerUid)
               || { uid: peerUid, displayName: peerName, username: peerUsername };
             if (social?.openChat) social.openChat(friend);
-          } catch {}
+          } catch { /* silent */ }
           notif.close();
         };
-        setTimeout(() => { try { notif.close(); } catch {} }, 10000);
+        setTimeout(() => { try { notif.close(); } catch { /* silent */ } }, 10000);
       }
-    } catch {}
+    } catch { /* silent */ }
 
     // 4. Persistent Message Bar (stays until opened or 30s)
     showPersistentBar({ peerName, peerUsername, text, photoData, peerUid });
@@ -19355,7 +19460,7 @@ const ChatNotifications = (() => {
             || { uid: peerUid, displayName: peerName, username: peerUsername };
           if (social?.openChat) social.openChat(friend);
           hidePersistentBar();
-        } catch (e) { console.warn('Open chat error:', e.message); }
+        } catch (e) { Logger.warn('openChat', e.message); }
       }
     });
   }
@@ -19429,7 +19534,7 @@ const ChatNotifications = (() => {
         const friend = social?._state?.friends?.find(f => f.uid === peerUid)
           || { uid: peerUid, displayName: peerName, username: peerUsername };
         if (social?.openChat) social.openChat(friend);
-      } catch {}
+      } catch { /* silent */ }
       hidePersistentBar();
     });
 
@@ -19445,7 +19550,7 @@ const ChatNotifications = (() => {
         const friend = social?._state?.friends?.find(f => f.uid === peerUid)
           || { uid: peerUid, displayName: peerName, username: peerUsername };
         if (social?.openChat) social.openChat(friend);
-      } catch {}
+      } catch { /* silent */ }
       hidePersistentBar();
     });
 
@@ -19456,7 +19561,7 @@ const ChatNotifications = (() => {
     const bar = document.getElementById('chatPersistBar');
     if (!bar) return;
     bar.classList.remove('show');
-    setTimeout(() => { try { bar.remove(); } catch {} }, 300);
+    setTimeout(() => { try { bar.remove(); } catch { /* silent */ } }, 300);
   }
 
   // ═══ REQUEST BROWSER NOTIFICATION PERMISSION ═══
@@ -19465,7 +19570,7 @@ const ChatNotifications = (() => {
       if ('Notification' in window && Notification.permission === 'default') {
         Notification.requestPermission();
       }
-    } catch {}
+    } catch { /* silent */ }
   }
 
   // ═══ SETTINGS ═══
@@ -19475,13 +19580,13 @@ const ChatNotifications = (() => {
       if (saved) {
         state.settings = { ...state.settings, ...JSON.parse(saved) };
       }
-    } catch {}
+    } catch { /* silent */ }
   }
 
   function saveSettings() {
     try {
       localStorage.setItem('chatNotifSettings', JSON.stringify(state.settings));
-    } catch {}
+    } catch { /* silent */ }
   }
 
   function toggleSetting(key) {
@@ -19589,7 +19694,7 @@ const Sidebar = (() => {
           });
           // Toggle current
           group.classList.toggle('open');
-          try { if (navigator.vibrate) navigator.vibrate(5); } catch {}
+          try { if (navigator.vibrate) navigator.vibrate(5); } catch { /* silent */ }
         }
       });
     });
@@ -19650,7 +19755,7 @@ const Sidebar = (() => {
     document.body.style.overflow = 'hidden';
     
     // Vibration
-    try { if (navigator.vibrate) navigator.vibrate(10); } catch {}
+    try { if (navigator.vibrate) navigator.vibrate(10); } catch { /* silent */ }
   }
 
   function close() {
@@ -19874,10 +19979,10 @@ const Sidebar = (() => {
           break;
 
         default:
-          console.warn('[Sidebar] Unknown action:', action);
+          Logger.warn('Sidebar', 'Unknown action: ' + action);
       }
     } catch (e) {
-      console.error('[Sidebar] Action error:', e);
+      Logger.error('Sidebar.action', e);
     }
   }
 
@@ -19927,7 +20032,7 @@ const Sidebar = (() => {
 
       <div class="contact-list">
         <!-- Email -->
-        <button class="contact-item" data-contact="email">
+        <button type="button" class="contact-item" data-contact="email">
           <div class="contact-icon contact-icon-email">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
@@ -19942,7 +20047,7 @@ const Sidebar = (() => {
         </button>
 
         <!-- TikTok -->
-        <button class="contact-item" data-contact="tiktok">
+        <button type="button" class="contact-item" data-contact="tiktok">
           <div class="contact-icon contact-icon-tiktok">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
               <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.62a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.05Z"/>
@@ -19956,7 +20061,7 @@ const Sidebar = (() => {
         </button>
 
         <!-- Instagram -->
-        <button class="contact-item" data-contact="instagram">
+        <button type="button" class="contact-item" data-contact="instagram">
           <div class="contact-icon contact-icon-instagram">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
@@ -19972,7 +20077,7 @@ const Sidebar = (() => {
         </button>
 
         <!-- X (Twitter) -->
-        <button class="contact-item" data-contact="x">
+        <button type="button" class="contact-item" data-contact="x">
           <div class="contact-icon contact-icon-x">
             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
               <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
@@ -19986,7 +20091,7 @@ const Sidebar = (() => {
         </button>
 
         <!-- Website -->
-        <button class="contact-item" data-contact="website">
+        <button type="button" class="contact-item" data-contact="website">
           <div class="contact-icon contact-icon-website">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <circle cx="12" cy="12" r="10"/>
@@ -20007,7 +20112,7 @@ const Sidebar = (() => {
         <div class="contact-footer-sub">سنرد عليك في أقرب وقت ممكن</div>
       </div>
 
-      <button class="contact-close" id="contactClose">إغلاق</button>
+      <button type="button" class="contact-close" id="contactClose">إغلاق</button>
     `;
     document.body.appendChild(menu);
 
@@ -20025,7 +20130,7 @@ const Sidebar = (() => {
         try {
           backdrop.remove();
           menu.remove();
-        } catch {}
+        } catch { /* silent */ }
       }, 300);
     };
 
@@ -20052,7 +20157,7 @@ const Sidebar = (() => {
   }
 
   function handleContact(type) {
-    try { if (navigator.vibrate) navigator.vibrate(15); } catch {}
+    try { if (navigator.vibrate) navigator.vibrate(15); } catch { /* silent */ }
     
     switch (type) {
       case 'email': {
@@ -20143,7 +20248,10 @@ const Sidebar = (() => {
           img.alt = '';
           avatar.appendChild(img);
         } else {
-          avatar.innerHTML = `<span id="sidebarAvatarInitial">${(profile.displayName || '؟')[0].toUpperCase()}</span>`;
+          const _initSpan = document.createElement('span');
+          _initSpan.id = 'sidebarAvatarInitial';
+          _initSpan.textContent = (profile.displayName || '؟')[0].toUpperCase();
+          avatar.appendChild(_initSpan);
         }
       }
       
@@ -20179,7 +20287,7 @@ const Sidebar = (() => {
       if (friendsEl && social?.friends) {
         friendsEl.textContent = social.friends.length;
       }
-    } catch {}
+    } catch { /* silent */ }
 
     // Update unread dot
     try {
@@ -20192,7 +20300,7 @@ const Sidebar = (() => {
           unreadDot.classList.remove('show');
         }
       }
-    } catch {}
+    } catch { /* silent */ }
   }
 
   return {
@@ -20228,7 +20336,7 @@ const DedicatedPages = (() => {
     
     const page = PAGES[pageName];
     if (!page) {
-      console.warn('Page not found:', pageName);
+      Logger.warn('Pages', 'not found: ' + pageName);
       return;
     }
 
@@ -20238,11 +20346,19 @@ const DedicatedPages = (() => {
     // Build content
     const hero = document.createElement('div');
     hero.className = 'page-hero';
-    hero.innerHTML = `
-      <div class="page-hero-icon">${page.icon}</div>
-      <div class="page-hero-title">${page.heading}</div>
-      <div class="page-hero-desc">${page.description}</div>
-    `;
+    // بناء آمن (page config ثابت، لكن نلتزم بـ DOM pattern)
+    const _heroIcon = document.createElement('div');
+    _heroIcon.className = 'page-hero-icon';
+    _heroIcon.textContent = page.icon;
+    const _heroTitle = document.createElement('div');
+    _heroTitle.className = 'page-hero-title';
+    _heroTitle.textContent = page.heading;
+    const _heroDesc = document.createElement('div');
+    _heroDesc.className = 'page-hero-desc';
+    _heroDesc.textContent = page.description;
+    hero.appendChild(_heroIcon);
+    hero.appendChild(_heroTitle);
+    hero.appendChild(_heroDesc);
     body.appendChild(hero);
 
     // Render page-specific content
@@ -20254,7 +20370,7 @@ const DedicatedPages = (() => {
     document.body.style.overflow = 'hidden';
     isOpen = true;
 
-    try { if (navigator.vibrate) navigator.vibrate(10); } catch {}
+    try { if (navigator.vibrate) navigator.vibrate(10); } catch { /* silent */ }
   }
 
   function close() {
@@ -20312,15 +20428,28 @@ const DedicatedPages = (() => {
 
     const section = document.createElement('div');
     section.className = 'page-section';
-    section.innerHTML = `
-      <div class="page-section-title">👤 المعلومات الأساسية</div>
-      <div class="page-form-row" style="flex-direction:column;align-items:stretch;gap:6px">
-        <label class="page-form-label" style="flex:none">الاسم</label>
-        <input type="text" class="page-form-input" id="profileNameInput" 
-               value="${escapeHTML(savedName)}" 
-               placeholder="اكتب اسمك" maxlength="50">
-      </div>
-    `;
+    // بناء آمن
+    const _secTitle = document.createElement('div');
+    _secTitle.className = 'page-section-title';
+    _secTitle.textContent = '👤 المعلومات الأساسية';
+    const _formRow = document.createElement('div');
+    _formRow.className = 'page-form-row';
+    _formRow.style.cssText = 'flex-direction:column;align-items:stretch;gap:6px';
+    const _label = document.createElement('label');
+    _label.className = 'page-form-label';
+    _label.style.flex = 'none';
+    _label.textContent = 'الاسم';
+    const _nameInput = document.createElement('input');
+    _nameInput.type = 'text';
+    _nameInput.className = 'page-form-input';
+    _nameInput.id = 'profileNameInput';
+    _nameInput.value = savedName; // escaping مضمون لأن value property آمنة
+    _nameInput.placeholder = 'اكتب اسمك';
+    _nameInput.maxLength = 50;
+    _formRow.appendChild(_label);
+    _formRow.appendChild(_nameInput);
+    section.appendChild(_secTitle);
+    section.appendChild(_formRow);
     container.appendChild(section);
 
     // Birthday section
@@ -20363,7 +20492,7 @@ const DedicatedPages = (() => {
             birthday: birthday || null
           }).catch(() => {});
         }
-      } catch {}
+      } catch { /* silent */ }
 
       if (window.Toast?.show) {
         window.Toast.show('✅ تم ااحفظ المعلومات بنجاح', 'ok');
@@ -20380,28 +20509,37 @@ const DedicatedPages = (() => {
 
     const statsSection = document.createElement('div');
     statsSection.className = 'page-section';
-    statsSection.innerHTML = `
-      <div class="page-section-title">📊 إجمالي الإنجازات</div>
-      <div style="display:flex;justify-content:space-around;padding:16px 0;text-align:center">
-        <div>
-          <div style="font-size:28px;font-weight:900;color:var(--accent-2)">${unlocked.length}</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:4px">مفتوح</div>
-        </div>
-        <div>
-          <div style="font-size:28px;font-weight:900;color:var(--text)">${ACHIEVEMENTS.length}</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:4px">الإجمالي</div>
-        </div>
-        <div>
-          <div style="font-size:28px;font-weight:900;color:var(--accent)">${Math.round(unlocked.length / Math.max(ACHIEVEMENTS.length, 1) * 100)}%</div>
-          <div style="font-size:11px;color:var(--text3);margin-top:4px">اللي كملته</div>
-        </div>
-      </div>
-    `;
+    // DOM آمن - الأرقام تُعيَّن بـ textContent
+    const _stTitle = document.createElement('div');
+    _stTitle.className = 'page-section-title';
+    _stTitle.textContent = '📊 إجمالي الإنجازات';
+    statsSection.appendChild(_stTitle);
+    const _stRow = document.createElement('div');
+    _stRow.style.cssText = 'display:flex;justify-content:space-around;padding:16px 0;text-align:center';
+    const pct = Math.round(unlocked.length / Math.max(ACHIEVEMENTS.length, 1) * 100);
+    [
+      { val: unlocked.length, label: 'مفتوح', color: 'var(--accent-2)' },
+      { val: ACHIEVEMENTS.length, label: 'الإجمالي', color: 'var(--text)' },
+      { val: pct + '%', label: 'اللي كملته', color: 'var(--accent)' }
+    ].forEach(item => {
+      const col = document.createElement('div');
+      const num = document.createElement('div');
+      num.style.cssText = `font-size:28px;font-weight:900;color:${item.color}`;
+      num.textContent = item.val;
+      const lbl = document.createElement('div');
+      lbl.style.cssText = 'font-size:11px;color:var(--text3);margin-top:4px';
+      lbl.textContent = item.label;
+      col.appendChild(num); col.appendChild(lbl);
+      _stRow.appendChild(col);
+    });
+    statsSection.appendChild(_stRow);
     container.appendChild(statsSection);
 
     const gridSection = document.createElement('div');
     gridSection.className = 'page-section';
-    gridSection.innerHTML = `<div class="page-section-title">🏆 شارات الإنجاز</div>`;
+    const _gtitle = document.createElement('div');
+    _gtitle.className = 'page-section-title'; _gtitle.textContent = '🏆 شارات الإنجاز';
+    gridSection.appendChild(_gtitle);
     
     const grid = document.createElement('div');
     grid.className = 'ach-grid';
@@ -20411,11 +20549,13 @@ const DedicatedPages = (() => {
       const isOn = unlocked.includes(a.id);
       const badge = document.createElement('div');
       badge.className = 'ach-badge ' + (isOn ? 'on' : 'off');
-      badge.innerHTML = `
-        <div class="ach-icon">${a.icon}</div>
-        <div class="ach-name">${a.name}</div>
-        <div class="ach-pts">${a.pts}⭐</div>
-      `;
+      const _bIcon = document.createElement('div');
+      _bIcon.className = 'ach-icon'; _bIcon.textContent = a.icon;
+      const _bName = document.createElement('div');
+      _bName.className = 'ach-name'; _bName.textContent = a.name;
+      const _bPts = document.createElement('div');
+      _bPts.className = 'ach-pts'; _bPts.textContent = a.pts + '⭐';
+      badge.appendChild(_bIcon); badge.appendChild(_bName); badge.appendChild(_bPts);
       grid.appendChild(badge);
     }
     gridSection.appendChild(grid);
@@ -20471,7 +20611,7 @@ const DedicatedPages = (() => {
           if (window.App?.Theme?.apply) {
             window.App.Theme.apply(t.id);
           }
-        } catch (e) { console.warn('[Theme] App.Theme.apply failed:', e); }
+        } catch (e) { Logger.warn('Theme.apply', e); }
         
         // 2. Direct DOM manipulation (fallback - always works)
         try {
@@ -20487,31 +20627,31 @@ const DedicatedPages = (() => {
             const colors = { default: '#0a0a0a', light: '#fdf8f3', midnight: '#05070a', rose: '#1a0d14' };
             meta.setAttribute('content', colors[t.id] || '#05070a');
           }
-        } catch (e) { console.warn('[Theme] Direct apply failed:', e); }
+        } catch (e) { Logger.warn('Theme.direct', e); }
         
         // 3. Save to storage
         try {
           if (window.App?.store?.set) {
             window.App.store.set('theme', t.id);
           }
-        } catch (e) { console.warn('[Theme] store.set failed:', e); }
+        } catch (e) { Logger.warn('Theme.store', e); }
         
         // 4. Save to localStorage directly (always works)
         try {
           const existingData = localStorage.getItem('tadbeerStore');
           let storeData = {};
           if (existingData) {
-            try { storeData = JSON.parse(existingData); } catch {}
+            try { storeData = JSON.parse(existingData); } catch { /* silent */ }
           }
           storeData.theme = t.id;
           localStorage.setItem('tadbeerStore', JSON.stringify(storeData));
-        } catch (e) { console.warn('[Theme] localStorage save failed:', e); }
+        } catch (e) { Logger.warn('Theme.ls', e); }
         
         // Feedback
         if (window.Toast?.show) {
           window.Toast.show(`🎨 تم تطبيق شكل ${t.name}`, 'ok');
         }
-        try { if (navigator.vibrate) navigator.vibrate(10); } catch {}
+        try { if (navigator.vibrate) navigator.vibrate(10); } catch { /* silent */ }
         
         // Re-render
         container.innerHTML = '';
@@ -20675,7 +20815,7 @@ const BirthdaySystem = (() => {
         }
       }
     } catch (e) {
-      console.warn('[Birthday] Error:', e);
+      Logger.warn('Birthday', e);
     }
   }
 
@@ -20696,7 +20836,7 @@ const BirthdaySystem = (() => {
           ${age > 0 ? `<span style="color:var(--accent-2);font-weight:800">عمرك ${age} سنة 🎉</span><br>` : ''}
           نتمنى لك سنة مليانة نجاح وتوفيق في فلوسك 💚
         </div>
-        <button class="birthday-btn" id="birthdayCloseBtn">شكراً 🙏</button>
+        <button type="button" class="birthday-btn" id="birthdayCloseBtn">شكراً 🙏</button>
       </div>
     `;
     document.body.appendChild(celebration);
@@ -20714,7 +20854,7 @@ const BirthdaySystem = (() => {
     };
 
     // Vibration
-    try { if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]); } catch {}
+    try { if (navigator.vibrate) navigator.vibrate([100, 50, 100, 50, 200]); } catch { /* silent */ }
   }
 
   function launchConfetti() {
@@ -20876,7 +21016,7 @@ const ChatsPage = (() => {
       setTimeout(() => searchInput.focus(), 400);
     }
 
-    try { if (navigator.vibrate) navigator.vibrate(10); } catch {}
+    try { if (navigator.vibrate) navigator.vibrate(10); } catch { /* silent */ }
   }
 
   function close() {
@@ -21063,7 +21203,7 @@ const ChatsPage = (() => {
 
     card.innerHTML = `
       <div class="conv-avatar ${photoData ? 'has-img' : ''}">
-        ${photoData ? `<img src="${photoData}" alt="">` : initial}
+        ${photoData ? `<img loading="lazy" src="${photoData}" alt="">` : initial}
       </div>
       <div class="conv-body">
         <div class="conv-top-row">
@@ -21084,7 +21224,7 @@ const ChatsPage = (() => {
           </div>
         </div>
       </div>
-      <button class="conv-menu-btn" aria-label="خيارات">⋮</button>
+      <button type="button" class="conv-menu-btn" aria-label="خيارات">⋮</button>
     `;
 
     // Click to open chat
@@ -21116,7 +21256,7 @@ const ChatsPage = (() => {
     let pressTimer = null;
     card.addEventListener('touchstart', () => {
       pressTimer = setTimeout(() => {
-        try { if (navigator.vibrate) navigator.vibrate(50); } catch {}
+        try { if (navigator.vibrate) navigator.vibrate(50); } catch { /* silent */ }
         showActionsMenu(conv);
       }, 500);
     });
@@ -21150,18 +21290,24 @@ const ChatsPage = (() => {
       backdrop.classList.remove('show');
       menu.classList.remove('show');
       setTimeout(() => {
-        try { backdrop.remove(); menu.remove(); } catch {}
+        try { backdrop.remove(); menu.remove(); } catch { /* silent */ }
       }, 300);
     };
 
     backdrop.addEventListener('click', closeMenu);
 
-    menu.innerHTML = `
-      <div class="conv-menu-header">
-        <div class="conv-menu-name">${escapeHTML(conv.peerName || conv.peerUsername || '')}</div>
-        <div class="conv-menu-sub">اختر إجراء</div>
-      </div>
-    `;
+    // DOM آمن
+    const _mHeader = document.createElement('div');
+    _mHeader.className = 'conv-menu-header';
+    const _mName = document.createElement('div');
+    _mName.className = 'conv-menu-name';
+    _mName.textContent = conv.peerName || conv.peerUsername || '';
+    const _mSub = document.createElement('div');
+    _mSub.className = 'conv-menu-sub';
+    _mSub.textContent = 'اختر إجراء';
+    _mHeader.appendChild(_mName);
+    _mHeader.appendChild(_mSub);
+    menu.appendChild(_mHeader);
 
     const actions = [
       {
@@ -21194,7 +21340,7 @@ const ChatsPage = (() => {
             const ref = window.FB.doc(window.FB.db, 'users', window.Social._state.user.uid, 'conversations', conv.peerUid);
             await window.FB.updateDoc(ref, { unread: 0 });
             window.Toast?.show('✓ تم وضع علامة "انقرت"', 'ok');
-          } catch {}
+          } catch { /* silent */ }
         }
       });
     }
@@ -21209,17 +21355,24 @@ const ChatsPage = (() => {
           const ref = window.FB.doc(window.FB.db, 'users', window.Social._state.user.uid, 'conversations', conv.peerUid);
           await window.FB.deleteDoc(ref);
           window.Toast?.show('🗑️ تم الحذف', 'ok');
-        } catch {}
+        } catch { /* silent */ }
       }
     });
 
     actions.forEach(a => {
       const btn = document.createElement('button');
+      btn.type = 'button';
       btn.className = 'conv-menu-action';
-      btn.innerHTML = `
-        <span class="conv-menu-icon" style="color:${a.color}">${a.icon}</span>
-        <span class="conv-menu-label">${a.label}</span>
-      `;
+      // DOM آمن بدل innerHTML
+      const _iconSpan = document.createElement('span');
+      _iconSpan.className = 'conv-menu-icon';
+      _iconSpan.style.color = a.color;
+      _iconSpan.textContent = a.icon;
+      const _labelSpan = document.createElement('span');
+      _labelSpan.className = 'conv-menu-label';
+      _labelSpan.textContent = a.label;
+      btn.appendChild(_iconSpan);
+      btn.appendChild(_labelSpan);
       btn.onclick = () => {
         closeMenu();
         a.action();
@@ -21418,7 +21571,7 @@ const BiometricAuth = (() => {
 
       return { success: true, credentialId: credential.id };
     } catch (e) {
-      console.error('[Biometric] Register error:', e);
+      Logger.error('Biometric.register', e);
       
       let message = 'فشل تسجيل البصمة';
       if (e.name === 'NotAllowedError') message = 'تم إلغاء العملية';
@@ -21464,7 +21617,7 @@ const BiometricAuth = (() => {
         displayName: credData.displayName
       };
     } catch (e) {
-      console.error('[Biometric] Auth error:', e);
+      Logger.error('Biometric.auth', e);
       
       let message = 'فشل التحقق من البصمة';
       if (e.name === 'NotAllowedError') message = 'تم إلغاء العملية';
@@ -21523,8 +21676,8 @@ const BiometricAuth = (() => {
           </div>
         </div>
         <div class="biometric-setup-actions">
-          <button class="biometric-setup-btn secondary" id="biometricSkipBtn">بعدين</button>
-          <button class="biometric-setup-btn primary" id="biometricEnableBtn">✨ شغّل الحين</button>
+          <button type="button" class="biometric-setup-btn secondary" id="biometricSkipBtn">بعدين</button>
+          <button type="button" class="biometric-setup-btn primary" id="biometricEnableBtn">✨ شغّل الحين</button>
         </div>
       </div>
     `;
@@ -21646,7 +21799,7 @@ const BiometricAuth = (() => {
         // Close any open modals
         document.body.style.overflow = '';
       } catch (err) {
-        console.error('[Biometric] Firebase signin error:', err);
+        Logger.error('Biometric.signin', err);
         
         let errorMsg = 'فشل تسجيل الدخول';
         if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
@@ -21669,7 +21822,7 @@ const BiometricAuth = (() => {
         window.Toast?.show(errorMsg, 'danger');
       }
     } catch (e) {
-      console.error('[Biometric] Parse error:', e);
+      Logger.error('Biometric.parse', e);
       window.Toast?.show('❌ خطأ في البيانات المحفوظة', 'danger');
     } finally {
       if (btn) btn.classList.remove('loading');
@@ -21915,7 +22068,7 @@ window.PWAInstall = PWAInstall;
           }
         }, 1000);
       }
-    } catch {}
+    } catch { /* silent */ }
   }, 2000);
 })();
 
@@ -21966,7 +22119,7 @@ window.Sidebar = Sidebar;
       } else {
         label.classList.add('show');
       }
-    } catch {}
+    } catch { /* silent */ }
   }
 
   // Initial
@@ -22031,10 +22184,10 @@ window.Sidebar = Sidebar;
       });
 
       // Apply language
-      try { App.Lang.apply(store.get('lang') || 'ar'); } catch {}
+      try { App.Lang.apply(store.get('lang') || 'ar'); } catch { /* silent */ }
 
       // Start date display
-      try { App.DateDisplay.start(); } catch {}
+      try { App.DateDisplay.start(); } catch { /* silent */ }
     } catch (e) {
       Logger.error('Bootstrap.loadState', e);
     }
@@ -22123,7 +22276,7 @@ window.Sidebar = Sidebar;
       })
       .catch((err) => {
         // فشل التسجيل (تطوير محلي أو iOS قديمة) — لا مشكلة
-        console.warn('[SW] فشل التسجيل:', err.message);
+        if (!window.__PROD__) console.warn('[SW] فشل التسجيل:', err.message);
       });
     
     // أبلّغ الـ SW لما يعود الاتصال
@@ -22140,16 +22293,22 @@ window.Sidebar = Sidebar;
       const y = store.get('year'), m = store.get('month');
       const d = App.Sel.monthData(y, m);
       const cats = App.Sel.categorySpending(y, m);
-      let exceeded = 0;
+      let exceeded = 0, nearLimit = [];
       for (const b of d.budgets || []) {
         const sp = App.Budgets.calcSpent(b.name, cats);
-        if (sp >= b.limit) exceeded++;
+        const pct = b.limit > 0 ? (sp / b.limit) * 100 : 0;
+        if (pct >= 100) exceeded++;
+        else if (pct >= 90) nearLimit.push({ name: b.name, pct: Math.round(pct) });
       }
-      if (exceeded > 0) {
-        setTimeout(() => {
-          App.Toast.show(`⚠️ تجاوزت ${exceeded} ${exceeded === 1 ? 'حد' : 'حدود'} إنفاق`, 'warn', 3500);
-        }, 2500);
-      }
+      setTimeout(() => {
+        if (exceeded > 0) {
+          App.Toast.show(`🚨 تجاوزت ${exceeded} ${exceeded === 1 ? 'حد' : 'حدود'} إنفاق`, 'danger', 4000);
+        }
+        if (nearLimit.length > 0) {
+          const names = nearLimit.map(b => `${b.name} (${b.pct}٪)`).join('، ');
+          App.Toast.show(`⚠️ قريب من الحد: ${names}`, 'warn', 4500);
+        }
+      }, 2500);
     } catch (e) { Logger.error('maybeAlertBudget', e); }
   }
 
@@ -22221,13 +22380,13 @@ window.Sidebar = Sidebar;
       Logger.warn('Init', 'تم التحميل بنجاح');
       
       // تهيئة Currency Selector
-      try { if (typeof Currency !== 'undefined') Currency.init(); } catch {}
+      try { if (typeof Currency !== 'undefined') Currency.init(); } catch { /* silent */ }
       
       // تهيئة Recurring Transactions
-      try { if (typeof Recurring !== 'undefined') Recurring.init(); } catch {}
+      try { if (typeof Recurring !== 'undefined') Recurring.init(); } catch { /* silent */ }
       
       // تهيئة Monthly Search
-      try { if (typeof MonthlySearch !== 'undefined') MonthlySearch.init(); } catch {}
+      try { if (typeof MonthlySearch !== 'undefined') MonthlySearch.init(); } catch { /* silent */ }
     } catch (e) {
       Logger.error('Bootstrap.init', e);
     }
@@ -22403,6 +22562,42 @@ const Tests = (() => {
     assert(Budgets.calcSpent('أكل', cats) === 100, 'Budget matches by text');
   }
 
+  function testCurrency() {
+    assert(typeof CURRENCIES === 'object', 'CURRENCIES object exists');
+    assert(CURRENCIES.SAR.rate === 1, 'SAR rate is 1');
+    assert(CURRENCIES.USD.rate > 0, 'USD rate positive');
+    assert(Object.isFrozen(CURRENCIES), 'CURRENCIES is frozen');
+    // Fmt.c يستخدم العملة
+    const fmt = Fmt.c(1000);
+    assert(typeof fmt === 'string' && fmt.length > 0, 'Fmt.c returns string');
+  }
+
+  function testGoalDeadline() {
+    const today = new Date();
+    const future = new Date(today.getTime() + 10 * 86400000);
+    const past   = new Date(today.getTime() - 5  * 86400000);
+    const futureStr = future.toISOString().slice(0, 10);
+    const pastStr   = past.toISOString().slice(0, 10);
+    const daysLeft  = (d) => Math.ceil((new Date(d) - new Date(new Date().toDateString())) / 86400000);
+    assert(daysLeft(futureStr) > 0,  'Future deadline positive days');
+    assert(daysLeft(pastStr)   < 0,  'Past deadline negative days');
+    assert(daysLeft(new Date().toISOString().slice(0,10)) === 0, 'Today deadline = 0');
+  }
+
+  function testAuthRateLimit() {
+    if (!window.AuthRateLimit) { assert(false, 'AuthRateLimit missing'); return; }
+    AuthRateLimit.reset(); // ابدأ نظيف
+    assert(!AuthRateLimit.isBlocked(), 'Not blocked initially');
+    assert(typeof AuthRateLimit.getRemainingMinutes === 'function' ||
+           typeof AuthRateLimit.remainingMinutes === 'function', 'Has remaining method');
+  }
+
+  function testDOMCache() {
+    if (!window.DOMCache) { assert(false, 'DOMCache missing'); return; }
+    assert(typeof DOMCache.get === 'function', 'DOMCache.get exists');
+    assert(typeof DOMCache.invalidate === 'function', 'DOMCache.invalidate exists');
+  }
+
   function run() {
     pass = 0; fail = 0;
     try {
@@ -22411,8 +22606,12 @@ const Tests = (() => {
       testStore();
       testZakat();
       testBudgetMatching();
+      testCurrency();
+      testGoalDeadline();
+      testAuthRateLimit();
+      testDOMCache();
     } catch (e) {
-      console.error('Test crashed:', e);
+      Logger.error('Tests.run', e);
       fail++;
     }
     const total = pass + fail;
@@ -22465,7 +22664,7 @@ const Currency = (() => {
         window.Renderers?.scheduledAll?.();
         window.Toast?.show(`${cur.flag} تم التغيير لـ ${cur.name}`, 'success');
         // vibrate
-        try { if (navigator.vibrate) navigator.vibrate(10); } catch {}
+        try { if (navigator.vibrate) navigator.vibrate(10); } catch { /* silent */ }
       };
       grid.appendChild(btn);
     });
@@ -22564,7 +22763,7 @@ const Recurring = (() => {
           window.Renderers?.scheduledAll?.();
         }
       } catch (e) {
-        console.warn('[Recurring]', e.message);
+        if (!window.__PROD__) console.warn('[Recurring]', e.message);
       }
     }, 2000);
   }
@@ -22577,16 +22776,16 @@ window.Recurring = Recurring;
 
 // ═══ HAPTIC FEEDBACK HELPER ═══
 const Haptic = {
-  light()  { try { if (navigator.vibrate) navigator.vibrate(10);        } catch {} },
-  medium() { try { if (navigator.vibrate) navigator.vibrate(20);        } catch {} },
-  heavy()  { try { if (navigator.vibrate) navigator.vibrate(50);        } catch {} },
-  success(){ try { if (navigator.vibrate) navigator.vibrate([30,20,50]);} catch {} },
-  error()  { try { if (navigator.vibrate) navigator.vibrate([50,30,50,30,100]);} catch {} },
+  light()  { try { if (navigator.vibrate) navigator.vibrate(10);        } catch { /* silent */ } },
+  medium() { try { if (navigator.vibrate) navigator.vibrate(20);        } catch { /* silent */ } },
+  heavy()  { try { if (navigator.vibrate) navigator.vibrate(50);        } catch { /* silent */ } },
+  success(){ try { if (navigator.vibrate) navigator.vibrate([30,20,50]);} catch { /* silent */ } },
+  error()  { try { if (navigator.vibrate) navigator.vibrate([50,30,50,30,100]);} catch { /* silent */ } },
   // iOS Haptic API (Safari 16.4+)
   impact(style = 'medium') {
     try {
       if (window.HapticFeedback) window.HapticFeedback.impactOccurred(style);
-    } catch {}
+    } catch { /* silent */ }
     this.medium();
   }
 };
@@ -22796,7 +22995,7 @@ const PushSetup = (() => {
       });
       return sub;
     } catch (e) {
-      console.warn('[Push]', e.message);
+      if (!window.__PROD__) console.warn('[Push]', e.message);
       return null;
     }
   }
@@ -22840,12 +23039,10 @@ if ('serviceWorker' in navigator) {
   navigator.serviceWorker.addEventListener('message', (event) => {
     const { type } = event.data || {};
     if (type === 'SYNC_STREAK') {
-      try { if (typeof Social !== 'undefined' && Social.syncStreak) Social.syncStreak(); }
-      catch {}
+      try { if (typeof Social !== 'undefined' && Social.syncStreak) Social.syncStreak(); } catch { /* silent */ }
     }
     if (type === 'SYNC_DATA') {
-      try { if (window.App?.store) Tdbeer.Storage.flushNow(); }
-      catch {}
+      try { if (window.App?.store) Tdbeer.Storage.flushNow(); } catch { /* silent */ }
     }
     if (type === 'NEW_VERSION_AVAILABLE') {
       // أبلّغ المستخدم بوجود تحديث
@@ -23144,18 +23341,127 @@ window.MonthlySearch = MonthlySearch;
   window._shortcuts = shortcuts;
 })();
 
+
+// ═══ AUTH RATE LIMITING ═══
+const AuthRateLimit = (() => {
+  const KEY = 'auth_attempts';
+  const MAX_ATTEMPTS = 5;
+  const WINDOW_MS = 15 * 60 * 1000; // 15 دقيقة
+
+  function getAttempts() {
+    try {
+      const raw = localStorage.getItem(KEY);
+      if (!raw) return { count: 0, firstAt: Date.now() };
+      return JSON.parse(raw);
+    } catch { return { count: 0, firstAt: Date.now() }; }
+  }
+
+  function record() {
+    const data = getAttempts();
+    const now = Date.now();
+    // إعادة تعيين بعد انتهاء النافذة
+    if (now - data.firstAt > WINDOW_MS) {
+      localStorage.setItem(KEY, JSON.stringify({ count: 1, firstAt: now }));
+      return true;
+    }
+    data.count++;
+    localStorage.setItem(KEY, JSON.stringify(data));
+    return data.count <= MAX_ATTEMPTS;
+  }
+
+  function isBlocked() {
+    const data = getAttempts();
+    const now = Date.now();
+    if (now - data.firstAt > WINDOW_MS) return false;
+    return data.count >= MAX_ATTEMPTS;
+  }
+
+  function reset() {
+    localStorage.removeItem(KEY);
+  }
+
+  function remainingMs() {
+    const data = getAttempts();
+    const elapsed = Date.now() - data.firstAt;
+    return Math.max(0, WINDOW_MS - elapsed);
+  }
+
+  function remainingMinutes() {
+    return Math.ceil(remainingMs() / 60000);
+  }
+
+  return { record, isBlocked, reset, remainingMinutes, getAttempts };
+})();
+
+window.AuthRateLimit = AuthRateLimit;
+
+
+// ═══ RESIZE DEBOUNCE ═══
+(function() {
+  let _resizeTimer;
+  const _origHandlers = [];
+  
+  window.addEventListener('resize', () => {
+    clearTimeout(_resizeTimer);
+    _resizeTimer = setTimeout(() => {
+      // إعادة رسم الـ charts فقط لما ينتهي الـ resize
+      try {
+        if (typeof Renderers !== 'undefined') {
+          Renderers.periodChart?.();
+          Renderers.donutChart?.();
+        }
+      } catch { /* silent */ }
+    }, 250);
+  });
+})();
+
+// ═══ SCROLL RESTORATION ═══
+(function() {
+  const scrollPositions = {};
+  
+  // احفظ موضع التمرير قبل تغيير التبويب
+  document.addEventListener('click', (e) => {
+    const tabBtn = e.target.closest('[data-tab]');
+    if (tabBtn) {
+      const currentTab = document.querySelector('.tab-content:not([style*="none"])');
+      if (currentTab) {
+        scrollPositions[currentTab.id] = currentTab.scrollTop;
+      }
+    }
+  });
+  
+  // استعد الموضع بعد تغيير التبويب
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach(m => {
+      if (m.target.classList?.contains('tab-content') && 
+          m.attributeName === 'style' &&
+          !m.target.style.display.includes('none')) {
+        const id = m.target.id;
+        if (scrollPositions[id] !== undefined) {
+          requestAnimationFrame(() => {
+            m.target.scrollTop = scrollPositions[id];
+          });
+        }
+      }
+    });
+  });
+  
+  document.querySelectorAll('.tab-content').forEach(el => {
+    observer.observe(el, { attributes: true, attributeFilter: ['style'] });
+  });
+})();
 </script>
 
 <!-- ═══ DAILY GIFT BOX ═══ -->
 <div class="gift-overlay" id="giftOverlay">
   <div class="gift-card">
-    <button class="gift-close-btn" id="giftCloseBtn" aria-label="إغلاق">✕</button>
+    <button type="button" class="gift-close-btn" id="giftCloseBtn" aria-label="إغلاق">✕</button>
 
     <div id="giftIntro">
       <div class="gift-box-visual shaking" id="giftBox">🎁</div>
       <div class="gift-title">صندوق اليوم</div>
       <div class="gift-desc">افتح الصندوق واكسب مفاجأة يومية!<br>قد تكون نقاط، شارة، أو نصيحة ذهبية</div>
-      <button class="gift-open-btn" id="giftOpenBtn">🎁 افتح الصندوق</button>
+      <button type="button" class="gift-open-btn" id="giftOpenBtn">🎁 افتح الصندوق</button>
     </div>
 
     <div id="giftLocked" style="display:none">
@@ -23170,7 +23476,7 @@ window.MonthlySearch = MonthlySearch;
       <div class="gift-reward-icon" id="giftRewardIcon">🎉</div>
       <div class="gift-reward-text" id="giftRewardText">مبروك!</div>
       <div class="gift-reward-detail" id="giftRewardDetail"></div>
-      <button class="gift-open-btn" id="giftCollectBtn">✨ استلام الجائزة</button>
+      <button type="button" class="gift-open-btn" id="giftCollectBtn">✨ استلام الجائزة</button>
     </div>
   </div>
 </div>
@@ -23184,7 +23490,7 @@ window.MonthlySearch = MonthlySearch;
         <div class="sim-title">ماذا لو؟</div>
         <div class="sim-subtitle">جرّب سيناريوهات مالية مختلفة</div>
       </div>
-      <button class="sim-close" id="simCloseBtn" aria-label="إغلاق">✕</button>
+      <button type="button" class="sim-close" id="simCloseBtn" aria-label="إغلاق">✕</button>
     </div>
 
     <div class="sim-scenarios" id="simScenarios"></div>
@@ -23198,7 +23504,7 @@ window.MonthlySearch = MonthlySearch;
         <span class="sim-custom-label" id="simLabel2">المدة (سنوات)</span>
         <input type="number" class="sim-custom-input" id="simInput2" value="1" min="1" max="30" step="1">
       </div>
-      <button class="sim-calc-btn" id="simCalcBtn">احسب النتيجة</button>
+      <button type="button" class="sim-calc-btn" id="simCalcBtn">احسب النتيجة</button>
     </div>
 
     <div class="sim-result" id="simResult">
@@ -23216,11 +23522,11 @@ window.MonthlySearch = MonthlySearch;
 <!-- ═══ VOICE INPUT ═══ -->
 <div class="voice-overlay" id="voiceOverlay">
   <div class="voice-modal">
-    <button class="voice-close" id="voiceCloseBtn" aria-label="إغلاق">✕</button>
+    <button type="button" class="voice-close" id="voiceCloseBtn" aria-label="إغلاق">✕</button>
     <div class="voice-title">🎙️ سجّل بصوتك</div>
     <div class="voice-subtitle">قل مصروفك بلغتك الطبيعية</div>
 
-    <button class="voice-mic-btn" id="voiceMicBtn" aria-label="تسجيل">🎤</button>
+    <button type="button" class="voice-mic-btn" id="voiceMicBtn" aria-label="تسجيل">🎤</button>
 
     <div class="voice-status" id="voiceStatus">اضغط على الميكروفون للبدء</div>
 
@@ -23240,8 +23546,8 @@ window.MonthlySearch = MonthlySearch;
     </div>
 
     <div class="voice-actions" id="voiceActions" style="display:none">
-      <button class="voice-action-btn cancel" id="voiceCancelBtn">إلغاء</button>
-      <button class="voice-action-btn confirm" id="voiceConfirmBtn">✓ إضافة</button>
+      <button type="button" class="voice-action-btn cancel" id="voiceCancelBtn">إلغاء</button>
+      <button type="button" class="voice-action-btn confirm" id="voiceConfirmBtn">✓ إضافة</button>
     </div>
   </div>
 </div>
@@ -23252,7 +23558,7 @@ window.MonthlySearch = MonthlySearch;
     <div class="companion-picker-title">🎭 اختر رفيقك المالي</div>
     <div class="companion-picker-sub">صديق ذكي يرافقك في رحلتك المالية<br>ويتعلم أسلوبك ويكبر معك</div>
     <div class="companion-list" id="companionList"></div>
-    <button class="companion-confirm" id="companionConfirmBtn">✨ اختيار هذا الرفيق</button>
+    <button type="button" class="companion-confirm" id="companionConfirmBtn">✨ اختيار هذا الرفيق</button>
   </div>
 </div>
 
