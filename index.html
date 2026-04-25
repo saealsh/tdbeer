@@ -84,6 +84,35 @@
   })();
 </script>
 
+<!-- ═══ SAFETY NET: ضمان إخفاء الـ skeleton مهما حصل ═══ -->
+<script>
+  // مستقل تماماً عن باقي الكود — يشتغل حتى لو Firebase/Bootstrap فشلوا
+  (function() {
+    var hidden = false;
+    function hide() {
+      if (hidden) return;
+      hidden = true;
+      try {
+        if (document.body) document.body.classList.add('app-loaded');
+      } catch(e) {}
+    }
+    // الطريقة 1: لو الـ DOM جاهز، أخفِ بعد 1.5s
+    if (document.readyState !== 'loading') {
+      setTimeout(hide, 1500);
+    } else {
+      document.addEventListener('DOMContentLoaded', function() {
+        setTimeout(hide, 1500);
+      });
+    }
+    // الطريقة 2: لو الصفحة خلصت تحميل، أخفِ فوراً
+    window.addEventListener('load', function() {
+      setTimeout(hide, 500);
+    });
+    // الطريقة 3: safety net مطلق — بعد 3 ثواني، أخفِ مهما حصل
+    setTimeout(hide, 3000);
+  })();
+</script>
+
 <!-- PWA Manifest (inline as data URI for single-file delivery) -->
 <link rel="manifest" href='data:application/json;charset=utf-8,%7B%22name%22%3A%22%D8%AA%D9%80%D8%AF%D9%91%D8%A8%D9%8A%D8%B1%22%2C%22short_name%22%3A%22%D8%AA%D9%80%D8%AF%D9%91%D8%A8%D9%8A%D8%B1%22%2C%22description%22%3A%22%D9%85%D8%AE%D8%B7%D8%B7%D9%83%20%D8%A7%D9%84%D9%85%D8%A7%D9%84%D9%8A%20%D8%A7%D9%84%D8%B0%D9%83%D9%8A%22%2C%22start_url%22%3A%22.%2F%22%2C%22display%22%3A%22standalone%22%2C%22orientation%22%3A%22portrait%22%2C%22background_color%22%3A%22%230a0a0a%22%2C%22theme_color%22%3A%22%230a0a0a%22%2C%22lang%22%3A%22ar%22%2C%22dir%22%3A%22rtl%22%2C%22icons%22%3A%5B%7B%22src%22%3A%22data%3Aimage%2Fsvg%2Bxml%3Bcharset%3Dutf-8%2C%253Csvg%2520xmlns%253D%2522http%253A%252F%252Fwww.w3.org%252F2000%252Fsvg%2522%2520viewBox%253D%25220%25200%2520540%2520540%2522%253E%253Crect%2520width%253D%2522540%2522%2520height%253D%2522540%2522%2520rx%253D%2522108%2522%2520fill%253D%2522%2523061a10%2522%252F%253E%253Cg%2520transform%253D%2522translate%25280%252070%2529%2522%2520fill%253D%2522%252301dd8c%2522%253E%253Cpath%2520d%253D%2522M216.45%252037.73%2520C226.48%252016.28%2520243.13%25204.36%2520266.50%25203.54%2520C287.23%25202.82%2520306.24%252012.42%2520317.56%252033.46%2520C325.74%252048.67%2520327.25%252065.23%2520325.93%252082.20%2520C323.86%2520109.00%2520314.65%2520133.69%2520303.21%2520157.63%2520C290.95%2520183.27%2520279.27%2520209.14%2520270.14%2520236.11%2520C269.70%2520237.39%2520269.49%2520238.88%2520268.10%2520239.66%2520C266.32%2520239.57%2520266.29%2520238.03%2520265.91%2520236.89%2520C256.65%2520208.98%2520244.69%2520182.21%2520231.98%2520155.73%2520C222.96%2520136.93%2520215.38%2520117.55%2520211.84%252096.86%2520C208.65%252078.22%2520208.26%252059.67%2520214.88%252041.54%2520C215.32%252040.33%2520215.85%252039.16%2520216.45%252037.73%2520Z%2522%252F%253E%253Cpath%2520d%253D%2522M507.78%2520222.63%2520C533.82%2520237.59%2520540.14%2520269.80%2520527.05%2520293.34%2520C519.76%2520306.47%2520507.98%2520314.48%2520493.91%2520318.79%2520C472.26%2520325.43%2520450.65%2520322.71%2520429.21%2520317.19%2520C405.55%2520311.10%2520383.25%2520301.42%2520361.07%2520291.40%2520C340.06%2520281.91%2520318.79%2520273.12%2520296.54%2520266.93%2520C295.75%2520266.71%2520294.99%2520266.39%2520294.26%2520266.04%2520C293.99%2520265.91%2520293.83%2520265.55%2520293.46%2520265.10%2520C295.59%2520263.11%2520298.38%2520263.05%2520300.83%2520262.44%2520C323.00%2520256.92%2520344.56%2520249.61%2520365.68%2520240.92%2520C388.50%2520231.54%2520411.35%2520222.29%2520435.61%2520217.09%2520C454.47%2520213.04%2520473.30%2520212.11%2520492.22%2520216.60%2520C497.60%2520217.88%2520502.70%2520219.86%2520507.78%2520222.63%2520Z%2522%252F%253E%253Cpath%2520d%253D%2522M182.21%2520246.27%2520C201.52%2520253.63%2520221.03%2520259.51%2520240.69%2520264.31%2520C240.57%2520266.34%2520239.46%2520266.48%2520238.64%2520266.69%2520C212.40%2520273.30%2520188.10%2520284.80%2520163.70%2520296.11%2520C144.06%2520305.22%2520124.10%2520313.51%2520102.91%2520318.46%2520C90.33%2520321.39%252077.63%2520323.39%252064.70%2520322.39%2520C48.89%2520321.18%252033.59%2520317.96%252020.87%2520307.62%2520C7.96%2520297.13%25202.68%2520283.02%25202.75%2520266.78%2520C2.85%2520240.20%252021.43%2520222.07%252044.22%2520216.57%2520C63.71%2520211.87%252082.92%2520213.23%2520102.16%2520217.61%2520C122.53%2520222.25%2520141.89%2520229.86%2520161.13%2520237.82%2520C168.04%2520240.68%2520175.01%2520243.39%2520182.21%2520246.27%2520Z%2522%252F%253E%253C%252Fg%253E%253C%252Fsvg%253E%22%2C%22sizes%22%3A%22540x540%22%2C%22type%22%3A%22image%2Fsvg%2Bxml%22%2C%22purpose%22%3A%22any%20maskable%22%7D%5D%7D'>
 
@@ -9816,11 +9845,18 @@ html {
   margin-bottom: var(--s-3);
   overflow: hidden;
 }
-/* إخفاء الـ skeleton بعد التحميل */
-.app-loaded .skeleton,
-.app-loaded .skeleton-card,
-.app-loaded .skeleton-bank {
+/* ═══ SKELETON: مخفي افتراضياً، يظهر فقط لو app-loading موجود ═══
+   هذا يضمن إن الـ skeleton ما يكسر التصميم لو حصل أي خطأ في JS */
+.skeleton,
+.skeleton-card,
+.skeleton-bank {
   display: none !important;
+}
+/* الـ class app-loading يضاف بالـ JS بسرعة لو احتجنا نعرض الـ skeleton */
+.app-loading .skeleton,
+.app-loading .skeleton-card,
+.app-loading .skeleton-bank {
+  display: block !important;
 }
 
 
@@ -13198,26 +13234,6 @@ th{background:#f8f8f8}</style>
 <table><thead><tr><th>البند</th><th>الفئة</th><th>النوع</th><th>المبلغ</th></tr></thead><tbody>
 ${items.map(r => `<tr><td>${U.esc(r.name)}</td><td>${U.esc(r.cat)}</td><td>${r.type}</td><td style="color:${r.color};font-weight:700">${Fmt.c(r.amt)}</td></tr>`).join('')}
 </tbody></table>
-// ═══ OFFLINE BANNER CONTROLLER ═══
-(function() {
-  const banner = document.getElementById('offlineBanner');
-  if (!banner) return;
-  
-  function updateBanner() {
-    if (!navigator.onLine) {
-      banner.classList.add('show');
-    } else {
-      banner.classList.remove('show');
-    }
-  }
-  
-  // تحقق فوري
-  updateBanner();
-  
-  window.addEventListener('online', updateBanner);
-  window.addEventListener('offline', updateBanner);
-})();
-
 </body></html>`);
       win.document.close();
       setTimeout(() => win.print(), 500);
@@ -22279,11 +22295,21 @@ window.Sidebar = Sidebar;
         if (!window.__PROD__) console.warn('[SW] فشل التسجيل:', err.message);
       });
     
-    // أبلّغ الـ SW لما يعود الاتصال
+    // ─── Offline Banner + Toast ───
+    const offlineBanner = document.getElementById('offlineBanner');
+    function updateOfflineBanner() {
+      if (!offlineBanner) return;
+      offlineBanner.classList.toggle('show', !navigator.onLine);
+    }
+    // تحقق فوري عند بدء التشغيل
+    updateOfflineBanner();
+
     window.addEventListener('online', () => {
+      updateOfflineBanner();
       if (window.Toast?.show) window.Toast.show('✅ عاد الاتصال', 'success');
     });
     window.addEventListener('offline', () => {
+      updateOfflineBanner();
       if (window.Toast?.show) window.Toast.show('📴 لا اتصال — وضع أوفلاين', 'warn', 5000);
     });
   }
@@ -22313,6 +22339,16 @@ window.Sidebar = Sidebar;
   }
 
   function init() {
+    // ─── ضمان إخفاء الـ skeleton حتى لو فشل أي شي تحت ───
+    // يُنفّذ بعد أول paint عشان يعطي frame للـ skeleton يظهر بسلاسة
+    const hideSkeleton = () => {
+      requestAnimationFrame(() => {
+        document.body.classList.add('app-loaded');
+      });
+    };
+    // safety net: حتى لو الكود تحت رمى exception، الـ skeleton يختفي
+    setTimeout(hideSkeleton, 1500);
+
     try {
       loadState();
       bindPersistence();
@@ -22324,10 +22360,8 @@ window.Sidebar = Sidebar;
       maybeAlertBudget();
       store.set('initialized', true);
       
-      // أخفِ الـ skeleton loaders بعد التحميل
-      setTimeout(() => {
-        document.body.classList.add('app-loaded');
-      }, 800);
+      // أخفِ الـ skeleton فوراً بعد render أول
+      hideSkeleton();
 
       // Social init (waits for fb-ready event internally)
       try {
