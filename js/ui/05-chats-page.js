@@ -12,6 +12,20 @@ var ChatsPage = (() => {
   let currentFilter = 'all';
   let currentSearch = '';
 
+  // 🔧 STORAGE FIX: helpers لـ convPrefs (تستخدم Storage module مع fallback)
+  function loadConvPrefs() {
+    try {
+      if (window.Storage) return window.Storage.load('convPrefs', {}) || {};
+      return JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    } catch { return {}; }
+  }
+  function saveConvPrefs(prefs) {
+    try {
+      if (window.Storage) window.Storage.save('convPrefs', prefs);
+      else saveConvPrefs(prefs);
+    } catch (e) { if (window.Logger) window.Logger.warn('ChatsPage.saveConvPrefs', e?.message); }
+  }
+
   function init() {
     page = document.getElementById('chatsPage');
     body = document.getElementById('chatsPageBody');
@@ -190,7 +204,7 @@ var ChatsPage = (() => {
     const friends = social.friends || [];
 
     // Load preferences
-    const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    const prefs = loadConvPrefs();
     const pinnedUids = prefs.pinned || [];
     const mutedUids = prefs.muted || [];
     const archivedUids = prefs.archived || [];
@@ -369,7 +383,7 @@ var ChatsPage = (() => {
     const existingBackdrop = document.querySelector('.conv-menu-backdrop');
     if (existingBackdrop) existingBackdrop.remove();
 
-    const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    const prefs = loadConvPrefs();
     const isPinned = (prefs.pinned || []).includes(conv.peerUid);
     const isMuted = (prefs.muted || []).includes(conv.peerUid);
     const isArchived = (prefs.archived || []).includes(conv.peerUid);
@@ -472,7 +486,7 @@ var ChatsPage = (() => {
   }
 
   function togglePref(key, uid, successMsg) {
-    const prefs = JSON.parse(localStorage.getItem('convPrefs') || '{}');
+    const prefs = loadConvPrefs();
     prefs[key] = prefs[key] || [];
     const idx = prefs[key].indexOf(uid);
     if (idx >= 0) {
@@ -485,7 +499,7 @@ var ChatsPage = (() => {
       }
       prefs[key].push(uid);
     }
-    localStorage.setItem('convPrefs', JSON.stringify(prefs));
+    saveConvPrefs(prefs);
     window.Toast?.show('✅ ' + successMsg, 'ok');
   }
 
