@@ -7,7 +7,13 @@
 var BiometricAuth = (() => {
   const STORAGE_KEY = 'tdbeer_biometric_credential';
   const USER_KEY = 'tdbeer_biometric_user';
-
+// 🔒 SECURITY: امسح أي توكن قديم محفوظ بنص واضح من نسخ سابقة
+  try {
+    if (localStorage.getItem('tdbeer_biometric_auth_token')) {
+      localStorage.removeItem('tdbeer_biometric_auth_token');
+      if (window.Logger) window.Logger.warn('Biometric', 'تم حذف توكن قديم غير آمن');
+    }
+  } catch (e) { /* localStorage not available */ }
   // ═══ Check if biometrics are supported ═══
   async function isSupported() {
     if (!window.PublicKeyCredential) return false;
