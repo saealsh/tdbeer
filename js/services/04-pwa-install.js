@@ -176,36 +176,35 @@ var PWAInstall = (() => {
 
 window.PWAInstall = PWAInstall;
 
-// ═══ Save password temporarily after successful login for biometric future use ═══
-// Hook into auth success
+// ═══ Hook into auth success — يربط البصمة بالحساب بعد نجاح تسجيل الدخول ═══
+// 🔒 SECURITY FIX: لا نخزّن كلمة السر بعد الآن (كانت بنص واضح في localStorage).
+// Firebase يحفظ جلسة المستخدم في IndexedDB تلقائياً (LOCAL persistence)،
+// فالبصمة دورها يصير "تأكيد هوية" قبل فتح التطبيق، مش إعادة تسجيل دخول.
 (function hookAuthSuccess() {
-  // Watch for when user successfully logs in
   let lastAuthState = null;
   setInterval(() => {
     try {
       const user = window.Social?._state?.user;
       if (user && user.email && user.email !== lastAuthState) {
         lastAuthState = user.email;
-        
-        // Check if biometric is available and not dismissed recently
+
         setTimeout(async () => {
           const supported = await BiometricAuth.isSupported();
           const hasRegistered = BiometricAuth.hasRegisteredCredential();
           const dismissed = localStorage.getItem('biometric_dismissed');
-          const dismissedRecently = dismissed && (Date.now() - parseInt(dismissed)) < 7 * 24 * 60 * 60 * 1000; // 7 days
-          
+          const dismissedRecently = dismissed && (Date.now() - parseInt(dismissed)) < 7 * 24 * 60 * 60 * 1000;
+
           if (supported && !hasRegistered && !dismissedRecently) {
-            // Show setup prompt 3 seconds after login
             setTimeout(() => {
               const profile = window.Social?._state?.profile;
               const displayName = profile?.displayName || user.email.split('@')[0];
-              
-            // ⚠️ تم حذف تخزين كلمة السر بنص واضح
+
+              // ⚠️ تم حذف تخزين كلمة السر بنص واضح
               // Firebase auth.currentUser سيبقى متاح عبر الجلسة المخزنة في IndexedDB
               // البصمة ستتحقق فقط من هوية المستخدم محلياً قبل فتح الواجهة
-              
+
               BiometricAuth.showSetupPrompt(user.email, displayName, () => {
-                // On success, keep auth_token for future biometric logins
+                // البصمة سُجّلت بنجاح — لا حاجة لحفظ كلمة السر
               });
             }, 3000);
           }
@@ -385,11 +384,14 @@ window.Sidebar = Sidebar;
   }
 
   function registerSW() {
-    // Unregister any legacy service workers (iOS occasionally caches old versions)
+    // 🔧 FIX: ما نلغي SW. بدل كذا نطلب من الموجود يفحص نفسه ويحدّث.
+    // الإصدار يُتحكم به عبر CACHE_VERSION في sw.js — لما يتغير، SW الجديد ياخذ مكان القديم.
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistrations().then(regs => {
-        for (const r of regs) r.unregister();
-      }).catch(() => {});
+      navigator.serviceWorker.getRegistration('./sw.js')
+        .then(reg => {
+          if (reg) reg.update().catch(() => {});
+        })
+        .catch(() => {});
     }
   }
 
