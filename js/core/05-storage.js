@@ -73,7 +73,8 @@ var Storage = (() => {
       try { setItem(key, JSON.stringify(val)); }
       catch (e) {
         if (e.message === 'QUOTA_EXCEEDED') {
-          Toast.show('مساحة التخزين ممتلئة — احذف بيانات قديمة', 'danger');
+          // 🔧 FIX: Toast قد يكون غير معرّف لو فشل QUOTA قبل تحميل App
+          window.Toast?.show?.('مساحة التخزين ممتلئة — احذف بيانات قديمة', 'danger');
         }
       }
     }
@@ -87,7 +88,7 @@ var Storage = (() => {
         return setItem(key, JSON.stringify(value));
       } catch (e) {
         if (e.message === 'QUOTA_EXCEEDED') {
-          Toast.show('مساحة التخزين ممتلئة', 'danger');
+          window.Toast?.show?.('مساحة التخزين ممتلئة', 'danger');
         }
         return false;
       }
@@ -166,8 +167,17 @@ var Storage = (() => {
             localStorage.removeItem(key);
             continue;
           }
-          // انقل القيمة (بدون JSON.parse — Storage يخزّن JSON منفصلاً)
-          localStorage.setItem(PREFIX + key, oldVal);
+          // 🔧 FIX: القيم القديمة قد تكون raw strings (مثل userName="أحمد")
+          // أو JSON صالح (مثل convPrefs='{"a":1}'). Storage.load يعمل JSON.parse،
+          // لذلك أي raw string بدون quotes سيفشل في parse ويُفقَد.
+          // الحل: نتحقق هل القيمة JSON صالح؛ إن لم تكن، نلفّها بـ JSON.stringify.
+          let valueToStore = oldVal;
+          try {
+            JSON.parse(oldVal); // إذا parse نجح، القيمة JSON صالح — نخزّنها كما هي
+          } catch {
+            valueToStore = JSON.stringify(oldVal); // وإلا نلفّها (string عادي)
+          }
+          localStorage.setItem(PREFIX + key, valueToStore);
           localStorage.removeItem(key);
           migrated++;
         } catch (e) { Logger.warn('Storage.migrateLegacy', `${key}: ${e?.message}`); }
