@@ -21,7 +21,8 @@ var PWAInstall = (() => {
 
   // Check if dismissed recently (within 7 days)
   function isDismissedRecently() {
-    const dismissed = localStorage.getItem('pwa_install_dismissed');
+    // 🔧 STORAGE FIX: Storage module مع fallback
+    const dismissed = (window.Storage?.load('pwa_install_dismissed', null)) ?? localStorage.getItem('pwa_install_dismissed');
     if (!dismissed) return false;
     const days = (Date.now() - parseInt(dismissed)) / (1000 * 60 * 60 * 24);
     return days < 7;
@@ -122,7 +123,9 @@ var PWAInstall = (() => {
   }
 
   function handleDismiss() {
-    localStorage.setItem('pwa_install_dismissed', Date.now().toString());
+    // 🔧 STORAGE FIX: Storage module مع fallback
+    if (window.Storage) window.Storage.save('pwa_install_dismissed', Date.now().toString());
+    else localStorage.setItem('pwa_install_dismissed', Date.now().toString());
     hideBanner();
   }
 
@@ -140,12 +143,14 @@ var PWAInstall = (() => {
     }, 300);
     hideBanner();
     // Mark as shown
-    localStorage.setItem('pwa_install_dismissed', Date.now().toString());
+    if (window.Storage) window.Storage.save('pwa_install_dismissed', Date.now().toString());
+    else localStorage.setItem('pwa_install_dismissed', Date.now().toString());
   }
 
   // Manual trigger (can be called from anywhere)
   function forceShow() {
-    localStorage.removeItem('pwa_install_dismissed');
+    if (window.Storage) window.Storage.remove('pwa_install_dismissed');
+    else localStorage.removeItem('pwa_install_dismissed');
     if (isIOS()) {
       showIosModal();
     } else if (deferredPrompt) {
@@ -191,7 +196,8 @@ window.PWAInstall = PWAInstall;
         setTimeout(async () => {
           const supported = await BiometricAuth.isSupported();
           const hasRegistered = BiometricAuth.hasRegisteredCredential();
-          const dismissed = localStorage.getItem('biometric_dismissed');
+          // 🔧 STORAGE FIX: Storage module مع fallback
+          const dismissed = (window.Storage?.load('biometric_dismissed', null)) ?? localStorage.getItem('biometric_dismissed');
           const dismissedRecently = dismissed && (Date.now() - parseInt(dismissed)) < 7 * 24 * 60 * 60 * 1000;
 
           if (supported && !hasRegistered && !dismissedRecently) {
