@@ -112,8 +112,9 @@ var DedicatedPages = (() => {
   // ═══ Profile Page (with Birthday!) ═══
   function renderProfilePage(container) {
     const profile = window.Social?._state?.profile;
-    const savedBirthday = localStorage.getItem('userBirthday') || '';
-    const savedName = profile?.displayName || localStorage.getItem('userName') || '';
+    // 🔧 STORAGE FIX: استخدام Storage module (يدعم memory fallback)
+    const savedBirthday = (window.Storage?.load('userBirthday', '')) || '';
+    const savedName = profile?.displayName || (window.Storage?.load('userName', '')) || '';
 
     const section = document.createElement('div');
     section.className = 'page-section';
@@ -151,11 +152,11 @@ var DedicatedPages = (() => {
       const birthday = document.getElementById('birthdayInput')?.value;
 
       if (name) {
-        localStorage.setItem('userName', name);
+        if (window.Storage) window.Storage.save('userName', name);
         if (window.App?.store) window.App.store.set('userName', name);
       }
       if (birthday) {
-        localStorage.setItem('userBirthday', birthday);
+        if (window.Storage) window.Storage.save('userBirthday', birthday);
       }
 
       // Update profile in Firebase
@@ -301,16 +302,15 @@ var DedicatedPages = (() => {
           }
         } catch (e) { console.warn('[Theme] store.set failed:', e); }
         
-        // 4. Save to localStorage directly (always works)
+        // 4. Save via Storage module (مع fallback لـ memory + يحدّث td_theme المستخدم في inline script)
         try {
-          const existingData = localStorage.getItem('tadbeerStore');
-          let storeData = {};
-          if (existingData) {
-            try { storeData = JSON.parse(existingData); } catch (e) { if (window.Logger) Logger.warn('DedicatedPages', e?.message); }
+          if (window.Storage) {
+            window.Storage.save('theme', t.id);
+          } else {
+            // fallback لو Storage ما تحمّل
+            localStorage.setItem('td_theme', JSON.stringify(t.id));
           }
-          storeData.theme = t.id;
-          localStorage.setItem('tadbeerStore', JSON.stringify(storeData));
-        } catch (e) { console.warn('[Theme] localStorage save failed:', e); }
+        } catch (e) { console.warn('[Theme] Storage save failed:', e); }
         
         // Feedback
         if (window.Toast?.show) {
