@@ -85,8 +85,18 @@ var Sidebar = (() => {
   // Initial state update
   updateSidebarContent();
 
-  // Update content periodically
-  setInterval(updateSidebarContent, 2000);
+  // 🔧 PERF FIX: استبدلنا setInterval(updateSidebarContent, 2000) بـ event-driven updates.
+  // الـ setInterval كان يعيد بناء innerHTML للـ avatar كل ثانيتين بدون داعي — مهدر للبطارية.
+  // الآن: نحدّث فقط لما تتغير البيانات الفعلية.
+  try {
+    if (window.App?.store) {
+      window.App.store.subscribe('streak', updateSidebarContent);
+      window.App.store.subscribe('pts', updateSidebarContent);
+    }
+  } catch (e) { if (window.Logger) Logger.warn('Sidebar.subscribe', e?.message); }
+
+  // تحديث عند فتح القائمة (يمسك أي تغييرات في Social state من Firestore)
+  // التحديث يصير في open() الموجود تحت
  }
 
  function open() {
