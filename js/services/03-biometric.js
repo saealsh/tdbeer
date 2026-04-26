@@ -7,13 +7,16 @@
 var BiometricAuth = (() => {
   const STORAGE_KEY = 'tdbeer_biometric_credential';
   const USER_KEY = 'tdbeer_biometric_user';
-// 🔒 SECURITY: امسح أي توكن قديم محفوظ بنص واضح من نسخ سابقة
+
+  // 🔒 SECURITY: امسح أي توكن قديم محفوظ بنص واضح من نسخ سابقة من التطبيق
+  // (كان فيه bug سابقاً يخزّن كلمة السر في localStorage بدون تشفير)
   try {
     if (localStorage.getItem('tdbeer_biometric_auth_token')) {
       localStorage.removeItem('tdbeer_biometric_auth_token');
       if (window.Logger) window.Logger.warn('Biometric', 'تم حذف توكن قديم غير آمن');
     }
   } catch (e) { /* localStorage not available */ }
+
   // ═══ Check if biometrics are supported ═══
   async function isSupported() {
     if (!window.PublicKeyCredential) return false;
@@ -294,6 +297,9 @@ var BiometricAuth = (() => {
   }
 
   // ═══ Biometric sign-in handler ═══
+  // 🔒 SECURITY: لم نعد نقرأ كلمة السر من localStorage.
+  // البصمة الآن تتحقق من هوية المستخدم محلياً، ثم نتأكد من جلسة Firebase الموجودة.
+  // إذا كانت الجلسة منتهية، نطلب من المستخدم تسجيل دخول يدوي (مرة واحدة).
   async function handleSignIn() {
     const btn = document.getElementById('authBiometricBtn');
     if (btn) btn.classList.add('loading');
@@ -315,67 +321,42 @@ var BiometricAuth = (() => {
       return;
     }
 
-    // Biometric verified - now sign in directly
-    const savedAuth = localStorage.getItem('tdbeer_biometric_auth_token');
-    
-    if (!savedAuth) {
-      window.Toast?.show('⚠️ سجل دخول بإيميلك أول عشان تربط البصمة', 'warn');
+    // ✅ البصمة تحققت محلياً. نتحقق من جلسة Firebase الموجودة.
+    if (!window.FB || !window.FB.auth) {
+      window.Toast?.show('⏳ اصبر ثانية ثم حاول مرة ثانية', 'warn');
       return;
     }
 
     try {
-      const authData = JSON.parse(savedAuth);
-      
-      // Verify Firebase is ready
-      if (!window.FB || !window.FB.auth || !window.FB.signIn) {
-        window.Toast?.show('⏳ اصبر ثانية ثم حاول مرة ثانية', 'warn');
+      // Firebase يحفظ الجلسة في IndexedDB. لو المستخدم لسا مسجل دخول، فقط نُغلق المودال.
+      const currentUser = window.FB.auth.currentUser;
+
+      if (currentUser && currentUser.email === result.email) {
+        // الجلسة موجودة وتطابق صاحب البصمة — نجاح
+        window.Toast?.show('🎉 يا هلا بعودتك!', 'ok');
+        const authOverlay = document.getElementById('authOverlay');
+        if (authOverlay) authOverlay.classList.remove('open');
+        document.body.style.overflow = '';
         return;
       }
 
-      window.Toast?.show('✅ تم التحقق - قاعد يسجل دخول...', 'ok');
-      
-      if (iconEl) iconEl.textContent = '⏳';
-      if (textEl) textEl.textContent = 'قاعد يسجل دخول...';
-      if (btn) btn.classList.add('loading');
-
-      // Sign in directly with Firebase (bypass the form)
-      try {
-        await window.FB.signIn(window.FB.auth, authData.email, authData.password);
-        
-        // Close auth overlay
-        const authOverlay = document.getElementById('authOverlay');
-        if (authOverlay) authOverlay.classList.remove('open');
-        
-        window.Toast?.show('🎉 يا هلا بعودتك!', 'ok');
-        
-        // Close any open modals
-        document.body.style.overflow = '';
-      } catch (err) {
-        console.error('[Biometric] Firebase signin error:', err);
-        
-        let errorMsg = 'فشل تسجيل الدخول';
-        if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-          errorMsg = '⚠️ الرقم السري تغير. سجل دخول يدوي.';
-          // Clear old biometric data
-          localStorage.removeItem('tdbeer_biometric_auth_token');
-          BiometricAuth.remove();
-          // Reset button
-          initLoginButton();
-        } else if (err.code === 'auth/user-not-found') {
-          errorMsg = '❌ الحساب غير موجود';
-          localStorage.removeItem('tdbeer_biometric_auth_token');
-          BiometricAuth.remove();
-        } else if (err.code === 'auth/too-many-requests') {
-          errorMsg = '⚠️ محاولات كثيرة - حاول بعد قليل';
-        } else if (err.code === 'auth/network-request-failed') {
-          errorMsg = '📶 مشكلة في الاتصال';
-        }
-        
-        window.Toast?.show(errorMsg, 'danger');
+      // الجلسة منتهية — نحتاج تسجيل دخول يدوي (مرة واحدة لتجديد الـ token)
+      // نملأ الإيميل تلقائياً تسهيلاً للمستخدم، لكن المستخدم يدخل كلمة السر.
+      const emailInput = document.getElementById('authEmail');
+      if (emailInput) {
+        emailInput.value = result.email;
+        emailInput.readOnly = true;
       }
+      const passInput = document.getElementById('authPass');
+      if (passInput) {
+        passInput.value = '';
+        passInput.focus();
+      }
+      window.Toast?.show('🔐 تم التحقق من البصمة — أدخل كلمة السر لتجديد الجلسة', 'warn', 4000);
+
     } catch (e) {
-      console.error('[Biometric] Parse error:', e);
-      window.Toast?.show('❌ خطأ في البيانات المحفوظة', 'danger');
+      console.error('[Biometric] Session check error:', e);
+      window.Toast?.show('❌ خطأ في التحقق من الجلسة', 'danger');
     } finally {
       if (btn) btn.classList.remove('loading');
       if (iconEl && origIcon) iconEl.textContent = origIcon;
