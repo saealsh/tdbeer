@@ -200,21 +200,9 @@ window.PWAInstall = PWAInstall;
               const profile = window.Social?._state?.profile;
               const displayName = profile?.displayName || user.email.split('@')[0];
               
-              // Save password temporarily (encrypted in localStorage)
-              const emailInput = document.getElementById('authEmail');
-              const passInput = document.getElementById('authPass');
-              
-              if (passInput && passInput.value) {
-                // Save for biometric auto-fill
-                try {
-                  const authData = {
-                    email: user.email,
-                    password: passInput.value,  // In production, should be encrypted
-                    savedAt: Date.now()
-                  };
-                  localStorage.setItem('tdbeer_biometric_auth_token', JSON.stringify(authData));
-                } catch (e) { if (window.Logger) Logger.warn('PWAInstall', e?.message); }
-              }
+            // ⚠️ تم حذف تخزين كلمة السر بنص واضح
+              // Firebase auth.currentUser سيبقى متاح عبر الجلسة المخزنة في IndexedDB
+              // البصمة ستتحقق فقط من هوية المستخدم محلياً قبل فتح الواجهة
               
               BiometricAuth.showSetupPrompt(user.email, displayName, () => {
                 // On success, keep auth_token for future biometric logins
