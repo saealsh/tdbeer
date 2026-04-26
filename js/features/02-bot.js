@@ -366,12 +366,13 @@ var Bot = (() => {
       const isMine = m.from !== BOT_ID;
       const bubble = DOM.h('div', { class: 'msg ' + (isMine ? 'mine' : 'bot') });
 
-      // تحويل **text** إلى <b>
-      const text = m.text.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+// ⚠️ XSS FIX: escape أولاً، ثم حوّل markdown لعلامات HTML آمنة فقط
+      const safe = U.esc(m.text)
+        .replace(/\*\*(.+?)\*\*/g, '<b>$1</b>')   // bold
+        .replace(/\n/g, '<br>');                    // line breaks
       const textDiv = document.createElement('div');
       textDiv.className = 'msg-text';
-      textDiv.innerHTML = text;
-      bubble.appendChild(textDiv);
+      textDiv.innerHTML = safe;
 
       const t = m.at ? new Date(m.at) : new Date();
       const timeStr = t.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
