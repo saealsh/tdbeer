@@ -1,0 +1,6 @@
+/* ═══ Print / debug styles ═══ */
+body{font-family:Arial,sans-serif;padding:32px;direction:rtl}
+h1{color:#a07828}
+table{width:100%;border-collapse:collapse;margin-top:20px}
+th,td{padding:8px;border-bottom:1px solid #eee;text-align:right}
+th{background:#f8f8f8}

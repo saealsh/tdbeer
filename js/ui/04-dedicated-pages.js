@@ -1,0 +1,815 @@
+/* ═══════════════════════════════════════════════════════════════════
+   تـدّبير — Dedicated Pages (Goals, Budgets, Recurring)
+   ───────────────────────────────────────────────────────────────────
+   Originally lines 19701–20141 of index.html
+═══════════════════════════════════════════════════════════════════ */
+
+var DedicatedPages = (() => {
+  let modal, body, title, backBtn, isOpen = false;
+
+  function init() {
+    modal = document.getElementById('pageModal');
+    body = document.getElementById('pageModalBody');
+    title = document.getElementById('pageModalTitle');
+    backBtn = document.getElementById('pageModalBack');
+
+    if (!modal) return;
+
+    if (backBtn) backBtn.addEventListener('click', close);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && isOpen) close();
+    });
+  }
+
+  function open(pageName) {
+    if (!modal || !body) return;
+    
+    const page = PAGES[pageName];
+    if (!page) {
+      window.Logger?.warn?.('Page not found:', pageName);
+      return;
+    }
+
+    title.textContent = page.title;
+    body.innerHTML = '';
+
+    // Build content
+    const hero = document.createElement('div');
+    hero.className = 'page-hero';
+    hero.innerHTML = `
+      <div class="page-hero-icon">${page.icon}</div>
+      <div class="page-hero-title">${page.heading}</div>
+      <div class="page-hero-desc">${page.description}</div>
+    `;
+    body.appendChild(hero);
+
+    // Render page-specific content
+    if (page.render) page.render(body);
+
+    // Show modal
+    modal.classList.add('open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.style.overflow = 'hidden';
+    isOpen = true;
+
+    try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) { if (window.Logger) Logger.warn('DedicatedPages', e?.message); }
+  }
+
+  function close() {
+    if (!modal) return;
+    modal.classList.remove('open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.style.overflow = '';
+    isOpen = false;
+  }
+
+  // ═══ PAGE DEFINITIONS ═══
+  const PAGES = {
+    'my-profile': {
+      title: 'ملفي الشخصي',
+      icon: '📝',
+      heading: 'معلوماتي الشخصية',
+      description: 'حدث معلوماتك الشخصية، أضف تاريخ ميلادك عشان نهنيّك',
+      render: renderProfilePage
+    },
+    'achievements': {
+      title: 'إنجازاتي',
+      icon: '🏆',
+      heading: 'إنجازاتي الشخصية',
+      description: 'تابع تقدمك ومنجزاتك في رحلة التوفير',
+      render: renderAchievementsPage
+    },
+    'themes': {
+      title: 'شكل التطبيق',
+      icon: '🎨',
+      heading: 'خصص شكل التطبيق',
+      description: 'اختار الشكل اللي يعجبك لديك، وغيّر ألوان التطبيق حسب ذوقك',
+      render: renderThemesPage
+    },
+    'notif-settings': {
+      title: 'التنبيهات',
+      icon: '🔔',
+      heading: 'إعدادات التنبيهات',
+      description: 'اختر كيف توصلك التنبيهات عند استلام الرسائل والتنبيهات',
+      render: renderNotifSettingsPage
+    },
+    'backup': {
+      title: 'النسخ الاحتياطي',
+      icon: '💾',
+      heading: 'انقل بياناتك بأمان',
+      description: 'صدّر بياناتك كملف، وتقدر تستوردها في جهاز ثاني',
+      render: renderBackupPage
+    },
+    'goals-budget': {
+      title: 'الأهداف والميزانية',
+      icon: '🎯',
+      heading: 'إدارة الأهداف والميزانية',
+      description: 'حدد أهدافك المالية وميزانيتك',
+      render: renderGoalsBudgetPage
+    }
+  };
+
+  // ═══ Profile Page (with Birthday!) ═══
+  function renderProfilePage(container) {
+    const profile = window.Social?._state?.profile;
+    // 🔧 STORAGE FIX: استخدام Storage module (يدعم memory fallback)
+    const savedBirthday = (window.Storage?.load('userBirthday', '')) || '';
+    const savedName = profile?.displayName || (window.Storage?.load('userName', '')) || '';
+
+    const section = document.createElement('div');
+    section.className = 'page-section';
+    section.innerHTML = `
+      <div class="page-section-title">👤 المعلومات الأساسية</div>
+      <div class="page-form-row" style="flex-direction:column;align-items:stretch;gap:6px">
+        <label class="page-form-label" style="flex:none">الاسم</label>
+        <input type="text" class="page-form-input" id="profileNameInput" 
+               value="${escapeHTML(savedName)}" 
+               placeholder="اكتب اسمك" maxlength="50">
+      </div>
+    `;
+    container.appendChild(section);
+
+    // Birthday section
+    const birthdaySection = document.createElement('div');
+    birthdaySection.className = 'page-section';
+    birthdaySection.innerHTML = `
+      <div class="page-section-title">🎂 تاريخ الميلاد</div>
+      <div class="birthday-input-wrap">
+        <input type="date" class="birthday-input" id="birthdayInput" 
+               value="${savedBirthday}"
+               max="${new Date().toISOString().split('T')[0]}">
+        <div class="birthday-hint">💝 بنرسل لك تهنئة خاصة في يوم ميلادك!</div>
+      </div>
+    `;
+    container.appendChild(birthdaySection);
+
+    // Save button
+    const saveBtn = document.createElement('button');
+    saveBtn.className = 'page-save-btn';
+    saveBtn.innerHTML = '💾 اااحفظ التغييرات';
+    saveBtn.onclick = () => {
+      const name = document.getElementById('profileNameInput')?.value.trim();
+      const birthday = document.getElementById('birthdayInput')?.value;
+
+      if (name) {
+        if (window.Storage) window.Storage.save('userName', name);
+        if (window.App?.store) window.App.store.set('userName', name);
+      }
+      if (birthday) {
+        if (window.Storage) window.Storage.save('userBirthday', birthday);
+      }
+
+      // Update profile in Firebase
+      try {
+        const user = window.Social?._state?.user;
+        if (user && window.FB?.db && name) {
+          const ref = window.FB.doc(window.FB.db, 'users', user.uid);
+          window.FB.updateDoc(ref, { 
+            displayName: name,
+            birthday: birthday || null
+          }).catch(() => {});
+        }
+      } catch (e) { if (window.Logger) Logger.warn('DedicatedPages', e?.message); }
+
+      if (window.Toast?.show) {
+        window.Toast.show('✅ تم ااحفظ المعلومات بنجاح', 'ok');
+      }
+      close();
+    };
+    container.appendChild(saveBtn);
+  }
+
+  // ═══ Achievements Page ═══
+  function renderAchievementsPage(container) {
+    const unlocked = window.App?.store?.get('achievements') || [];
+    const ACHIEVEMENTS = window.Tdbeer?.ACHIEVEMENTS || [];
+
+    const statsSection = document.createElement('div');
+    statsSection.className = 'page-section';
+    statsSection.innerHTML = `
+      <div class="page-section-title">📊 إجمالي الإنجازات</div>
+      <div style="display:flex;justify-content:space-around;padding:16px 0;text-align:center">
+        <div>
+          <div style="font-size:28px;font-weight:900;color:var(--accent-2)">${unlocked.length}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px">مفتوح</div>
+        </div>
+        <div>
+          <div style="font-size:28px;font-weight:900;color:var(--text)">${ACHIEVEMENTS.length}</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px">الإجمالي</div>
+        </div>
+        <div>
+          <div style="font-size:28px;font-weight:900;color:var(--accent)">${Math.round(unlocked.length / Math.max(ACHIEVEMENTS.length, 1) * 100)}%</div>
+          <div style="font-size:11px;color:var(--text3);margin-top:4px">اللي كملته</div>
+        </div>
+      </div>
+    `;
+    container.appendChild(statsSection);
+
+    const gridSection = document.createElement('div');
+    gridSection.className = 'page-section';
+    gridSection.innerHTML = `<div class="page-section-title">🏆 شارات الإنجاز</div>`;
+    
+    const grid = document.createElement('div');
+    grid.className = 'ach-grid';
+    grid.style.cssText = 'display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin-top:8px';
+    
+    for (const a of ACHIEVEMENTS) {
+      const isOn = unlocked.includes(a.id);
+      const badge = document.createElement('div');
+      badge.className = 'ach-badge ' + (isOn ? 'on' : 'off');
+      badge.innerHTML = `
+        <div class="ach-icon">${a.icon}</div>
+        <div class="ach-name">${a.name}</div>
+        <div class="ach-pts">${a.pts}⭐</div>
+      `;
+      grid.appendChild(badge);
+    }
+    gridSection.appendChild(grid);
+    container.appendChild(gridSection);
+  }
+
+  // ═══ Themes Page ═══
+  function renderThemesPage(container) {
+    const current = window.App?.store?.get('theme') || 'midnight';
+    const themes = [
+      { id: 'midnight', name: 'Midnight', desc: 'داكن أسود مع لمسات خضراء', colors: ['#05070a', '#01dd8c'] },
+      { id: 'default', name: 'Classic', desc: 'الشكل الكلاسيكي مع الذهبي', colors: ['#0a0a0a', '#c9a84c'] },
+      { id: 'light', name: 'Light', desc: 'فاتح ومريح للقراءة في النهار', colors: ['#fdf8f3', '#c9a84c'] },
+      { id: 'rose', name: 'Rose', desc: 'وردي أنيق ومميز', colors: ['#1a0d14', '#ff6fa5'] },
+      { id: 'tropical', name: 'Tropical', desc: 'استوائي منعش بالأخضر الفيروزي', colors: ['#052e2b', '#06b6d4'] },
+      { id: 'sunset', name: 'Sunset', desc: 'ألوان غروب الشمس الدافئة', colors: ['#1a0f1a', '#f97316'] },
+      { id: 'oled', name: 'OLED', desc: 'أسود نقي - يوفّر بطارية الجوال', colors: ['#000000', '#10b981'] },
+      { id: 'custom', name: 'Custom', desc: 'اختر لون accent يعجبك', colors: ['#1a1a1a', '#c9a84c'] }
+    ];
+
+    const section = document.createElement('div');
+    section.className = 'page-section';
+    section.innerHTML = `<div class="page-section-title">🎨 اختار الشكل اللي يعجبك</div>`;
+
+    const grid = document.createElement('div');
+    grid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px';
+
+    themes.forEach(t => {
+      const card = document.createElement('button');
+      const isActive = t.id === current;
+      card.style.cssText = `
+        background:linear-gradient(145deg, ${t.colors[0]}, ${t.colors[0]}dd);
+        border:2px solid ${isActive ? t.colors[1] : 'var(--border)'};
+        border-radius:14px;
+        padding:16px 12px;
+        cursor:pointer;
+        transition:all 0.3s;
+        position:relative;
+        overflow:hidden;
+        font-family:inherit;
+        box-shadow:${isActive ? '0 0 20px ' + t.colors[1] + '66' : 'none'};
+      `;
+      card.innerHTML = `
+        <div style="display:flex;gap:6px;margin-bottom:12px">
+          <div style="width:28px;height:28px;border-radius:50%;background:${t.colors[0]};border:2px solid ${t.colors[1]}"></div>
+          <div style="width:28px;height:28px;border-radius:50%;background:${t.colors[1]}"></div>
+        </div>
+        <div style="font-size:14px;font-weight:800;color:#fff;margin-bottom:4px">${t.name}</div>
+        <div style="font-size:10px;color:#ccc;line-height:1.4">${t.desc}</div>
+        ${isActive ? '<div style="position:absolute;top:8px;left:8px;background:' + t.colors[1] + ';color:#000;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:800">✓ مختار</div>' : ''}
+      `;
+      card.onclick = () => {
+        // ═══ Custom theme — يفتح color picker ═══
+        if (t.id === 'custom') {
+          if (window.ExtraThemes?.openCustomPicker) {
+            window.ExtraThemes.openCustomPicker();
+            return;
+          }
+        }
+        
+        // ═══ CRITICAL: Apply theme multiple ways to ensure it works ═══
+        
+        // 1. Apply via App.Theme.apply() (preferred)
+        try {
+          if (window.App?.Theme?.apply) {
+            window.App.Theme.apply(t.id);
+          }
+        } catch (e) { window.Logger?.warn?.('[Theme] App.Theme.apply failed:', e); }
+        
+        // 1b. Apply via ExtraThemes for new themes
+        try {
+          if (['tropical','sunset','oled','custom'].includes(t.id) && window.ExtraThemes?.apply) {
+            window.ExtraThemes.apply(t.id);
+          }
+        } catch (e) { window.Logger?.warn?.('[Theme] ExtraThemes.apply failed:', e); }
+        
+        // 2. Direct DOM manipulation (fallback - always works)
+        try {
+          if (t.id === 'default') {
+            document.documentElement.removeAttribute('data-theme');
+          } else {
+            document.documentElement.setAttribute('data-theme', t.id);
+          }
+          
+          // Update theme-color meta for PWA
+          const meta = document.querySelector('meta[name="theme-color"]');
+          if (meta) {
+            const colors = { 
+              default: '#0a0a0a', 
+              light: '#fdf8f3', 
+              midnight: '#05070a', 
+              rose: '#1a0d14',
+              tropical: '#052e2b',
+              sunset: '#1a0f1a',
+              oled: '#000000',
+              custom: '#0a0a0a'
+            };
+            meta.setAttribute('content', colors[t.id] || '#05070a');
+          }
+        } catch (e) { window.Logger?.warn?.('[Theme] Direct apply failed:', e); }
+        
+        // 3. Save to storage
+        try {
+          if (window.App?.store?.set) {
+            window.App.store.set('theme', t.id);
+          }
+        } catch (e) { window.Logger?.warn?.('[Theme] store.set failed:', e); }
+        
+        // 4. Save via Storage module (مع fallback لـ memory + يحدّث td_theme المستخدم في inline script)
+        try {
+          if (window.Storage) {
+            window.Storage.save('theme', t.id);
+          } else {
+            // fallback لو Storage ما تحمّل
+            localStorage.setItem('td_theme', JSON.stringify(t.id));
+          }
+        } catch (e) { window.Logger?.warn?.('[Theme] Storage save failed:', e); }
+        
+        // Feedback
+        if (window.Toast?.show) {
+          window.Toast.show(`🎨 تم تطبيق شكل ${t.name}`, 'ok');
+        }
+        try { if (navigator.vibrate) navigator.vibrate(10); } catch (e) { if (window.Logger) Logger.warn('DedicatedPages', e?.message); }
+        
+        // Re-render
+        container.innerHTML = '';
+        // Rebuild hero
+        const hero = document.createElement('div');
+        hero.className = 'page-hero';
+        hero.innerHTML = `
+          <div class="page-hero-icon">🎨</div>
+          <div class="page-hero-title">خصص شكل التطبيق</div>
+          <div class="page-hero-desc">اختار الشكل اللي يعجبك</div>
+        `;
+        container.appendChild(hero);
+        renderThemesPage(container);
+      };
+      grid.appendChild(card);
+    });
+    section.appendChild(grid);
+    container.appendChild(section);
+  }
+
+  // ═══ Notif Settings Page ═══
+  function renderNotifSettingsPage(container) {
+    const settings = window.ChatNotifications?.getSettings?.() || {
+      toast: true, sound: true, vibration: true, bar: true
+    };
+    
+    // ─── 1. Push Notifications Status & Toggle ───
+    const PushNotifs = window.PushNotifs;
+    if (PushNotifs?.isSupported?.()) {
+      const permission = PushNotifs.getPermission();
+      const pushConfig = PushNotifs.getConfig?.();
+      const isEnabled = permission === 'granted' && pushConfig?.enabled;
+      
+      const pushSection = document.createElement('div');
+      pushSection.className = 'page-section';
+      pushSection.innerHTML = `
+        <div class="page-section-title">📱 تنبيهات النظام (Push)</div>
+        <div class="notif-status-card ${permission === 'granted' ? 'granted' : permission === 'denied' ? 'denied' : ''}">
+          <div class="notif-status-icon">${
+            permission === 'granted' ? '✅' : 
+            permission === 'denied' ? '🚫' : 
+            '🔔'
+          }</div>
+          <div class="notif-status-info">
+            <div class="notif-status-title">${
+              permission === 'granted' ? 'التنبيهات مفعّلة' : 
+              permission === 'denied' ? 'التنبيهات معطّلة' : 
+              'التنبيهات غير مفعّلة'
+            }</div>
+            <div class="notif-status-sub">${
+              permission === 'granted' ? 'ستصلك تنبيهات حسب الإعدادات أدناه' : 
+              permission === 'denied' ? 'فعّلها من إعدادات المتصفح' : 
+              'فعّلها لتذكيرك بمصاريفك'
+            }</div>
+          </div>
+          ${permission !== 'denied' ? `
+            <label class="notif-toggle notif-status-toggle">
+              <input type="checkbox" id="pushMainToggle" ${isEnabled ? 'checked' : ''}>
+              <span class="notif-toggle-slider"></span>
+            </label>
+          ` : ''}
+        </div>
+      `;
+      container.appendChild(pushSection);
+      
+      // Bind main toggle
+      const mainToggle = pushSection.querySelector('#pushMainToggle');
+      if (mainToggle) {
+        mainToggle.addEventListener('change', async () => {
+          if (mainToggle.checked) {
+            const granted = await PushNotifs.requestPermission();
+            if (!granted) mainToggle.checked = false;
+          } else {
+            // إيقاف
+            const config = PushNotifs.getConfig();
+            config.enabled = false;
+          }
+          // Re-render
+          setTimeout(() => {
+            container.innerHTML = '';
+            const hero = document.createElement('div');
+            hero.className = 'page-hero';
+            hero.innerHTML = `
+              <div class="page-hero-icon">🔔</div>
+              <div class="page-hero-title">إعدادات التنبيهات</div>
+              <div class="page-hero-desc">اختر كيف توصلك التنبيهات</div>
+            `;
+            container.appendChild(hero);
+            renderNotifSettingsPage(container);
+          }, 200);
+        });
+      }
+      
+      // ─── إعدادات أنواع التنبيهات ───
+      if (isEnabled && pushConfig?.types) {
+        const typesSection = document.createElement('div');
+        typesSection.className = 'page-section';
+        typesSection.innerHTML = `<div class="page-section-title">🎯 أنواع التنبيهات</div>`;
+        
+        const typesList = document.createElement('div');
+        typesList.className = 'notif-types-list';
+        
+        const typeItems = [
+          { key: 'dailyReminder', icon: '📅', title: 'تذكير يومي', desc: 'في الوقت المحدد كل يوم' },
+          { key: 'monthEnd', icon: '🔔', title: 'نهاية الشهر', desc: 'قبل نهاية الشهر بأيام قليلة' },
+          { key: 'monthStart', icon: '🗓️', title: 'بداية شهر جديد', desc: 'تذكير في أول يومين' },
+          { key: 'budgetExceeded', icon: '⚠️', title: 'تجاوز الميزانية', desc: 'عند صرف 90%+ من الدخل' },
+          { key: 'goalProgress', icon: '🎯', title: 'تقدم الأهداف', desc: 'عند الاقتراب من تحقيق هدف' },
+          { key: 'streakReminder', icon: '🔥', title: 'استمرار التسجيل', desc: 'لا تكسر سلسلتك!' }
+        ];
+        
+        typeItems.forEach(item => {
+          const typeConfig = pushConfig.types[item.key] || {};
+          const isOn = typeConfig.enabled;
+          
+          const row = document.createElement('div');
+          row.className = `notif-type-item ${!isOn ? 'disabled' : ''}`;
+          row.innerHTML = `
+            <div class="notif-type-icon">${item.icon}</div>
+            <div class="notif-type-info">
+              <div class="notif-type-title">${item.title}</div>
+              <div class="notif-type-desc">${item.desc}</div>
+              ${item.key === 'dailyReminder' && isOn ? `
+                <div class="notif-time-picker">
+                  ⏰ الوقت: <input type="time" data-time-for="${item.key}" value="${typeConfig.time || '20:00'}">
+                </div>
+              ` : ''}
+            </div>
+            <label class="notif-toggle">
+              <input type="checkbox" data-type="${item.key}" ${isOn ? 'checked' : ''}>
+              <span class="notif-toggle-slider"></span>
+            </label>
+          `;
+          typesList.appendChild(row);
+          
+          // Bind toggle
+          const toggle = row.querySelector(`input[data-type="${item.key}"]`);
+          toggle.addEventListener('change', () => {
+            PushNotifs.toggleType(item.key);
+            row.classList.toggle('disabled', !toggle.checked);
+            
+            // إعادة render للـ time picker
+            if (item.key === 'dailyReminder') {
+              setTimeout(() => {
+                container.innerHTML = '';
+                const hero = document.createElement('div');
+                hero.className = 'page-hero';
+                hero.innerHTML = `
+                  <div class="page-hero-icon">🔔</div>
+                  <div class="page-hero-title">إعدادات التنبيهات</div>
+                  <div class="page-hero-desc">اختر كيف توصلك التنبيهات</div>
+                `;
+                container.appendChild(hero);
+                renderNotifSettingsPage(container);
+              }, 100);
+            }
+          });
+          
+          // Bind time picker
+          const timeInput = row.querySelector(`input[data-time-for="${item.key}"]`);
+          if (timeInput) {
+            timeInput.addEventListener('change', (e) => {
+              PushNotifs.updateSetting(item.key, 'time', e.target.value);
+              window.Toast?.show?.(`تم تحديث وقت التذكير إلى ${e.target.value}`, 'success');
+            });
+          }
+        });
+        
+        typesSection.appendChild(typesList);
+        
+        // Test button
+        const testBtn = document.createElement('button');
+        testBtn.className = 'notif-test-btn';
+        testBtn.innerHTML = `🧪 إرسال تنبيه تجريبي`;
+        testBtn.addEventListener('click', () => {
+          PushNotifs.sendTestNotification();
+        });
+        typesSection.appendChild(testBtn);
+        
+        container.appendChild(typesSection);
+      }
+    }
+    
+    // ─── 2. In-App Notifications ───
+    const items = [
+      { key: 'toast', icon: '🔔', name: 'إشعار يظهر فوق (Toast)', desc: 'إشعار حلو يطلع فوق الشاشة' },
+      { key: 'sound', icon: '🎧', name: 'صوت تنبيه', desc: 'صوت خفيف إذا جت رسالة' },
+      { key: 'vibration', icon: '📳', name: 'اهتزاز', desc: 'اهتزاز خفيف (للجوال)' },
+      { key: 'bar', icon: '📌', name: 'شريط مستمر', desc: 'يبقى تحت الشاشة لين تفتحه' }
+    ];
+
+    const section = document.createElement('div');
+    section.className = 'page-section';
+    section.innerHTML = `<div class="page-section-title">💬 تنبيهات داخل التطبيق</div>`;
+
+    items.forEach(item => {
+      const isOn = settings[item.key];
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:12px;padding:14px 8px;border-bottom:1px solid var(--border)';
+      row.innerHTML = `
+        <div style="font-size:24px;flex-shrink:0;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--bg4);border-radius:12px">${item.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:2px">${item.name}</div>
+          <div style="font-size:11px;color:var(--text3)">${item.desc}</div>
+        </div>
+        <div class="notif-toggle-btn ${isOn ? 'on' : 'off'}" data-key="${item.key}" style="
+          width:48px;height:26px;border-radius:14px;
+          background:${isOn ? 'linear-gradient(135deg, var(--accent), var(--accent-2))' : 'var(--bg5)'};
+          position:relative;cursor:pointer;transition:all 0.3s;
+          flex-shrink:0;
+        ">
+          <div style="position:absolute;top:3px;${isOn ? 'left:3px' : 'right:3px'};width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,0.3);transition:all 0.3s"></div>
+        </div>
+      `;
+      row.querySelector('.notif-toggle-btn').onclick = (e) => {
+        const key = e.currentTarget.dataset.key;
+        if (window.ChatNotifications?.toggleSetting) {
+          window.ChatNotifications.toggleSetting(key);
+        }
+        // Re-render
+        container.innerHTML = '';
+        const hero = document.createElement('div');
+        hero.className = 'page-hero';
+        hero.innerHTML = `
+          <div class="page-hero-icon">🔔</div>
+          <div class="page-hero-title">إعدادات التنبيهات</div>
+          <div class="page-hero-desc">اختر كيف توصلك التنبيهات</div>
+        `;
+        container.appendChild(hero);
+        renderNotifSettingsPage(container);
+      };
+      section.appendChild(row);
+    });
+    container.appendChild(section);
+  }
+
+  // ═══ Goals & Budget Page ═══
+  function renderGoalsBudgetPage(container) {
+    const section = document.createElement('div');
+    section.className = 'page-section';
+    section.innerHTML = `
+      <div class="page-section-title">🎯 الأهداف والميزانية</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7;margin-bottom:16px">
+        للوصول إلى الأهداف وحد الصرف، اضغط الزر أدناه لفتح الصفحة الكاملة.
+      </p>
+    `;
+    const btn = document.createElement('button');
+    btn.className = 'page-save-btn';
+    btn.innerHTML = '🎯 افتح الأهداف والميزانية';
+    btn.onclick = () => {
+      close();
+      if (window.Controllers?.showTab) {
+        window.Controllers.showTab('money:monthly');
+        setTimeout(() => {
+          const goalsCard = Array.from(document.querySelectorAll('.card-title'))
+            .find(el => el.textContent.includes('الأهداف'))?.closest('.card');
+          if (goalsCard) goalsCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 400);
+      }
+    };
+    section.appendChild(btn);
+    container.appendChild(section);
+  }
+
+  // ═══ Backup Page ═══
+  function renderBackupPage(container) {
+    const section = document.createElement('div');
+    section.className = 'page-section';
+    section.innerHTML = `
+      <div class="page-section-title">📤 تصدير نسخة احتياطية</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7;margin:0 0 12px">
+        احفظ بياناتك (دخل، مصاريف، أهداف، إلخ) كملف على جهازك. تقدر ترجعها لاحقاً أو تنقلها لجهاز ثاني.
+      </p>
+      <button class="page-btn primary" id="dedBackupBtn" style="width:100%">
+        💾 تصدير الآن
+      </button>
+    `;
+    container.appendChild(section);
+
+    const restoreSection = document.createElement('div');
+    restoreSection.className = 'page-section';
+    restoreSection.innerHTML = `
+      <div class="page-section-title">📥 استيراد من ملف</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7;margin:0 0 12px">
+        لو عندك نسخة احتياطية من جهاز آخر، اختر الملف ليتم استرجاع البيانات.
+      </p>
+      <button class="page-btn" id="dedRestoreBtn" style="width:100%">
+        📂 اختر ملف
+      </button>
+      <input type="file" id="dedRestoreInput" accept="application/json" style="display:none">
+    `;
+    container.appendChild(restoreSection);
+
+    // ─── إعادة الجولة التعريفية ───
+    const tourSection = document.createElement('div');
+    tourSection.className = 'page-section';
+    tourSection.innerHTML = `
+      <div class="page-section-title">👋 الجولة التعريفية</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7;margin:0 0 12px">
+        إعادة عرض شاشات الترحيب اللي تظهر للمستخدم الجديد، وإعادة الإعداد السريع.
+      </p>
+      <button class="page-btn" id="dedRestartTourBtn" style="width:100%">
+        🔄 إعادة الجولة التعريفية
+      </button>
+    `;
+    container.appendChild(tourSection);
+    
+    // ─── معلومات التطبيق + Diagnostics ───
+    const aboutSection = document.createElement('div');
+    aboutSection.className = 'page-section';
+    aboutSection.innerHTML = `
+      <div class="page-section-title">ℹ️ معلومات التطبيق</div>
+      <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:13px;line-height:1.7;margin-bottom:12px">
+        <span style="color:var(--text2)">الإصدار:</span>
+        <span style="color:var(--text);font-weight:700">${window.__APP_VERSION__ || '5.0.0'}</span>
+        <span style="color:var(--text2)">تاريخ البناء:</span>
+        <span style="color:var(--text)">${window.__BUILD_DATE__ || '2026-04-27'}</span>
+        <span style="color:var(--text2)">المتصفح:</span>
+        <span style="color:var(--text);font-size:11px;direction:ltr">${navigator.userAgent.split(') ')[0].split('(').pop()}</span>
+        <span style="color:var(--text2)">الاتصال:</span>
+        <span style="color:var(--text)">${navigator.onLine ? '🟢 متصل' : '🔴 غير متصل'}</span>
+      </div>
+      <button class="page-btn" id="dedDiagBtn" style="width:100%">
+        📊 تنزيل تقرير التشخيص
+      </button>
+    `;
+    container.appendChild(aboutSection);
+
+    const dangerSection = document.createElement('div');
+    dangerSection.className = 'page-section';
+    dangerSection.style.cssText = 'border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:16px;margin-top:8px';
+    dangerSection.innerHTML = `
+      <div class="page-section-title" style="color:var(--danger)">⚠️ منطقة خطر</div>
+      <p style="font-size:13px;color:var(--text2);line-height:1.7;margin:0 0 12px">
+        مسح كل البيانات نهائياً. ما يمكن التراجع. خذ نسخة احتياطية أولاً.
+      </p>
+      <button class="page-btn" id="dedClearBtn" 
+        style="width:100%;color:var(--danger);border-color:rgba(239,68,68,.4)">
+        🗑️ مسح كل البيانات
+      </button>
+    `;
+    container.appendChild(dangerSection);
+
+    // ─── Wire up ───
+    const store = window.App?.store;
+    const Toast = window.Toast;
+
+    // Export
+    container.querySelector('#dedBackupBtn').onclick = () => {
+      try {
+        if (!store) throw new Error('no store');
+        const snap = store.snapshot();
+        // Don't include transient flags
+        const clean = { ...snap };
+        delete clean.dirty;
+        delete clean.tab;
+        delete clean.subTab;
+        delete clean.tipIdx;
+        const blob = new Blob([JSON.stringify(clean, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const ts = new Date().toISOString().slice(0, 19).replace(/[:T]/g, '-');
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `tdbeer_backup_${ts}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        Toast?.show('تم التصدير ✓', 'ok');
+      } catch (e) {
+        if (window.Logger) Logger.error('Backup.export', e);
+        Toast?.show('فشل التصدير', 'danger');
+      }
+    };
+
+    // Import
+    const fileInput = container.querySelector('#dedRestoreInput');
+    container.querySelector('#dedRestoreBtn').onclick = () => fileInput.click();
+    fileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (!data || typeof data !== 'object') throw new Error('INVALID');
+          if (!confirm('استيراد هذه النسخة؟ سيتم استبدال البيانات الحالية.')) return;
+
+          const SYNC_KEYS = ['data', 'pts', 'salaryDay', 'streak', 'notifs',
+                             'theme', 'achievements', 'userName'];
+          for (const k of SYNC_KEYS) {
+            if (k in data) store.set(k, data[k]);
+          }
+          if (window.App?.Theme && data.theme) {
+            window.App.Theme.apply(data.theme);
+          }
+          if (window.Renderers?.scheduledAll) window.Renderers.scheduledAll();
+          Toast?.show('تم الاستيراد ✓', 'ok');
+          // Close the page after successful import
+          setTimeout(() => window.DedicatedPages?.close?.(), 800);
+        } catch (err) {
+          if (window.Logger) Logger.error('Backup.import', err);
+          Toast?.show('ملف غير صحيح', 'danger');
+        }
+      };
+      reader.readAsText(file);
+    };
+
+    // Clear
+    container.querySelector('#dedClearBtn').onclick = () => {
+      if (!confirm('⚠️ سيتم مسح كل البيانات نهائياً. متأكد؟')) return;
+      if (!confirm('آخر تأكيد — لا يمكن التراجع!')) return;
+      const keys = ['data', 'pts', 'salaryDay', 'streak', 'notifs', 'achievements', 'userName'];
+      for (const k of keys) window.Storage?.remove(k);
+      window.Storage?.remove('__version');
+      location.reload();
+    };
+
+    // Restart Tour
+    const restartTourBtn = container.querySelector('#dedRestartTourBtn');
+    if (restartTourBtn) {
+      restartTourBtn.onclick = () => {
+        if (!confirm('سيتم إعادة عرض الجولة التعريفية. متأكد؟')) return;
+        if (window.Onboarding?.restart) {
+          // أغلق الصفحة الحالية أولاً
+          if (window.DedicatedPages?.close) {
+            window.DedicatedPages.close();
+          }
+          setTimeout(() => window.Onboarding.restart(), 400);
+        } else {
+          Toast?.show?.('الجولة التعريفية غير متاحة', 'warn');
+        }
+      };
+    }
+    
+    // Diagnostics report
+    const diagBtn = container.querySelector('#dedDiagBtn');
+    if (diagBtn) {
+      diagBtn.onclick = () => {
+        if (window.Diagnostics?.exportReport) {
+          window.Diagnostics.exportReport();
+        } else {
+          Toast?.show?.('Diagnostics غير متاح', 'warn');
+        }
+      };
+    }
+  }
+
+  // 🔧 DRY FIX: استخدام U.esc من core بدل تعريف محلي مكرر.
+  const escapeHTML = (s) => (window.Tdbeer?.U?.esc || ((x) => String(x ?? '')))(s);
+
+  // Initialize on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  return { open, close };
+})();
+
+window.DedicatedPages = DedicatedPages;
+
+// Expose openDedicatedPage for sidebar
+function openDedicatedPage(pageName) {
+  if (window.DedicatedPages?.open) {
+    window.DedicatedPages.open(pageName);
+  }
+}
+window.openDedicatedPage = openDedicatedPage;
